@@ -1,5 +1,5 @@
-import { useCart } from '@/hooks/useCart';
-import { Button } from '@/components/ui/button';
+import { useCart } from "@/hooks/useCart";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -7,25 +7,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Trash2, Minus, Plus } from 'lucide-react';
+} from "@/components/ui/table";
+import { Trash2, Minus, Plus } from "lucide-react";
 
 export function CartPage() {
   const { items, removeItem, updateQuantity } = useCart();
-
-  const total = items.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
-    0
-  );
 
   return (
     <div className="container py-8">
       <h1 className="mb-8 text-3xl font-bold">Shopping Cart</h1>
       {items.length === 0 ? (
         <div className="text-center">
-          <p className="text-lg text-muted-foreground">
-            Your cart is empty
-          </p>
+          <p className="text-lg text-muted-foreground">Your cart is empty</p>
         </div>
       ) : (
         <div className="grid gap-8 lg:grid-cols-3">
@@ -42,7 +35,9 @@ export function CartPage() {
               </TableHeader>
               <TableBody>
                 {items.map((item) => (
-                  <TableRow key={`${item.product.id}-${item.size}-${item.color}`}>
+                  <TableRow
+                    key={`${item.product.id}-${item.size}-${item.color}`}
+                  >
                     <TableCell>
                       <div className="flex items-center gap-4">
                         <img
@@ -79,9 +74,7 @@ export function CartPage() {
                         >
                           <Minus className="h-4 w-4" />
                         </Button>
-                        <span className="w-8 text-center">
-                          {item.quantity}
-                        </span>
+                        <span className="w-8 text-center">{item.quantity}</span>
                         <Button
                           variant="outline"
                           size="icon"
@@ -93,9 +86,7 @@ export function CartPage() {
                         </Button>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      ${item.product.price.toFixed(2)}
-                    </TableCell>
+                    <TableCell>${item.product.price.toFixed(2)}</TableCell>
                     <TableCell>
                       ${(item.product.price * item.quantity).toFixed(2)}
                     </TableCell>

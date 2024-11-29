@@ -9,9 +9,13 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { ShoppingCart, Heart, User, Menu, X } from "lucide-react";
+import useCartController from "@/hooks/useCartController";
+import { useCart } from "@/hooks/useCart";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { onOpen } = useCartController();
+  const { items } = useCart();
 
   return (
     <header className="sticky  px-4 md:px-6 lg:px-10  top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -54,10 +58,19 @@ export function Navbar() {
               <Heart className="h-5 w-5" />
             </Link>
           </Button>
-          <Button variant="ghost" size="icon" asChild>
-            <Link to="/cart">
-              <ShoppingCart className="h-5 w-5" />
-            </Link>
+          <Button
+            onClick={onOpen}
+            variant="ghost"
+            size="icon"
+            asChild
+            className="relative"
+          >
+            <div className="relative">
+              <ShoppingCart className="" />
+              <span className="absolute rounded-full bg-blue-50 p-3 text-center flex items-center justify-center w-0 h-0 bottom-[-10px] right-[-5px]">
+                {items.length}
+              </span>
+            </div>
           </Button>
           <Button variant="ghost" size="icon" asChild>
             <Link to="/account">
