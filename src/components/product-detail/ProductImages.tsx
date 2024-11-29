@@ -11,13 +11,12 @@ const ProductImages = ({ images }: Props) => {
   useEffect(() => {
     setPosterImage(images[0]);
   }, []);
-  // Automatically change the poster image every 2 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) =>
         prevIndex === images.length - 1 ? 0 : prevIndex + 1
       );
-    }, 3000);
+    }, 5000);
 
     setPosterImage(images[currentImageIndex]);
 
@@ -40,7 +39,7 @@ const ProductImages = ({ images }: Props) => {
             onMouseEnter={() => setImage(img, index)}
             className={`w-20 h-20 relative cursor-pointer rounded-lg overflow-hidden transition-all duration-300 shadow-md hover:scale-110 ${
               posterImage === img
-                ? "scale-110 border-2 border-muted-foreground"
+                ? "scale-110 border-2 border-muted-foreground "
                 : ""
             }`}
           >
@@ -55,7 +54,7 @@ const ProductImages = ({ images }: Props) => {
 
       {/* Primary Image Section */}
       <div className="w-full sm:w-2/3">
-        <div className="relative flex justify-center items-center overflow-hidden rounded-lg shadow-lg aspect-square">
+        <div className=" flex justify-center items-center overflow-hidden rounded-lg shadow-lg aspect-square">
           <img
             src={posterImage}
             alt="Product Primary"
