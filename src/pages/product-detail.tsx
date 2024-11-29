@@ -1,25 +1,25 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom"; // Use `useNavigate` instead of `useHistory`
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, ShoppingCart, XCircle } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
 import AxiosBase from "@/lib/axios";
-import { Product } from "@/types/product";
+import { Product, Variant } from "@/types/product";
 import { ProductDetailSkeleton } from "@/components/loaders/ProductDetailSkeleton";
 import { useCart } from "@/hooks/useCart";
-import { AddToCartButton } from "@/components/product-detail/AddToCart";
 import ProductImages from "@/components/product-detail/ProductImages";
+import useCartController from "@/hooks/useCartController";
 
 export function ProductDetailPage() {
-  const { addItem } = useCart();
+  const { addItem, items } = useCart();
+  const { onOpen } = useCartController();
   const { slug } = useParams<{ slug: string }>();
-  const navigate = useNavigate(); // Updated from `useHistory`
+  const navigate = useNavigate();
+  const [isItemSelected, setIsItemSelected] = useState(false);
   const location = useLocation();
   const contentRef = useRef<HTMLDivElement>(null);
-  const [selectedVariant, setSelectedVariant] = useState<
-    Product["variants"][0] | null
-  >(null);
+  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
@@ -47,16 +47,27 @@ export function ProductDetailPage() {
 
   const updateURLParams = (size: string | null, color: string | null) => {
     const params = new URLSearchParams(location.search);
-    if (size) params.set("size", size);
-    if (color) params.set("color", color);
+    if (size) {
+      params.set("size", size);
+    } else {
+      params.delete("size");
+    }
+    if (color) {
+      params.set("color", color);
+    } else {
+      params.delete("color");
+    }
     navigate({ search: params.toString() }, { replace: true });
   };
 
   useEffect(() => {
-    if (selectedSize || selectedVariant) {
-      updateURLParams(selectedSize, selectedVariant?.color || null);
+    if (selectedSize && selectedVariant) {
+      const cartId = `${selectedVariant.productId}-${selectedSize}-${selectedVariant.color}`;
+      const isSelected = items.some((item) => item.id === cartId);
+      setIsItemSelected(isSelected);
+      updateURLParams(selectedSize, selectedVariant.color);
     }
-  }, [selectedSize, selectedVariant]);
+  }, [selectedSize, selectedVariant, items]);
 
   if (isLoading) return <ProductDetailSkeleton />;
 
@@ -79,28 +90,55 @@ export function ProductDetailPage() {
     selectedVariant?.attributes.map((attr) => attr.size.toUpperCase()) || [];
 
   const handleAddToCart = () => {
-    if (!selectedSize) {
-      setErrorMessage("Please select a size before adding to cart.");
+    if (!selectedSize || !selectedVariant) {
+      setErrorMessage(
+        "Please select a size and variant before adding to cart."
+      );
       return;
     }
+
+    const cartId = `${selectedVariant.productId}-${selectedSize}-${selectedVariant.color}`;
+    const isSelected = items.some((item) => item.id === cartId);
+    if (isSelected) {
+      onOpen();
+      return;
+    }
+
     setErrorMessage("");
     addItem({
-      id: product.id,
+      id: cartId,
       name: product.name,
       quantity,
       size: selectedSize,
-      color: selectedVariant?.color,
+      color: selectedVariant.color,
       price: currentPrice || 0,
-      image: selectedVariant?.images[0] as string,
+      image: selectedVariant.images[0] as string,
     });
+    setIsItemSelected(true);
   };
 
-  const queryParams = new URLSearchParams(location.search);
-  const sizeParam = queryParams.get("size");
+  const handleSelectVariant = (variant: Variant) => {
+    setSelectedSize(null); // Clear selected size for new variant
+    setSelectedVariant(variant);
+    const cartId = `${variant.productId}-${selectedSize}-${variant.color}`;
+    const isSelected = items.some((item) => item.id === cartId);
+    setIsItemSelected(isSelected);
+    updateURLParams(null, variant.color);
+  };
+
+  const handleSelectSize = (size: string) => {
+    setSelectedSize(size);
+    if (selectedVariant) {
+      const cartId = `${selectedVariant.productId}-${size}-${selectedVariant.color}`;
+      const isSelected = items.some((item) => item.id === cartId);
+      setIsItemSelected(isSelected);
+    }
+    setErrorMessage("");
+  };
 
   return (
     <div className="container mx-auto h-full py-8">
-      <div ref={contentRef} className="grid  gap-8 md:grid-cols-2">
+      <div ref={contentRef} className="grid gap-8 md:grid-cols-2">
         <ProductImages images={selectedVariant?.images as string[]} />
 
         {/* Product Details */}
@@ -128,7 +166,7 @@ export function ProductDetailPage() {
                     ? "border-primary"
                     : "border-muted"
                 } cursor-pointer rounded`}
-                onClick={() => setSelectedVariant(variant)}
+                onClick={() => handleSelectVariant(variant)}
               >
                 <img
                   src={variant.images[0]}
@@ -144,19 +182,19 @@ export function ProductDetailPage() {
           <div className="flex gap-2">
             {sizesArray.map((size) => {
               const isAvailable = availableSizes.includes(size);
-              const isActive = size === sizeParam; // Check if the current size matches the URL param
+              const isActive = size === selectedSize;
 
               return (
                 <Button
                   key={size}
                   variant="outline"
                   size="sm"
-                  onClick={() => isAvailable && setSelectedSize(size)}
+                  onClick={() => isAvailable && handleSelectSize(size)}
                   disabled={!isAvailable}
                   className={`flex items-center justify-center ${
                     isAvailable
                       ? isActive
-                        ? "bg-primary hover:bg-primary hover:text-white text-white" // Apply active styles
+                        ? "bg-primary text-white"
                         : ""
                       : "opacity-50 cursor-not-allowed"
                   }`}
@@ -204,7 +242,7 @@ export function ProductDetailPage() {
               onClick={handleAddToCart}
               className="flex items-center gap-2"
             >
-              <ShoppingCart /> Add to Cart
+              {isItemSelected ? "VIEW BAG" : "ADD TO BAG"}
             </Button>
             {errorMessage && (
               <p className="text-sm text-red-500">{errorMessage}</p>

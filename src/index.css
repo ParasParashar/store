@@ -15,6 +15,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @apply custom-scrollbar;
 }
 
 a {
@@ -108,4 +109,22 @@ h1 {
   body {
     @apply bg-background text-foreground;
   }
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 5px;
+  border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #dadada;
+  border-radius: 50px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #d3d3f0;
 }

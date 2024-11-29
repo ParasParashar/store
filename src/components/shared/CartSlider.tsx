@@ -5,94 +5,111 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
 import { useCart } from "@/hooks/useCart";
 import useCartController from "@/hooks/useCartController";
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent, CardTitle } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
-import { Cross, X } from "lucide-react";
+import { X } from "lucide-react";
 
 const CartSlider = () => {
   const { isOpen, onClose } = useCartController();
-  const { items } = useCart();
+  const { items, removeItem } = useCart();
   const navigate = useNavigate();
+
   const handleCheckout = () => {
     navigate("/checkout");
     onClose();
   };
+
   const total = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
   return (
     <Sheet open={isOpen} onOpenChange={() => onClose()}>
-      {/* <SheetTrigger>Cart sdfsldfj</SheetTrigger> */}
-      <SheetContent side={"right"} className="p-0">
+      <SheetContent
+        side={"right"}
+        className="p-0 border-none rounded-l-2xl h-full ring-0"
+      >
         <SheetHeader>
-          <SheetTitle className="text-muted-foreground p-3">
+          <SheetTitle className="text-muted-foreground px-4 py-3 border-b">
             Items in my cart: {items.length}
           </SheetTitle>
-          <SheetDescription className="flex px-2  flex-col gap-2">
+        </SheetHeader>
+
+        <div className="flex flex-col h-full">
+          {/* Scrollable Cart Items */}
+          <SheetDescription className="flex-1 overflow-y-auto p-4 custom-scrollbar">
             {items.map((item) => (
-              <Card key={item.id} className="relative">
+              <Card
+                key={`${item.id}-${item.size}-${item.color}`}
+                className="relative mb-4 shadow-md"
+              >
                 <Button
                   variant={"ghost"}
                   size="icon"
-                  className="absolute top-1 right-3 rounded-full "
+                  className="absolute top-2 right-2 rounded-full"
+                  onClick={() => removeItem(item.id)}
                 >
                   <X />
                 </Button>
-                <CardContent className="p-2 flex  gap-3">
+                <CardContent className="p-4 flex gap-3 items-start">
                   <div className="w-1/4">
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="rounded-lg object-cover"
+                      className="rounded-lg object-cover w-full"
                     />
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <h6 className="text-lg font-semibold text-muted-foreground">
+                  <div className="flex flex-col flex-1">
+                    <h6 className="text-lg font-semibold text-muted-foreground truncate">
                       {item.name}
                     </h6>
-                    <div className="flex gap-x-3  text-md font-medium">
+                    <div className="flex gap-3 text-md font-medium mt-1">
                       <p className="text-muted-foreground">
-                        Size: <span className="text-primary">{item.size} </span>
+                        Size: <span className="text-primary">{item.size}</span>
                       </p>
                       <p className="text-muted-foreground">
                         Qty:{" "}
-                        <span className="text-primary">{item.quantity} </span>
+                        <span className="text-primary">{item.quantity}</span>
                       </p>
                     </div>
-                    <p className="text-xl font-bold"> &#8377;{item.price}</p>
+                    <p className="text-xl font-bold mt-2">
+                      ₹{item.price.toFixed(2)}
+                    </p>
                   </div>
                 </CardContent>
               </Card>
             ))}
           </SheetDescription>
-          <div className=" absolute bottom-0 left-0 shadow-inner rounded-t-xl flex flex-col items-start justify-start p-3 m-0 border-t border-2 w-full gap-3">
-            <p className="text-lg  font-semibold">Order Details</p>
-            <div className="flex text-sm justify-between items-center w-full">
+
+          {/* Sticky Footer */}
+          <div className="bg-white shadow-inner rounded-t-xl border-t p-4 sticky bottom-0 backdrop-filter ">
+            <p className="text-lg font-semibold">Order Details</p>
+            <div className="flex justify-between items-center text-sm mt-2">
               <p className="text-muted-foreground">Subtotal</p>
-              <p className=" font-semibold"> &#8377;{total}</p>
+              <p className="font-semibold">₹{total.toFixed(2)}</p>
             </div>
-            <div className="flex items-center justify-between w-full p-3 border-1 border-secondary-foreground">
-              <div className="flex flex-col justify-start items-start  w-full">
-                <p className="text-lg font-bold"> &#8377;{total}</p>
-                <p className="text-muted-foreground text-sm font-semibold">
-                  (Incl.of All Taxes)
+            <div className="flex justify-between items-center mt-4">
+              <div className="flex flex-col">
+                <p className="text-lg font-bold">₹{total.toFixed(2)}</p>
+                <p className="text-muted-foreground text-sm font-medium">
+                  (Incl. of All Taxes)
                 </p>
               </div>
               <Button
-                className="px-10 p-3 w-1/2 font-bold text-white bg-green-950 hover:opacity-55"
+                onClick={handleCheckout}
+                className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700"
                 disabled={items.length === 0}
               >
                 PLACE ORDER
               </Button>
             </div>
           </div>
-        </SheetHeader>
+        </div>
       </SheetContent>
     </Sheet>
   );

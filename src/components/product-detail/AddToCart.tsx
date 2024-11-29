@@ -23,12 +23,16 @@ export function AddToCartButton({
       console.warn("Quantity must be at least 1");
       return;
     }
+    const id = `${product.id}-${size}-${color}`;
 
     addItem({
-      product,
+      name: product.name,
+      image: product.variants[0].images[0] as string,
+      price: product.price,
       quantity,
       size,
       color,
+      id: id,
     });
   };
 
