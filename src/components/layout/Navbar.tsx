@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,12 +17,36 @@ export function Navbar() {
   const { onOpen } = useCartController();
   const { items } = useCart();
 
+  // tracking navbar visible or not
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY && currentScrollY > 50) {
+      // Scrolling down
+      setShowNavbar(false);
+    } else {
+      // Scrolling up
+      setShowNavbar(true);
+    }
+
+    setLastScrollY(currentScrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [lastScrollY]);
+
+
   return (
-    <header className="sticky  px-4 md:px-6 lg:px-10  top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className={`sticky px-4 md:px-6 lg:px-10  top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300  ${showNavbar ? 'translate-y-0' : '-translate-y-full'}`}>
       <div className="container flex h-16 items-center">
-        <Link to="/" className="mr-6 flex items-center space-x-2">
-          <span className="text-xl font-bold">FASHION</span>
-        </Link>
 
         <div className="hidden md:flex">
           <NavigationMenu>
@@ -52,6 +76,10 @@ export function Navbar() {
           </NavigationMenu>
         </div>
 
+        <Link to="/" className="flex items-center space-x-2">
+          <span className="text-xl font-bold">FASHION</span>
+        </Link>
+
         <div className="ml-auto flex items-center space-x-4">
           <Button variant="ghost" size="icon" asChild>
             <Link to="/wishlist">
@@ -67,7 +95,7 @@ export function Navbar() {
           >
             <div className="relative">
               <ShoppingCart className="" />
-              <span className="absolute rounded-full bg-blue-50 p-3 text-center flex items-center justify-center w-0 h-0 bottom-[-10px] right-[-5px]">
+              <span className="absolute rounded-full bg-blue-50 p-3 text-center flex items-center justify-center w-0 h-0 top-[-7px] right-[-5px]">
                 {items.length}
               </span>
             </div>
