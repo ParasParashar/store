@@ -39,18 +39,24 @@ export function ProductFilters() {
 
   const updateURLParams = () => {
     const params = new URLSearchParams(location.search);
-
     if (selectedFilters.category.id && selectedFilters.category.name) {
       params.set("category_id", selectedFilters.category.id);
       params.set("category_name", selectedFilters.category.name);
+    } else {
+      params.delete("category_id");
+      params.delete("category_name");
     }
 
     if (selectedFilters.size) {
       params.set("size", selectedFilters.size);
+    } else {
+      params.delete("size");
     }
 
     if (selectedFilters.color) {
       params.set("color", selectedFilters.color);
+    } else {
+      params.delete("color");
     }
 
     params.set("min_price", String(selectedFilters.priceRange[0]));
@@ -60,11 +66,13 @@ export function ProductFilters() {
   };
 
   const handleCategoryChange = (id: string, name: string) => {
-    setSelectedFilters((prev) => ({
-      ...prev,
-      category:
-        prev.category.id === id ? { id: null, name: null } : { id, name },
-    }));
+    setSelectedFilters((prev) => {
+      return {
+        ...prev,
+        category:
+          prev.category.id === id ? { id: null, name: null } : { id, name },
+      };
+    });
   };
 
   const handleSizeChange = (size: string) => {

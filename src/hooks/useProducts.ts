@@ -26,6 +26,7 @@ export const useProducts = (filters?: Filters) => {
     queryFn: ({ pageParam }) => fetchProducts({ pageParam, filters }),
     getNextPageParam: (lastPage) => lastPage.nextPage,
     initialPageParam: 1,
+    enabled: !!filters
   });
 };
 

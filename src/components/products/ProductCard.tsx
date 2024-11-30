@@ -10,11 +10,12 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  console.log(product, "value");
+  if (!product) return;
+
   return (
     <Card className="group overflow-hidden">
       <CardContent className="p-0">
-        <Link to={`/products/${product.id}`}>
+        <Link to={`/product/${product.slug}`}>
           <div className="relative aspect-square overflow-hidden">
             <img
               src={product.variants[0].images[0]}

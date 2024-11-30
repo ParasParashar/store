@@ -38,7 +38,6 @@ export function ProductsPage() {
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage]);
-  console.log(data?.pages);
   return (
     <div className="container mx-auto py-8 px-5 w-full md:w-3/4 ">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
