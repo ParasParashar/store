@@ -18,6 +18,7 @@ export function NewArrivals() {
 
   const settings = {
     dots: true,
+    className: "slider variable-height",
     infinite: true,
     slidesToShow: 3,
     slidesToScroll: 1,
@@ -29,9 +30,9 @@ export function NewArrivals() {
 
   if (isLoading) return null;
   return (
-    <section className="py-16 md:py-24">
+    <section className="py-16">
       <div className="container">
-        <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl">
+        <h2 className="mb-12 text-center text-2xl  md:text-4xl font-bold ">
           New Arrivals
         </h2>
         <Slider {...settings}>
@@ -49,14 +50,20 @@ export function NewArrivals() {
                           onLoad={(e) =>
                             e.currentTarget.classList.remove("opacity-0")
                           }
-                          className="h-[300px] opacity-0 w-full object-fill"
+                          className="h-[100px] md:h-[300px]  opacity-0 w-full object-fill"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent" />
                         <div className="absolute bottom-0 p-6 text-white">
                           <h3 className="mb-2 text-3xl truncate font-semibold text-popover">
                             {newProduct.name}
                           </h3>
-                          <p className="text-lg">{newProduct.category.name}</p>
+                          <p className="text-md font-light">
+                            {newProduct.category.name}
+                          </p>
+                          <p className="text-xl line-clamp-1 leading-relaxed">
+                            {" "}
+                            &#8377;{newProduct.price}
+                          </p>
                         </div>
                       </div>
                     </CardContent>

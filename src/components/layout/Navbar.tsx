@@ -36,18 +36,20 @@ export function Navbar() {
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [lastScrollY]);
 
-
   return (
-    <header className={`sticky px-4 md:px-6 lg:px-10  top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300  ${showNavbar ? 'translate-y-0' : '-translate-y-full'}`}>
+    <header
+      className={`sticky px-4 md:px-6 lg:px-10  top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300  ${
+        showNavbar ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
       <div className="container flex h-16 items-center">
-
         <div className="hidden md:flex">
           <NavigationMenu>
             <NavigationMenuList>

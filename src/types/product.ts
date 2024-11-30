@@ -44,3 +44,14 @@ export type Attribute = {
   sku: string | null;
   variantId: string;
 }
+
+
+export type Filters = {
+  categoryId?: string;
+  categoryName?: string;
+  size?: string;
+  color?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  search?: string;
+};

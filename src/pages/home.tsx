@@ -9,8 +9,8 @@ export function HomePage() {
       <HeroSection />
       <div className="px-10">
         <FeaturedCollections />
-        {/* <NewArrivals /> */}
-        <TrendingProducts />
+        <NewArrivals />
+        {/* <TrendingProducts /> */}
       </div>
     </main>
   );
