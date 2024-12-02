@@ -10,6 +10,7 @@ import { ProductDetailSkeleton } from "@/components/loaders/ProductDetailSkeleto
 import { useCart } from "@/hooks/useCart";
 import ProductImages from "@/components/product-detail/ProductImages";
 import useCartController from "@/hooks/useCartController";
+import RelatedProducts from "@/components/product-detail/RelatedProducts";
 
 export function ProductDetailPage() {
   const { addItem, items } = useCart();
@@ -113,12 +114,17 @@ export function ProductDetailPage() {
       color: selectedVariant.color,
       price: currentPrice || 0,
       image: selectedVariant.images[0] as string,
+      variantId: selectedVariant.id,
+      attributeId: selectedVariant.attributes.find(
+        (atr) => atr.size === selectedSize
+      )?.id,
+      status: product.status,
     });
     setIsItemSelected(true);
   };
 
   const handleSelectVariant = (variant: Variant) => {
-    setSelectedSize(null); // Clear selected size for new variant
+    setSelectedSize(null);
     setSelectedVariant(variant);
     const cartId = `${variant.productId}-${selectedSize}-${variant.color}`;
     const isSelected = items.some((item) => item.id === cartId);
@@ -250,6 +256,7 @@ export function ProductDetailPage() {
           </div>
         </section>
       </div>
+      <RelatedProducts categoryId={product.categoryId} />
     </div>
   );
 }

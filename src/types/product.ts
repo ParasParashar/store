@@ -23,6 +23,9 @@ export type Product = {
     contact: string | null;
   };
   variants: Variant[];
+  discountedPrice?: number;
+  discountPercent?: string;
+  isFeatured?: boolean;
 }
 
 

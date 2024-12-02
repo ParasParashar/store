@@ -10,6 +10,10 @@ interface CartItem {
   color?: string;
   price: number;
   image: string;
+  status: string;
+  variantId?: string;
+  attributeId?: string;
+
 }
 
 interface CartStore {
