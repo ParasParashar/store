@@ -148,7 +148,7 @@ export function ProductDetailPage() {
 
   return (
     <>
-      <div className="w-full flex flex-col gap-y-5  md:w-[90%] px-5 md:px-10 mx-auto h-full py-20 ">
+      <div className="w-full flex flex-col gap-y-5  md:w-[90%] px-5 md:px-10 mx-auto h-full  py-8 lg:py-14 ">
         <div ref={contentRef} className="grid items-start gap-8 md:grid-cols-2">
           <ProductImages images={selectedVariant?.images as string[]} />
 
@@ -238,7 +238,7 @@ export function ProductDetailPage() {
                             {size}
                             {!isAvailable && (
                               <span
-                                className=" absolute inset-0 flex items-center justify-center "
+                                className=" absolute inset-0 w-full flex items-center justify-center "
                                 aria-hidden="true"
                               >
                                 <span
@@ -278,9 +278,11 @@ export function ProductDetailPage() {
                   variant="ghost"
                   size="sm"
                   className=" h-10 w-10 border border-black/60"
-                  onClick={() =>
-                    setQuantity((q) => Math.min(currentStock || q, q + 1))
-                  }
+                  onClick={() => {
+                    if (!selectedSize)
+                      return setErrorMessage("Fist Select a size");
+                    setQuantity((q) => Math.min(currentStock || q, q + 1));
+                  }}
                 >
                   <Plus size={20} />
                 </Button>
@@ -304,10 +306,6 @@ export function ProductDetailPage() {
                   </Button>
                 </div>
               </div>
-
-              {errorMessage && (
-                <p className="text-sm text-red-500">{errorMessage}</p>
-              )}
             </div>
           </section>
         </div>
