@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -30,30 +31,31 @@ const ProductImages = ({ images }: Props) => {
   };
 
   return (
-    <div className="flex flex-col gap-4  pb-4 sm:flex-row items-center justify-center">
+    <div className="flex flex-col-reverse gap-4 lg:flex-row h-full items-start justify-center">
       {/* Thumbnail Section */}
-      <div className="flex sm:flex-col gap-3 items-center overflow-hidden max-sm:w-full max-sm:justify-center  p-3">
+      <div className="flex lg:flex-col h-full lg:flex-nowrap  flex-wrap gap-3 p-3 items-start overflow-hidden   justify-start ">
         {images.map((img, index) => (
           <div
             key={img}
             onMouseEnter={() => setImage(img, index)}
-            className={`w-20 h-20 relative cursor-pointer rounded-lg overflow-hidden transition-all duration-300 shadow-md hover:scale-110 ${
-              posterImage === img
-                ? "scale-110 border-2 border-muted-foreground "
-                : ""
+            className={`w-20 h-20 relative cursor-pointer rounded-lg overflow-hidden transition-all duration-300 shadow-md hover:scale-110 
             }`}
           >
             <img
               src={img}
               alt="Thumbnail"
-              className="w-full h-full object-cover"
+              className={cn(
+                "w-full h-full object-cover",
+                posterImage === img &&
+                  "scale-110 border-2 border-muted-foreground "
+              )}
             />
           </div>
         ))}
       </div>
 
       {/* Primary Image Section */}
-      <div className="w-full sm:w-2/3">
+      <div className="flex-1 w-full">
         <div className=" flex justify-center items-center overflow-hidden rounded-lg shadow-lg aspect-square">
           <img
             src={posterImage}
