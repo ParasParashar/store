@@ -8,9 +8,10 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { ShoppingCart, Heart, User, Menu, X } from "lucide-react";
+import { ShoppingCart, Heart, User, Menu, X, Search } from "lucide-react";
 import useCartController from "@/hooks/useCartController";
 import { useCart } from "@/hooks/useCart";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -45,47 +46,46 @@ export function Navbar() {
 
   return (
     <header
-      className={`sticky px-4 md:px-6 lg:px-10  top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300  ${
+      className={`sticky sm:px-4 md:px-6 lg:px-10  top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300 ${
         showNavbar ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <div className="container flex h-16 items-center">
-        <div className="hidden md:flex">
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <Link to="/products">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Shop
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link to="/collections">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Collections
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link to="/about">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    About
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
+      <div className="flex justify-between h-16 items-center">
+        <div className="flex sm:gap-2 md:gap-4">
+      
+          <Button
+            variant="ghost"
+            size={"sm"}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            
+          >
+            {isMenuOpen ? (
+              <span className="flex items-center gap-3 "> <X className={`h-5 w-5`} /> <span className=" max-sm:hidden">Close</span></span>
+              
+              
+            ) : (
+              <span className="flex items-center gap-3"> <Menu className="h-5 w-5" /> <span className=" max-sm:hidden">Menu</span></span>
+              
+            )}
+          </Button>
+
+          <Button
+            variant="ghost"
+            size={"sm"}
+            className="gap-2"
+          >
+          <MagnifyingGlassIcon className="h-5 w-5" /> <span className=" max-sm:hidden">Search</span>
+          </Button>
         </div>
 
-        <Link to="/" className="flex items-center space-x-2">
-          <span className="text-xl font-bold">FASHION</span>
+        <Link to="/" className="flex items-center md:mr-16 lg:mr-24 space-x-2">
+          <span className="max-[450px]:text-4xl text-5xl jaro-LogoStyle text-black/90">FASHION</span>
         </Link>
 
-        <div className="ml-auto flex items-center space-x-4">
-          <Button variant="ghost" size="icon" asChild>
+        <div className="flex items-center space-x-4">
+          <Button variant="ghost" size="icon" asChild className=" max-sm:hidden">
             <Link to="/wishlist">
-              <Heart className="h-5 w-5" />
+              <Heart className="h-5 w-5" color="black" />
             </Link>
           </Button>
           <Button
@@ -93,7 +93,7 @@ export function Navbar() {
             variant="ghost"
             size="icon"
             asChild
-            className="relative"
+            className="relative max-sm:hidden"
           >
             <div className="relative">
               <ShoppingCart className="" />
@@ -104,26 +104,15 @@ export function Navbar() {
           </Button>
           <Button variant="ghost" size="icon" asChild>
             <Link to="/account">
-              <User className="h-5 w-5" />
+              <User className="h-5 w-5" color="black" />
             </Link>
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
-          </Button>
+
         </div>
       </div>
 
       {isMenuOpen && (
-        <div className="container md:hidden">
+        <div className={`border border-black `}>
           <nav className="flex flex-col space-y-4 pb-4">
             <Link
               to="/products"

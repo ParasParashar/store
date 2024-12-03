@@ -5,7 +5,7 @@ import { NewArrivals } from "@/components/home/NewArrivals";
 
 export function HomePage() {
   return (
-    <main className="min-h-screen w-full   ">
+    <main className="min-h-screen w-full ">
       <HeroSection />
       <div className="px-10">
         <FeaturedCollections />

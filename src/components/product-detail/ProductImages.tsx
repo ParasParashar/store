@@ -30,7 +30,7 @@ const ProductImages = ({ images }: Props) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 sm:flex-row items-center justify-center">
+    <div className="flex flex-col gap-4 border-b border-black pb-4 sm:flex-row items-center justify-center">
       {/* Thumbnail Section */}
       <div className="flex sm:flex-col gap-3 items-center overflow-hidden max-sm:w-full max-sm:justify-center  p-3">
         {images.map((img, index) => (
