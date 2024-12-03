@@ -1,14 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { ShoppingCart, Heart, User, Menu, X, Search } from "lucide-react";
+import { User, Menu, X } from "lucide-react";
+import { IoBagOutline } from "react-icons/io5";
+
 import useCartController from "@/hooks/useCartController";
 import { useCart } from "@/hooks/useCart";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
@@ -52,42 +47,45 @@ export function Navbar() {
     >
       <div className="flex justify-between h-16 items-center">
         <div className="flex sm:gap-2 md:gap-4">
-      
           <Button
             variant="ghost"
             size={"sm"}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            
           >
             {isMenuOpen ? (
-              <span className="flex items-center gap-3 "> <X className={`h-5 w-5`} /> <span className=" max-sm:hidden">Close</span></span>
-              
-              
+              <span className="flex items-center gap-3 ">
+                {" "}
+                <X className={`h-5 w-5`} />{" "}
+                <span className=" max-sm:hidden">Close</span>
+              </span>
             ) : (
-              <span className="flex items-center gap-3"> <Menu className="h-5 w-5" /> <span className=" max-sm:hidden">Menu</span></span>
-              
+              <span className="flex items-center gap-3">
+                {" "}
+                <Menu className="h-5 w-5" />{" "}
+                <span className=" max-sm:hidden">Menu</span>
+              </span>
             )}
           </Button>
 
-          <Button
-            variant="ghost"
-            size={"sm"}
-            className="gap-2"
-          >
-          <MagnifyingGlassIcon className="h-5 w-5" /> <span className=" max-sm:hidden">Search</span>
+          <Button variant="ghost" size={"sm"} className="gap-2">
+            <MagnifyingGlassIcon className="h-5 w-5" />{" "}
+            <span className=" max-sm:hidden">Search</span>
           </Button>
         </div>
 
         <Link to="/" className="flex items-center md:mr-16 lg:mr-24 space-x-2">
-          <span className="max-[450px]:text-4xl text-5xl jaro-LogoStyle text-black/90">FASHION</span>
+          <span className="max-[450px]:text-4xl text-5xl jaro-LogoStyle text-black/90">
+            FASHION
+          </span>
         </Link>
 
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="icon" asChild className=" max-sm:hidden">
-            <Link to="/wishlist">
-              <Heart className="h-5 w-5" color="black" />
-            </Link>
-          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            asChild
+            className=" max-sm:hidden"
+          ></Button>
           <Button
             onClick={onOpen}
             variant="ghost"
@@ -96,10 +94,12 @@ export function Navbar() {
             className="relative max-sm:hidden"
           >
             <div className="relative">
-              <ShoppingCart className="" />
-              <span className="absolute rounded-full bg-blue-50 p-3 text-center flex items-center justify-center w-0 h-0 top-[-7px] right-[-5px]">
-                {items.length}
-              </span>
+              <IoBagOutline size={20} />
+              {items.length > 0 && (
+                <span className="absolute rounded-full bg-blue-50 p-3 text-center flex items-center justify-center w-0 h-0 top-[-7px] right-[-5px]">
+                  {items.length}
+                </span>
+              )}
             </div>
           </Button>
           <Button variant="ghost" size="icon" asChild>
@@ -107,7 +107,6 @@ export function Navbar() {
               <User className="h-5 w-5" color="black" />
             </Link>
           </Button>
-
         </div>
       </div>
 
@@ -125,12 +124,6 @@ export function Navbar() {
               className="text-sm font-medium transition-colors hover:text-primary"
             >
               Collections
-            </Link>
-            <Link
-              to="/about"
-              className="text-sm font-medium transition-colors hover:text-primary"
-            >
-              About
             </Link>
           </nav>
         </div>
