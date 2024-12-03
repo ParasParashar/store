@@ -1,79 +1,97 @@
-
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
-import useBottomCart from "@/hooks/useBottomCart"
+} from "@/components/ui/sheet";
+import { X } from "lucide-react";
+import { Button } from "../ui/button";
 
 const SizeChart = () => {
-
-  const {isOpenBottomSlide, onCloseBottomSlide} = useBottomCart()
-
   return (
-    <Sheet open={isOpenBottomSlide} onOpenChange={() => onCloseBottomSlide()} >
-    <SheetContent side={"bottom"} className="h-full bg-transparent flex justify-center w-full pt-[3rem] ">
-      <SheetHeader className="w-full md:w-[60%]">
-
-      <button
-            onClick={onCloseBottomSlide}
-            className="absolute top-10 right-10 text-white px-3 py-1 lowercase -tracking-tighter "
+    <Sheet>
+      <SheetTrigger>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-[#1C1D45] max-lg:hidden">
+            Check your size?
+          </span>
+          <Button
+            variant="link"
+            className="text-xs uppercase text-[#1C1D45] hover:text-[#3B82F6]"
           >
-            Close
-          </button>
+            Size chart
+          </Button>
+        </div>
+      </SheetTrigger>
 
-        <SheetTitle className=" text-[#3B82F6] underline text-center text-2xl font-sans">Size Chart</SheetTitle>
-        <SheetDescription className="w-full">
-        
-      <div className="w-full shadow-md rounded-lg p-4">
-        
-        <table className="w-full border-collapse border border-gray-300">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 p-4 bg-gray-200 text-center text-lg">Size</th>
-              <th className="border border-gray-300 p-4 bg-gray-200 text-center text-lg">Waist in cm</th>
-              <th className="border border-gray-300 p-4 bg-gray-200 text-center text-lg">Length in cm</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">S</td>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">99.06</td>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">68.58</td>
-            </tr>
-            <tr>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">M</td>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">104.14</td>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">69.85</td>
-            </tr>
-            <tr>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">L</td>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">109.22</td>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">71.12</td>
-            </tr>
-            <tr>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">XL</td>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">114.3</td>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">72.39</td>
-            </tr>
-            <tr>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">XXL</td>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">119.38</td>
-              <td className="border border-gray-300 text-center text-lg p-3 text-white font-semibold">73.66</td>
-            </tr>
-          </tbody>
-        </table>
-      
-    </div>
+      <SheetContent
+        side="bottom"
+        className="h-full w-full bg-transparent text-white overflow-y-auto p-6"
+      >
+        <SheetHeader>
+          <SheetTitle className="text-3xl font-semibold text-center mb-4 text-white">
+            Size Chart
+          </SheetTitle>
+        </SheetHeader>
+
+        <SheetDescription>
+          <div className="max-w-3xl mx-auto shadow-lg rounded-lg overflow-hidden">
+            <table className="w-full table-fixed border-collapse">
+              <thead>
+                <tr className="bg-[#3B82F6] text-white">
+                  <th className="p-3 text-center text-lg font-semibold">
+                    Size
+                  </th>
+                  <th className="p-3 text-center text-lg font-semibold">
+                    Waist (cm)
+                  </th>
+                  <th className="p-3 text-center text-lg font-semibold">
+                    Length (cm)
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { size: "S", waist: "99.06", length: "68.58" },
+                  { size: "M", waist: "104.14", length: "69.85" },
+                  { size: "L", waist: "109.22", length: "71.12" },
+                  { size: "XL", waist: "114.3", length: "72.39" },
+                  { size: "XXL", waist: "119.38", length: "73.66" },
+                ].map((item, index) => (
+                  <tr
+                    key={index}
+                    className={`${
+                      index % 2 === 0
+                        ? "bg-[#ffffff10] text-white"
+                        : "bg-[#ffffff05] text-white"
+                    }`}
+                  >
+                    <td className="p-4 text-center text-base font-medium">
+                      {item.size}
+                    </td>
+                    <td className="p-4 text-center text-base">{item.waist}</td>
+                    <td className="p-4 text-center text-base">{item.length}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </SheetDescription>
-      </SheetHeader>
-    </SheetContent>
-  </Sheet>
-  
-  )
-}
 
-export default SizeChart
+        <SheetClose asChild>
+          <button
+            aria-label="Close"
+            className="absolute top-4 right-4 p-2 rounded-full bg-[#3B82F6] hover:bg-[#2563EB] focus:ring-2 focus:ring-offset-2 focus:ring-[#3B82F6]"
+          >
+            <X className="text-white w-5 h-5" />
+          </button>
+        </SheetClose>
+      </SheetContent>
+    </Sheet>
+  );
+};
+
+export default SizeChart;

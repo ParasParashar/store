@@ -72,9 +72,9 @@ export function ProductCard({ product }: ProductCardProps) {
               <ShoppingCart className="mr-2 h-4 w-4" />
               Add to Cart
             </Button>
-            <Button variant="outline" size="icon">
+            {/* <Button variant="outline" size="icon">
               <Heart className="h-4 w-4" />
-            </Button>
+            </Button> */}
           </div>
         </div>
       </CardFooter>

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus } from "lucide-react";  // ShoppingCart, XCircle
+import { Minus, Plus } from "lucide-react"; // ShoppingCart, XCircle
 import { fadeInUp } from "@/lib/animations";
 import AxiosBase from "@/lib/axios";
 import { Product, Variant } from "@/types/product";
@@ -10,11 +10,11 @@ import { ProductDetailSkeleton } from "@/components/loaders/ProductDetailSkeleto
 import { useCart } from "@/hooks/useCart";
 import ProductImages from "@/components/product-detail/ProductImages";
 import useCartController from "@/hooks/useCartController";
-import useBottomCart from "@/hooks/useBottomCart";
-import RelatedProducts from "@/components/product-detail/RelatedProducts";
 import SizeChart from "@/components/product-detail/SizeChart";
 import washingInstructions from "@/lib/washingInstructions";
 import WashingInstruction from "@/components/product-detail/WashingInstruction";
+import { cn } from "@/lib/utils";
+import RelatedProducts from "@/components/product-detail/RelatedProducts";
 
 export function ProductDetailPage() {
   const { addItem, items } = useCart();
@@ -28,7 +28,6 @@ export function ProductDetailPage() {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
-  const {onOpenBottomSlide} = useBottomCart()
 
   const sizesArray = ["S", "M", "L", "XL", "XXL"];
 
@@ -80,7 +79,6 @@ export function ProductDetailPage() {
   if (!product) {
     return <div>Product not found</div>;
   }
-  console.log(product)
 
   const currentPrice =
     (selectedVariant &&
@@ -150,199 +148,183 @@ export function ProductDetailPage() {
 
   return (
     <>
-    <div className=" w-[90%] mx-auto h-full py-4 ">
-      <div ref={contentRef} className="grid gap-8 md:grid-cols-2">
-        <ProductImages images={selectedVariant?.images as string[]} />
+      <div className="w-full flex flex-col gap-y-5  md:w-[90%] px-5 md:px-10 mx-auto h-full py-20 ">
+        <div ref={contentRef} className="grid items-start gap-8 md:grid-cols-2">
+          <ProductImages images={selectedVariant?.images as string[]} />
 
-        {/* Product Details */}
-        <section className="flex flex-col border-b border-black pb-4 gap-6">
-          <div className=" border-b pb-2">
-            <h1 className="text-3xl ubuntu-medium text-[#121212]">
-              {product.name} - {selectedVariant?.color}
-            </h1>
-            <p className="text-sm text-muted-foreground -tracking-tighter">
-              {product.category.name}
-            </p>
-            <p className="mt-2 text-2xl font-bold">
-              &#8377; {currentPrice?.toFixed(2)}
-            </p>
-          </div>
-          {/* <p className="text-muted-foreground">{product?.description}</p> */}
-
-          {/* Variants */}
-          <div className="flex flex-col gap-3">
-            <p className=" capitalize font-semibold text-lg">
-              color:{" "}
-              <span className=" text-base text-gray-400">
-                {" "}
-                {selectedVariant?.color}{" "}
-              </span>
-            </p>
-            <div className="flex gap-3">
-              {product.variants.map((variant) => (
-                <div
-                  key={variant.id}
-                  className={`p-0.5 border ${
-                    selectedVariant?.id === variant.id
-                      ? "border-primary"
-                      : "border-muted"
-                  } cursor-pointer`}
-                  onClick={() => handleSelectVariant(variant)}
-                >
-                  <img
-                    src={variant.images[0]}
-                    alt={product.name}
-                    className="h-28 w-24 object-cover"
-                  />
-                  <p className="text-center text-sm mt-1">{variant.color}</p>
-                </div>
-              ))}
+          {/* Product Details */}
+          <section className="flex flex-col border-b border-black pb-4 gap-6">
+            <div className=" border-b pb-2">
+              <h1 className="text-3xl ubuntu-medium text-[#121212]">
+                {product.name} - {selectedVariant?.color}
+              </h1>
+              <p className="text-sm text-muted-foreground -tracking-tighter">
+                {product.category.name}
+              </p>
+              <p className="mt-2 text-2xl font-bold">
+                &#8377; {currentPrice?.toFixed(2)}
+              </p>
             </div>
-          </div>
+            {/* <p className="text-muted-foreground">{product?.description}</p> */}
 
-          {/* Sizes */}
-          <div className="flex gap-2 mt-2 justify-between ">
-            <div className="flex flex-col gap-2 ">
-            <p className=" uppercase text-xs space-x-5 text-[#FF0000]">Select a size</p>
-
-              <div className="flex gap-2">
-
-             
-            {sizesArray.map((size) => {
-              const isAvailable = availableSizes.includes(size);
-              const isActive = size === selectedSize;
-
-              return (
-                <div> 
-                  <Button
-                  key={size}
-                  onClick={() => isAvailable && handleSelectSize(size)}
-                  disabled={!isAvailable}
-                  className={`flex items-center justify-center border border-black  h-10 w-10 rounded-full bg-white text-black   ${
-                    isAvailable
-                      ? isActive
-                        ? " bg-primary text-white pointer-events-none "
-                        : ""
-                      : "opacity-80 cursor-not-allowed"
-                  }`}
-                >
-                  <span
-                    className={`relative ${
-                      !isAvailable ? "text-muted-foreground" : ""
-                    }`}
+            {/* Variants */}
+            <div className="flex flex-col gap-3">
+              <p className=" capitalize font-semibold text-lg">
+                color:{" "}
+                <span className=" text-base text-gray-400">
+                  {" "}
+                  {selectedVariant?.color}{" "}
+                </span>
+              </p>
+              <div className="flex gap-3">
+                {product.variants.map((variant) => (
+                  <div
+                    key={variant.id}
+                    className={`p-1  cursor-pointer`}
+                    onClick={() => handleSelectVariant(variant)}
                   >
-
-                  {size}
-                  {!isAvailable && (
-                    <span
-                      className=" absolute inset-0 flex items-center justify-center "
-                      aria-hidden="true"
+                    <img
+                      src={variant.images[0]}
+                      alt={product.name}
+                      className={cn(
+                        "h-28 w-24  transition-all duration-300 ease-in  rounded-sm object-cover",
+                        selectedVariant?.id === variant?.id && "scale-110 "
+                      )}
+                    />
+                    <p
+                      className={cn(
+                        "text-center text-sm mt-1",
+                        selectedVariant?.id === variant.id && "font-semibold"
+                      )}
                     >
-                      <span
-                        className="w-full h-[1px] bg-muted-foreground transform rotate-45"
-                        style={{ position: "absolute" }}
-                      />
-                    </span>
-                    
-                  )}
-                  </span>
-                </Button>
-                    </div>
- 
-              );
-            })}
-             </div>
+                      {variant.color}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
 
-          <div className="flex items-center">
-                  <span className=" text-sm lowercase text-[#1C1D45] max-lg:hidden">check your size?</span>
-                  <Button variant={"link"} className=" text-xs uppercase " 
-                  onClick={onOpenBottomSlide}
-                  
-                  >size chart</Button>
-                    </div>
-          </div>
+            {/* Sizes */}
+            <div className="flex flex-col  gap-3 mt-2 justify-between ">
+              <div className="flex flex-col gap-2 ">
+                <p className=" uppercase text-xs space-x-5 text-[#FF0000]">
+                  {errorMessage}
+                </p>
 
-          {/* Quantity Selector */}
-          <div className="flex flex-col justify-center gap-2">
-            <p className=" capitalize text-lg">
-              Quantity
-            </p>
-          
-          <div className="flex w-1/4 items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className=" h-10 w-10 border border-black/60"
-              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-            >
-              <Minus size={20} />
-            </Button>
-            <span className="px-4 flex items-center justify-center h-10 w-10 rounded-md border border-black/60">{quantity}</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              className=" h-10 w-10 border border-black/60"
-              onClick={() =>
-                setQuantity((q) => Math.min(currentStock || q, q + 1))
-              }
-            >
-              <Plus size={20} />
-            </Button>
-          </div>
-          </div>
-          {/* {quantity === currentStock && (
-            <p className="text-sm text-muted-foreground">
-              Only {currentStock} items left in stock for this size.
-            </p>
-          )} */}
-          
+                <div className="flex gap-2">
+                  {sizesArray.map((size) => {
+                    const isAvailable = availableSizes.includes(size);
+                    const isActive = size === selectedSize;
 
-          {/* Add to Cart */}
-          <div className=" flex flex-col gap-1">       
-          <div className="w-full flex gap-1">
-         {/* <div className="w-[50%] flex flex-col gap-2">
-            <Button
-            variant={"outline"}
-              onClick={handleAddToCart}
-              className="flex items-center gap-2 hover:text-black"
-            >
-              {isItemSelected ? "VIEW LIST" : "ADD TO WISHLIST"}
-            </Button>
-            
-          </div> */}
-          <div className="w-[50%] flex flex-col gap-2">
-            <Button
-            
-              onClick={handleAddToCart}
-              className="flex items-center gap-2"
-            >
-              {isItemSelected ? "VIEW BAG" : "ADD TO BAG"}
-            </Button>
-            
-          </div>
-          
-          </div>
-          
-          {errorMessage && (
-              <p className="text-sm text-red-500">{errorMessage}</p>
+                    return (
+                      <div>
+                        <Button
+                          key={size}
+                          onClick={() => isAvailable && handleSelectSize(size)}
+                          disabled={!isAvailable}
+                          className={`flex items-center justify-center border border-black  h-10 w-10 rounded-full bg-white text-black   ${
+                            isAvailable
+                              ? isActive
+                                ? " bg-primary text-white pointer-events-none "
+                                : ""
+                              : "opacity-80 cursor-not-allowed"
+                          }`}
+                        >
+                          <span
+                            className={`relative ${
+                              !isAvailable ? "text-muted-foreground" : ""
+                            }`}
+                          >
+                            {size}
+                            {!isAvailable && (
+                              <span
+                                className=" absolute inset-0 flex items-center justify-center "
+                                aria-hidden="true"
+                              >
+                                <span
+                                  className="w-full h-[1px] bg-muted-foreground transform rotate-45"
+                                  style={{ position: "absolute" }}
+                                />
+                              </span>
+                            )}
+                          </span>
+                        </Button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <SizeChart />
+            </div>
+
+            {/* Quantity Selector */}
+            <div className="flex flex-col justify-center gap-2">
+              <p className=" capitalize text-lg">Quantity</p>
+
+              <div className="flex w-1/4 items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className=" h-10 w-10 border border-black/60"
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                >
+                  <Minus size={20} />
+                </Button>
+                <span className="px-4 flex items-center justify-center h-10 w-10 rounded-md border border-black/60">
+                  {quantity}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className=" h-10 w-10 border border-black/60"
+                  onClick={() =>
+                    setQuantity((q) => Math.min(currentStock || q, q + 1))
+                  }
+                >
+                  <Plus size={20} />
+                </Button>
+              </div>
+            </div>
+            {quantity === currentStock && (
+              <p className="text-sm text-muted-foreground">
+                Only {currentStock} items left in stock for this size.
+              </p>
             )}
-             </div>
 
-        </section>
-      </div>
-      <div className="mt-8 flex flex-col gap-4 ">
-        <p className=" text-3xl ubuntu-medium">Washing Instructions</p>
-        <div className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 border border-black/50 rounded-md max-[550px]:px-2 px-8 py-2">
-          {washingInstructions.map((instruction) => (
-            <WashingInstruction key={instruction.id} title={instruction.title} icon={instruction.icon} />
-          ))}
+            {/* Add to Cart */}
+            <div className=" flex flex-col gap-1">
+              <div className="w-full flex gap-1">
+                <div className="w-[50%] flex flex-col gap-2">
+                  <Button
+                    onClick={handleAddToCart}
+                    className="flex items-center gap-2"
+                  >
+                    {isItemSelected ? "VIEW BAG" : "ADD TO BAG"}
+                  </Button>
+                </div>
+              </div>
+
+              {errorMessage && (
+                <p className="text-sm text-red-500">{errorMessage}</p>
+              )}
+            </div>
+          </section>
         </div>
+        <div className="mt-8 flex flex-col gap-4 ">
+          <p className=" text-3xl ubuntu-medium">Washing Instructions</p>
+          <div className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 border border-black/50 rounded-md max-[550px]:px-2 px-8 py-2">
+            {washingInstructions.map((instruction) => (
+              <WashingInstruction
+                key={instruction.id}
+                title={instruction.title}
+                icon={instruction.icon}
+              />
+            ))}
+          </div>
+        </div>
+        <RelatedProducts categoryId={product.categoryId} />
       </div>
-      {/* <RelatedProducts categoryId={product.categoryId} /> */}
-    <SizeChart />
-    </div>
-      
-      </>
+    </>
   );
 }
