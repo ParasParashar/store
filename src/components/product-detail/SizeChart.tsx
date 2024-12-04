@@ -15,7 +15,7 @@ const SizeChart = () => {
     <Sheet>
       <SheetTrigger>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[#1C1D45] max-lg:hidden">
+          <span className="text-sm text-[#1C1D45] ">
             Check your size?
           </span>
           <Button
@@ -29,10 +29,10 @@ const SizeChart = () => {
 
       <SheetContent
         side="bottom"
-        className="h-full w-full bg-transparent text-white overflow-y-auto p-6"
+        className="h-full w-full bg-transparent/60 text-white overflow-y-auto py-6 px-2 sm:p-12"
       >
         <SheetHeader>
-          <SheetTitle className="text-3xl font-semibold text-center mb-4 text-white">
+          <SheetTitle className="text-3xl underline font-mono text-center mb-8 text-[#3B82F6]">
             Size Chart
           </SheetTitle>
         </SheetHeader>
@@ -41,11 +41,11 @@ const SizeChart = () => {
           <div className="max-w-3xl mx-auto shadow-lg rounded-lg overflow-hidden">
             <table className="w-full table-fixed border-collapse">
               <thead>
-                <tr className="bg-[#3B82F6] text-white">
-                  <th className="p-3 text-center text-lg font-semibold">
+                <tr className="bg-[#F3F4F6] text-black">
+                  <th className="p-3 text-center text-lg font-semibold border-r border-gray-500">
                     Size
                   </th>
-                  <th className="p-3 text-center text-lg font-semibold">
+                  <th className="p-3 text-center text-lg font-semibold border-r border-gray-500">
                     Waist (cm)
                   </th>
                   <th className="p-3 text-center text-lg font-semibold">
@@ -69,11 +69,11 @@ const SizeChart = () => {
                         : "bg-[#ffffff05] text-white"
                     }`}
                   >
-                    <td className="p-4 text-center text-base font-medium">
+                    <td className="p-4 text-center text-xl font-medium">
                       {item.size}
                     </td>
-                    <td className="p-4 text-center text-base">{item.waist}</td>
-                    <td className="p-4 text-center text-base">{item.length}</td>
+                    <td className="p-4 text-center text-xl">{item.waist}</td>
+                    <td className="p-4 text-center text-xl">{item.length}</td>
                   </tr>
                 ))}
               </tbody>
@@ -81,14 +81,14 @@ const SizeChart = () => {
           </div>
         </SheetDescription>
 
-        <SheetClose asChild>
+        {/* <SheetClose asChild>
           <button
             aria-label="Close"
-            className="absolute top-4 right-4 p-2 rounded-full bg-[#3B82F6] hover:bg-[#2563EB] focus:ring-2 focus:ring-offset-2 focus:ring-[#3B82F6]"
+            className="absolute top-4 right-4 p-2 rounded-full  focus:ring-2 focus:ring-offset-2 focus:ring-[#3B82F6]"
           >
             <X className="text-white w-5 h-5" />
           </button>
-        </SheetClose>
+        </SheetClose> */}
       </SheetContent>
     </Sheet>
   );

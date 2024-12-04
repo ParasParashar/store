@@ -148,14 +148,14 @@ export function ProductDetailPage() {
 
   return (
     <>
-      <div className="w-full flex flex-col gap-y-5  md:w-[90%] px-5 md:px-10 mx-auto h-full  py-8 lg:py-14 ">
+      <div className="w-full flex flex-col gap-y-5  md:w-[90%] px-5 mx-auto h-full py-2 sm:py-8 lg:py-14 ">
         <div ref={contentRef} className="grid items-start gap-8 md:grid-cols-2">
           <ProductImages images={selectedVariant?.images as string[]} />
 
           {/* Product Details */}
-          <section className="flex flex-col border-b border-black pb-4 gap-6">
+          <section className="flex h-full flex-col border-b border-black/40 pb-4 gap-6">
             <div className=" border-b pb-2">
-              <h1 className="text-3xl ubuntu-medium text-[#121212]">
+              <h1 className="text-2xl sm:text-3xl ubuntu-medium text-[#121212]">
                 {product.name} - {selectedVariant?.color}
               </h1>
               <p className="text-sm text-muted-foreground -tracking-tighter">
@@ -309,8 +309,10 @@ export function ProductDetailPage() {
             </div>
           </section>
         </div>
+
+        {/* Washing Instructions */}
         <div className="mt-8 flex flex-col gap-4 ">
-          <p className=" text-3xl ubuntu-medium">Washing Instructions</p>
+          <p className=" text-2xl sm:text-3xl ubuntu-medium">Washing Instructions</p>
           <div className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 border border-black/50 rounded-md max-[550px]:px-2 px-8 py-2">
             {washingInstructions.map((instruction) => (
               <WashingInstruction

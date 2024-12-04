@@ -9,7 +9,7 @@ interface WashingInstructionProps {
   return (
     <div className="flex flex-col items-center justify-center gap-1">
         <Icon className=" h-10 w-6" />
-        <p className=" break-words">{title}</p>
+        <p className=" break-words text-center">{title}</p>
     </div>
   )
 }

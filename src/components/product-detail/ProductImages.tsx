@@ -31,14 +31,14 @@ const ProductImages = ({ images }: Props) => {
   };
 
   return (
-    <div className="flex flex-col-reverse gap-4 lg:flex-row h-full items-start justify-center">
+    <div className="flex flex-col-reverse gap-4 h-full items-start justify-center ">
       {/* Thumbnail Section */}
-      <div className="flex lg:flex-col h-full lg:flex-nowrap  flex-wrap gap-3 p-3 items-start overflow-hidden   justify-start ">
+      <div className="flex  h-full md:flex-nowrap flex-wrap gap-3 p-1 items-start justify-start  ">
         {images.map((img, index) => (
           <div
             key={img}
             onMouseEnter={() => setImage(img, index)}
-            className={`w-20 h-20 relative cursor-pointer rounded-lg overflow-hidden transition-all duration-300 shadow-md hover:scale-110 
+            className={`w-20 h-20 relative cursor-pointer rounded-sm overflow-hidden transition-all duration-300 shadow-md hover:scale-110 
             }`}
           >
             <img
@@ -55,8 +55,8 @@ const ProductImages = ({ images }: Props) => {
       </div>
 
       {/* Primary Image Section */}
-      <div className="flex-1 w-full">
-        <div className=" flex justify-center items-center overflow-hidden rounded-lg shadow-lg aspect-square">
+      <div className="flex-1 w-full h-full">
+        <div className=" flex justify-center items-center overflow-hidden rounded-sm shadow-lg aspect-square" >
           <img
             src={posterImage}
             alt="Product Primary"

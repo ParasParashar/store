@@ -22,7 +22,7 @@ export function ProductCard({ product }: ProductCardProps) {
     discountedPrice && calculateDiscount(price, discountedPrice);
 
   return (
-    <Card className="group overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+    <Card className="group h-full overflow-hidden shadow-md hover:shadow-lg transition-shadow " >
       <CardContent className="p-0">
         <Link to={`/product/${slug}`}>
           <div className="relative aspect-square overflow-hidden">
@@ -39,10 +39,10 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
         </Link>
       </CardContent>
-      <CardFooter className="p-4">
+      <CardFooter className="p-3">
         <div className="flex w-full flex-col gap-2">
           {/* Product Name and Category */}
-          <div className="flex items-start justify-between">
+          <div className="flex flex-col gap-1 items-start justify-between">
             <div>
               <h3 className="font-semibold">{name}</h3>
               <p className="text-sm text-muted-foreground">{category.name}</p>
@@ -62,7 +62,7 @@ export function ProductCard({ product }: ProductCardProps) {
                   </p>
                 </>
               ) : (
-                <p className="text-lg font-bold">&#8377;{price.toFixed(2)}</p>
+                <p className="text-lg font-bold">&#8377; {price.toFixed(2)}</p>
               )}
             </div>
           </div>

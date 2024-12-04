@@ -110,24 +110,30 @@ export function Navbar() {
         </div>
       </div>
 
-      {isMenuOpen && (
-        <div className={`border border-black `}>
-          <nav className="flex flex-col space-y-4 pb-4">
-            <Link
-              to="/products"
-              className="text-sm font-medium transition-colors hover:text-primary"
-            >
-              Shop
-            </Link>
-            <Link
-              to="/collections"
-              className="text-sm font-medium transition-colors hover:text-primary"
-            >
-              Collections
-            </Link>
-          </nav>
-        </div>
-      )}
+      {/* Dropdown Menu */}
+      <div
+        className={`absolute left-0 top-16 w-full bg-white border-t border-gray-200 overflow-hidden transition-all duration-500 ease-in-out ${
+          isMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <nav className="flex flex-col space-y-4 py-4 px-6">
+          <Link
+            to="/products"
+            className="text-xl font-medium transition-colors hover:text-primary"
+          >
+            Shop
+          </Link>
+          <Link
+            to="/collections"
+            className="text-xl font-medium transition-colors hover:text-primary"
+          >
+            Collections
+          </Link>
+        </nav>
+      </div>
+
+
+
     </header>
   );
 }
