@@ -6,8 +6,12 @@ import { ProductCard } from "../products/ProductCard";
 
 interface RelatedProductsProps {
   categoryId: string;
+  productId: string;
 }
-const RelatedProducts: React.FC<RelatedProductsProps> = ({ categoryId }) => {
+const RelatedProducts: React.FC<RelatedProductsProps> = ({
+  categoryId,
+  productId,
+}) => {
   const {
     data: products,
     isLoading,
@@ -19,7 +23,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ categoryId }) => {
         `/api/store/products?category_id=${categoryId}`
       );
       if (!data.success) throw new Error(data.message);
-      return data.data;
+      return data.data.filter((i: any) => i.id !== productId);
     },
     enabled: !!categoryId,
   });

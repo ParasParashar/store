@@ -13,7 +13,7 @@ interface CartItem {
   status: string;
   variantId?: string;
   attributeId?: string;
-
+  slug: string;
 }
 
 interface CartStore {

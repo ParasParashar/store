@@ -17,6 +17,8 @@ type productDetails = {
     name: string;
     status: string;
     price: number; //
+    slug: string;
+    discountPercent?: number
 }
 
 const useSelectVariantController = create<SelectModalProps>((set) => ({

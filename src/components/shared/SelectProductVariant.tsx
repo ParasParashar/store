@@ -14,6 +14,7 @@ import { sizesArray } from "@/lib/default-data";
 import { Minus, Plus } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import useCartController from "@/hooks/useCartController";
+import toast from "react-hot-toast";
 
 const SelectProductVariant = () => {
   const { isOpen, onClose, variants, product, clearVariants } =
@@ -30,17 +31,21 @@ const SelectProductVariant = () => {
   useEffect(() => {
     setQuantity(1);
     setSelectedVariant(variants[0]);
+    setSelectedSize("");
   }, [isOpen]);
 
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
   const openModal = variants && isOpen;
-
-  const currentPrice =
+  const price =
     (selectedVariant &&
       selectedVariant.attributes.find((attr) => attr.size === selectedSize)
         ?.price) ||
     product?.price;
+
+  const currentPrice = product?.discountPercent
+    ? price - (product?.discountPercent / 100) * price
+    : price;
 
   const currentStock =
     selectedVariant &&
@@ -56,6 +61,9 @@ const SelectProductVariant = () => {
     setSelectedSize(size);
     if (selectedVariant) {
       setIsSelected(true);
+    }
+    if (errorMessage) {
+      setErrorMessage("");
     }
   };
 
@@ -83,8 +91,10 @@ const SelectProductVariant = () => {
         (atr) => atr.size === selectedSize
       )?.id,
       status: product.status,
+      slug: product.slug,
     });
     clearVariants();
+    toast.success("Product added to bag.");
     onClose();
     onOpen();
   };
@@ -184,6 +194,7 @@ const SelectProductVariant = () => {
                 <Button
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                   variant="ghost"
+                  size={"icon"}
                   className="h-10 w-10 border border-gray-300"
                 >
                   <Minus size={18} />
@@ -193,6 +204,7 @@ const SelectProductVariant = () => {
                   onClick={() =>
                     setQuantity((q) => Math.min(currentStock || q, q + 1))
                   }
+                  size={"icon"}
                   variant="ghost"
                   className="h-10 w-10 border border-gray-300"
                 >
@@ -206,6 +218,25 @@ const SelectProductVariant = () => {
               )}
             </div>
           )}
+          {/* price  */}
+
+          <div className="mt-2">
+            {product?.discountPercent ? (
+              <div>
+                <p className="text-3xl font-bold text-red-500">
+                  &#8377; {currentPrice?.toFixed(2)}{" "}
+                  <span className="text-lg text-gray-500">
+                    ({product.discountPercent}% OFF)
+                  </span>
+                </p>
+                <p className="text-md line-through text-gray-500">
+                  &#8377; {price?.toFixed(2)}
+                </p>
+              </div>
+            ) : (
+              <p className="text-2xl font-bold">&#8377; {price?.toFixed(2)}</p>
+            )}
+          </div>
 
           {/* Add to Cart */}
           <div className="mt-4">

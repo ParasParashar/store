@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/sheet";
 import { useCart } from "@/hooks/useCart";
 import useCartController from "@/hooks/useCartController";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
@@ -56,13 +56,13 @@ const CartSlider = () => {
                   <X />
                 </Button>
                 <CardContent className="p-4 flex gap-3 items-start">
-                  <div className="w-1/4">
+                  <Link to={`/product/${item.slug}`} className="w-1/4">
                     <img
                       src={item.image}
                       alt={item.name}
                       className="rounded-lg object-cover w-full"
                     />
-                  </div>
+                  </Link>
                   <div className="flex flex-col flex-1">
                     <h6 className="text-lg font-semibold text-muted-foreground truncate">
                       {item.name}

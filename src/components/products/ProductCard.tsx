@@ -15,23 +15,18 @@ export function ProductCard({ product }: ProductCardProps) {
 
   if (!product) return null;
 
-  const {
-    discountedPrice,
-    discountPercent,
-    price,
-    name,
-    category,
-    slug,
-    status,
-    variants,
-  } = product;
+  const { discountPercent, price, name, category, slug, status, variants } =
+    product;
 
+  const discountedPrice = price - (discountPercent / 100) * price;
   const handleAddToCart = () => {
     addVariants(variants);
     setProduct({
       name: name,
-      price: discountedPrice || price,
+      price: price,
       status: status,
+      slug: slug,
+      discountPercent: +discountPercent as number,
     });
     onOpen();
   };
@@ -64,7 +59,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
             {/* Price Section */}
             <div className="text-right">
-              {discountedPrice ? (
+              {discountedPrice !== price ? (
                 <div className="flex flex-col items-start justify-start">
                   <p className="text-red-600 flex items-center gap-3 font-bold text-lg">
                     &#8377;{discountedPrice.toFixed(2)}
