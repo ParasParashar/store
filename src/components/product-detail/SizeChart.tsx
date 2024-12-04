@@ -7,7 +7,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { X } from "lucide-react";
 import { Button } from "../ui/button";
 
 const SizeChart = () => {
@@ -15,9 +14,7 @@ const SizeChart = () => {
     <Sheet>
       <SheetTrigger>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[#1C1D45] ">
-            Check your size?
-          </span>
+          <span className="text-sm text-[#1C1D45] ">Check your size?</span>
           <Button
             variant="link"
             className="text-xs uppercase text-[#1C1D45] hover:text-[#3B82F6]"
@@ -29,7 +26,7 @@ const SizeChart = () => {
 
       <SheetContent
         side="bottom"
-        className="h-full w-full bg-transparent/60 text-white overflow-y-auto py-6 px-2 sm:p-12"
+        className="h-full w-full bg-transparent/60 text-white overflow-y-auto py-6 border-none ring-0 px-2 sm:p-12"
       >
         <SheetHeader>
           <SheetTitle className="text-3xl underline font-mono text-center mb-8 text-[#3B82F6]">
@@ -80,15 +77,6 @@ const SizeChart = () => {
             </table>
           </div>
         </SheetDescription>
-
-        {/* <SheetClose asChild>
-          <button
-            aria-label="Close"
-            className="absolute top-4 right-4 p-2 rounded-full  focus:ring-2 focus:ring-offset-2 focus:ring-[#3B82F6]"
-          >
-            <X className="text-white w-5 h-5" />
-          </button>
-        </SheetClose> */}
       </SheetContent>
     </Sheet>
   );

@@ -1,12 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import AxiosBase from "@/lib/axios";
 import { Product } from "@/types/product";
 import { ProductCard } from "../products/ProductCard";
@@ -15,7 +8,6 @@ interface RelatedProductsProps {
   categoryId: string;
 }
 const RelatedProducts: React.FC<RelatedProductsProps> = ({ categoryId }) => {
-  console.log(categoryId);
   const {
     data: products,
     isLoading,
@@ -32,7 +24,6 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ categoryId }) => {
     enabled: !!categoryId,
   });
 
-  console.log(products);
   if (isError) {
     return null;
   }

@@ -15,6 +15,7 @@ import washingInstructions from "@/lib/washingInstructions";
 import WashingInstruction from "@/components/product-detail/WashingInstruction";
 import { cn } from "@/lib/utils";
 import RelatedProducts from "@/components/product-detail/RelatedProducts";
+import { sizesArray } from "@/lib/default-data";
 
 export function ProductDetailPage() {
   const { addItem, items } = useCart();
@@ -28,8 +29,6 @@ export function ProductDetailPage() {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const sizesArray = ["S", "M", "L", "XL", "XXL"];
 
   const { data: product, isLoading } = useQuery<Product>({
     queryKey: ["product", slug],
@@ -103,12 +102,6 @@ export function ProductDetailPage() {
     }
 
     const cartId = `${selectedVariant.productId}-${selectedSize}-${selectedVariant.color}`;
-    const isSelected = items.some((item) => item.id === cartId);
-    if (isSelected) {
-      onOpen();
-      return;
-    }
-
     setErrorMessage("");
     addItem({
       id: cartId,
@@ -312,7 +305,9 @@ export function ProductDetailPage() {
 
         {/* Washing Instructions */}
         <div className="mt-8 flex flex-col gap-4 ">
-          <p className=" text-2xl sm:text-3xl ubuntu-medium">Washing Instructions</p>
+          <p className=" text-2xl sm:text-3xl ubuntu-medium">
+            Washing Instructions
+          </p>
           <div className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 border border-black/50 rounded-md max-[550px]:px-2 px-8 py-2">
             {washingInstructions.map((instruction) => (
               <WashingInstruction

@@ -56,7 +56,7 @@ const ProductImages = ({ images }: Props) => {
 
       {/* Primary Image Section */}
       <div className="flex-1 w-full h-full">
-        <div className=" flex justify-center items-center overflow-hidden rounded-sm shadow-lg aspect-square" >
+        <div className=" flex justify-center items-center overflow-hidden rounded-sm shadow-lg aspect-square">
           <img
             src={posterImage}
             alt="Product Primary"

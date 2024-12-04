@@ -81,17 +81,11 @@ export function Navbar() {
 
         <div className="flex items-center space-x-4">
           <Button
-            variant="ghost"
-            size="icon"
-            asChild
-            className=" max-sm:hidden"
-          ></Button>
-          <Button
             onClick={onOpen}
             variant="ghost"
             size="icon"
             asChild
-            className="relative max-sm:hidden"
+            className="relative "
           >
             <div className="relative">
               <IoBagOutline size={20} />
