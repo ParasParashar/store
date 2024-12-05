@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-
 interface CartItem {
   name: string;
   id: string;
@@ -14,6 +13,7 @@ interface CartItem {
   variantId?: string;
   attributeId?: string;
   slug: string;
+  maxStock: number;
 }
 
 interface CartStore {
@@ -37,16 +37,23 @@ export const useCart = create<CartStore>()(
           );
 
           if (existingItem) {
+            const newQuantity = Math.min(
+              existingItem.quantity + item.quantity,
+              existingItem.maxStock
+            );
             return {
               items: state.items.map((i) =>
                 i === existingItem
-                  ? { ...i, quantity: i.quantity + item.quantity }
+                  ? { ...i, quantity: newQuantity }
                   : i
               ),
             };
           }
 
-          return { items: [...state.items, item] };
+          // Ensure the initial quantity does not exceed maxStock
+          const initialQuantity = Math.min(item.quantity, item.maxStock);
+
+          return { items: [...state.items, { ...item, quantity: initialQuantity }] };
         }),
       removeItem: (productId) =>
         set((state) => ({
@@ -56,7 +63,7 @@ export const useCart = create<CartStore>()(
         set((state) => ({
           items: state.items.map((item) =>
             item.id === productId
-              ? { ...item, quantity }
+              ? { ...item, quantity: Math.min(quantity, item.maxStock) }
               : item
           ),
         })),

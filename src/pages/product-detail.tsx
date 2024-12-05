@@ -122,6 +122,7 @@ export function ProductDetailPage() {
       )?.id,
       status: product.status,
       slug: product.slug,
+      maxStock: currentStock as number,
     });
     toast.success("Product added to bag.");
     setIsItemSelected(true);
