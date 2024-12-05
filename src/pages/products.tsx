@@ -39,7 +39,7 @@ export function ProductsPage() {
     }
   }, [inView, hasNextPage, fetchNextPage]);
   return (
-    <div className="container mx-auto py-8 px-5 w-full md:w-3/4 ">
+    <div className="w-full h-full md:w-[95%] px-2 sm:px-4 md:mx-auto py-2 sm:py-8 lg:py-10">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
         <aside className="md:col-span-1">
           <ProductFilters />

@@ -17,6 +17,8 @@ import { cn } from "@/lib/utils";
 import RelatedProducts from "@/components/product-detail/RelatedProducts";
 import { sizesArray } from "@/lib/default-data";
 import toast from "react-hot-toast";
+import { BsExclamationCircleFill } from "react-icons/bs";
+import ProductImageColors from "@/components/product-detail/ProductImageColors";
 
 export function ProductDetailPage() {
   const { addItem, items } = useCart();
@@ -79,6 +81,8 @@ export function ProductDetailPage() {
   if (!product) {
     return <div>Product not found</div>;
   }
+
+  // console.log(product.variants)
 
   const price =
     (selectedVariant &&
@@ -147,12 +151,12 @@ export function ProductDetailPage() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-y-5  md:w-[90%] px-5 mx-auto h-full py-2 sm:py-8 lg:py-14 ">
-      <div ref={contentRef} className="grid items-start gap-8 md:grid-cols-2">
+    <div className="w-full flex flex-col gap-y-5  md:w-[90%] px-2 sm:px-4  md:mx-auto h-full py-2 sm:py-8 lg:py-14 ">
+      <div ref={contentRef} className="w-full flex flex-col md:flex-row items-start gap-8">
         <ProductImages images={selectedVariant?.images as string[]} />
 
         {/* Product Details */}
-        <section className="flex h-full flex-col border-b border-black/40 pb-4 gap-6">
+        <section className="w-full md:w-[40%] flex h-full flex-col border-b border-black/40 pb-4 gap-6">
           <div className=" border-b pb-2">
             <h1 className="text-2xl sm:text-3xl ubuntu-medium text-[#121212]">
               {product.name} - {selectedVariant?.color}
@@ -169,18 +173,18 @@ export function ProductDetailPage() {
             <div className="mt-2">
               {product?.discountPercent ? (
                 <div>
-                  <p className="text-3xl font-bold text-red-500">
+                  <p className="text-3xl font-bold ">
                     &#8377; {currentPrice?.toFixed(2)}{" "}
-                    <span className="text-lg text-gray-500">
+                    <span className="bg-green-500 font-normal rounded-sm text-white px-2 py-0.5 text-sm">
                       ({product.discountPercent}% OFF)
                     </span>
                   </p>
-                  <p className="text-md line-through text-gray-500">
+                  <p className="text-base line-through text-red-500">
                     &#8377; {price?.toFixed(2)}
                   </p>
                 </div>
               ) : (
-                <p className="text-2xl font-bold">
+                <p className="text-2xl font-bold ">
                   &#8377; {price?.toFixed(2)}
                 </p>
               )}
@@ -197,48 +201,26 @@ export function ProductDetailPage() {
                 {selectedVariant?.color}{" "}
               </span>
             </p>
-            <div className="flex gap-3">
-              {product.variants.map((variant) => (
-                <div
-                  key={variant.id}
-                  className={`p-1  cursor-pointer`}
-                  onClick={() => handleSelectVariant(variant)}
-                >
-                  <img
-                    src={variant.images[0]}
-                    alt={product.name}
-                    className={cn(
-                      "h-28 w-24  transition-all duration-300 ease-in  rounded-sm object-cover",
-                      selectedVariant?.id === variant?.id && "scale-110 "
-                    )}
-                  />
-                  <p
-                    className={cn(
-                      "text-center text-sm mt-1",
-                      selectedVariant?.id === variant.id && "font-semibold"
-                    )}
-                  >
-                    {variant.color}
-                  </p>
-                </div>
-              ))}
-            </div>
+            
+             
+            <ProductImageColors variants={product.variants} onSelectVariant={handleSelectVariant} />
           </div>
 
           {/* Sizes */}
           <div className="flex flex-col  gap-3 mt-2 justify-between ">
             <div className="flex flex-col gap-2 ">
-              <p className=" uppercase text-xs space-x-5 text-[#FF0000]">
-                {errorMessage}
+              
+              <p className=" flex items-center gap-2 uppercase text-xs space-x-5 text-[#FF0000]">
+                {errorMessage ? <BsExclamationCircleFill size={16} /> : null} {errorMessage}
               </p>
-
+             
               <div className="flex gap-2">
                 {sizesArray.map((size) => {
                   const isAvailable = availableSizes.includes(size);
                   const isActive = size === selectedSize;
 
                   return (
-                    <div>
+                    <div key={size}>
                       <Button
                         key={size}
                         onClick={() => isAvailable && handleSelectSize(size)}
@@ -346,6 +328,7 @@ export function ProductDetailPage() {
           ))}
         </div>
       </div>
+
       <RelatedProducts productId={product.id} categoryId={product.categoryId} />
     </div>
   );
