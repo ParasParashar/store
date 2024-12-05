@@ -56,11 +56,14 @@ const CartSlider = () => {
                   <X />
                 </Button>
                 <CardContent className="p-4 flex gap-3 items-start">
-                  <Link to={`/product/${item.slug}`} className="w-1/4">
+                  <Link
+                    to={`/product/${item.slug}`}
+                    className="w-1/4 flex-shrink-0"
+                  >
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="rounded-lg object-cover w-full"
+                      className="rounded-lg object-cover w-full aspect-square"
                     />
                   </Link>
                   <div className="flex flex-col flex-1">

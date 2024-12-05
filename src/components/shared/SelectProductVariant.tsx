@@ -96,7 +96,6 @@ const SelectProductVariant = () => {
     clearVariants();
     toast.success("Product added to bag.");
     onClose();
-    onOpen();
   };
 
   return (
