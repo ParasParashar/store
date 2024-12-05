@@ -56,7 +56,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
       </h3>
       <div className="flex gap-3 md:gap-x-6 w-full overflow-x-auto custom-scrollbar ">
         {products.map((product: Product) => (
-          <div key={product.id} className="w-full md:w-[250px] h-full">
+          <div key={product.id} className="w-full py-3 md:w-[250px] h-full">
             <ProductCard product={product} />
           </div>
         ))}
