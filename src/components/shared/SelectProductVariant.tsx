@@ -94,6 +94,7 @@ const SelectProductVariant = () => {
       )?.id,
       status: product.status,
       slug: product.slug,
+      maxStock: currentStock as number,
     });
     clearVariants();
     toast.success("Product added to bag.");
