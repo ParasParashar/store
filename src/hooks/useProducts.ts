@@ -9,7 +9,7 @@ const fetchProducts = async ({
 }: {
   pageParam?: number;
   filters?: Filters;
-}): Promise<{ products: Product[]; nextPage: number | null }> => {
+}): Promise<{ products: Product[]; nextPage: number | null; hasNextPage: boolean }> => {
   const queryParams = buildFilterQueryParams(filters || {});
   const { data } = await AxiosBase.get(`/api/store/products?page=${pageParam}&${queryParams}`);
 
@@ -17,18 +17,23 @@ const fetchProducts = async ({
     throw new Error("Failed to fetch products");
   }
 
-  return data.data;
+  return {
+    products: data.data,
+    nextPage: data.hasNextPage ? pageParam + 1 : null,
+    hasNextPage: data.hasNextPage,
+  };
 };
 
 export const useProducts = (filters?: Filters) => {
   return useInfiniteQuery({
     queryKey: ["products", filters],
     queryFn: ({ pageParam }) => fetchProducts({ pageParam, filters }),
-    getNextPageParam: (lastPage) => lastPage.nextPage,
+    getNextPageParam: (lastPage) => lastPage.hasNextPage ? lastPage.nextPage : null,
     initialPageParam: 1,
-    enabled: !!filters
+    enabled: !!filters,
   });
 };
+
 
 
 export const buildFilterQueryParams = (filters: Filters): string => {
