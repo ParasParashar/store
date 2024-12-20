@@ -124,9 +124,9 @@ export function ProductsPage() {
   }, [inView, hasNextPage, fetchNextPage]);
 
   return (
-    <div className="w-full h-full md:w-[95%] px-2 sm:px-4 md:mx-auto py-2 sm:py-8 lg:py-10">
+    <div className="w-full h-full md:w-[95%] sm:px-4 md:mx-auto py-2 sm:py-8 lg:py-10  p-5 lg:px-20">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-        <aside className="md:col-span-1">
+        <aside className="md:col-span-1  ">
           <ProductFilters />
         </aside>
         <div className="md:col-span-3">
@@ -146,13 +146,20 @@ export function ProductsPage() {
                   <Skeleton className="h-4 w-1/2" />
                 </div>
               ))}
-
             {/* Render products */}
             {data?.pages.map((page) =>
               page.products.map((product: Product) => (
                 <ProductCard key={product.id} product={product} />
               ))
             )}
+            {isFetchingNextPage &&
+              Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="space-y-4">
+                  <Skeleton className="h-[300px] w-full" />
+                  <Skeleton className="h-4 w-2/3" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
+              ))}
           </div>
 
           {/* Sentinel Element for Intersection Observer */}
