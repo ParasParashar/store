@@ -6,12 +6,14 @@ type Props = {
 };
 
 const ProductImages = ({ images }: Props) => {
-  const [posterImage, setPosterImage] = useState<string>(images[0] || "");
+  const [posterImage, setPosterImage] = useState<string>("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
-    setPosterImage(images[0]);
-  }, []);
+    if (images) {
+      setPosterImage(images[0]);
+    }
+  }, [images]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -48,7 +50,7 @@ const ProductImages = ({ images }: Props) => {
     <div className="w-full md:w-[60%] flex flex-col-reverse md:flex-row gap-4 h-full items-start justify-center">
       {/* Thumbnail Section (only visible on medium screens and above) */}
       <div className="hidden md:flex md:flex-col h-full gap-3 p-1 items-start justify-start">
-        {images.map((img, index) => (
+        {images?.map((img, index) => (
           <div
             key={img}
             onMouseEnter={() => setImage(img, index)}
@@ -58,8 +60,9 @@ const ProductImages = ({ images }: Props) => {
               src={img}
               alt="Thumbnail"
               className={cn(
-                "w-full h-full object-cover",
-                posterImage === img && "scale-110 border-2 border-muted-foreground"
+                "w-full h-full object-contain",
+                posterImage === img &&
+                  "scale-110 border-2 border-muted-foreground"
               )}
             />
           </div>
@@ -68,11 +71,11 @@ const ProductImages = ({ images }: Props) => {
 
       {/* Primary Image Section */}
       <div className="flex-1 w-full h-full relative">
-        <div className="flex justify-center items-center overflow-hidden rounded-sm shadow-lg aspect-square">
+        <div className="flex justify-center items-center overflow-hidden rounded-sm aspect-square">
           <img
             src={posterImage}
             alt="Product Primary"
-            className="w-full h-full object-cover transition-all duration-500"
+            className="w-full h-full object-contain transition-all duration-500"
           />
         </div>
         {/* Navigation Buttons (only visible on smaller screens) */}

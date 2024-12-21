@@ -19,6 +19,7 @@ import { sizesArray } from "@/lib/default-data";
 import toast from "react-hot-toast";
 import { BsExclamationCircleFill } from "react-icons/bs";
 import ProductImageColors from "@/components/product-detail/ProductImageColors";
+import { Badge } from "@/components/ui/badge";
 
 export function ProductDetailPage() {
   const { addItem, items } = useCart();
@@ -33,7 +34,11 @@ export function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { data: product, isLoading } = useQuery<Product>({
+  const {
+    data: product,
+    isLoading,
+    refetch,
+  } = useQuery<Product>({
     queryKey: ["product", slug],
     queryFn: async () => {
       const { data } = await AxiosBase.get("/api/store/product/" + slug);
@@ -45,6 +50,20 @@ export function ProductDetailPage() {
     },
     enabled: !!slug,
   });
+
+  useEffect(() => {
+    refetch();
+  }, [slug, refetch]);
+
+  useEffect(() => {
+    if (product?.variants) {
+      setSelectedVariant(product.variants[0]);
+      setSelectedSize(null);
+    } else {
+      setSelectedVariant(null);
+      setSelectedSize(null);
+    }
+  }, [product, slug]);
 
   useEffect(() => {
     if (contentRef.current && !isLoading) {
@@ -153,8 +172,13 @@ export function ProductDetailPage() {
 
   return (
     <div className="w-full flex flex-col gap-y-5  md:w-[90%] px-2 sm:px-4  md:mx-auto h-full py-2 sm:py-8 lg:py-14 ">
-      <div ref={contentRef} className="w-full flex flex-col md:flex-row items-start gap-8">
-        <ProductImages images={selectedVariant?.images as string[]} />
+      <div
+        ref={contentRef}
+        className="w-full flex flex-col md:flex-row items-start gap-8"
+      >
+        {!isLoading && selectedVariant?.images && (
+          <ProductImages images={selectedVariant.images} />
+        )}
 
         {/* Product Details */}
         <section className="w-full md:w-[40%] flex h-full flex-col border-b border-black/40 pb-4 gap-6">
@@ -202,19 +226,21 @@ export function ProductDetailPage() {
                 {selectedVariant?.color}{" "}
               </span>
             </p>
-            
-             
-            <ProductImageColors variants={product.variants} onSelectVariant={handleSelectVariant} />
+
+            <ProductImageColors
+              variants={product.variants}
+              onSelectVariant={handleSelectVariant}
+            />
           </div>
 
           {/* Sizes */}
           <div className="flex flex-col  gap-3 mt-2 justify-between ">
             <div className="flex flex-col gap-2 ">
-              
               <p className=" flex items-center gap-2 uppercase text-xs space-x-5 text-[#FF0000]">
-                {errorMessage ? <BsExclamationCircleFill size={16} /> : null} {errorMessage}
+                {errorMessage ? <BsExclamationCircleFill size={16} /> : null}{" "}
+                {errorMessage}
               </p>
-             
+
               <div className="flex gap-2">
                 {sizesArray.map((size) => {
                   const isAvailable = availableSizes.includes(size);
@@ -299,18 +325,22 @@ export function ProductDetailPage() {
           )}
 
           {/* Add to Cart */}
-          <div className=" flex flex-col gap-1">
-            <div className="w-full flex gap-1">
-              <div className="w-[50%] flex flex-col gap-2">
-                <Button
-                  onClick={handleAddToCart}
-                  className="flex items-center gap-2"
-                >
-                  ADD TO BAG
-                </Button>
-              </div>
+          {/* <div className="w-full flex gap-1"> */}
+          {currentStock === 0 || product.status === "out_of_stock" ? (
+            <Badge className="text-lg w-32  text-center  rounded-full">
+              Out of Stock
+            </Badge>
+          ) : (
+            <div className="w-[50%] flex flex-col gap-2">
+              <Button
+                onClick={handleAddToCart}
+                className="flex items-center gap-2"
+              >
+                ADD TO BAG
+              </Button>
+              {/* </div> */}
             </div>
-          </div>
+          )}
         </section>
       </div>
 
