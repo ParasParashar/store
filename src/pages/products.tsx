@@ -90,6 +90,7 @@ import { ProductFilters } from "@/components/products/ProductFilters";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLocation } from "react-router-dom";
 import { Product } from "@/types/product";
+import MobileProductFilter from "@/components/products/MobileProductFilter";
 
 // Helper function to extract filters from the search params
 const getFiltersFromSearchParams = (searchParams: URLSearchParams) => {
@@ -126,17 +127,20 @@ export function ProductsPage() {
   return (
     <div className="w-full h-full md:w-[95%] sm:px-4 md:mx-auto py-2 sm:py-8 lg:py-10  p-5 lg:px-20">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-        <aside className="md:col-span-1  ">
+        <div className="block md:hidden w-full h-full">
+          <MobileProductFilter />
+        </div>
+        <aside className="md:col-span-1 hidden md:block  ">
           <ProductFilters />
         </aside>
-        <div className="md:col-span-3">
+        <section className="md:col-span-3">
           {/* Show message if no products are found */}
           {!isLoading && !data?.pages.length && (
             <p className="text-center text-lg w-full">No Products Found</p>
           )}
 
           {/* Product Grid */}
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 lg:gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {/* Skeleton loader for loading state */}
             {isLoading &&
               Array.from({ length: 6 }).map((_, i) => (
@@ -166,7 +170,7 @@ export function ProductsPage() {
           {hasNextPage && (
             <div ref={ref} className="mt-8 flex justify-center h-4"></div>
           )}
-        </div>
+        </section>
       </div>
     </div>
   );

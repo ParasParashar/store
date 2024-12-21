@@ -26,7 +26,7 @@ export function ProductCard({ product }: ProductCardProps) {
       price: price,
       status: status,
       slug: slug,
-      discountPercent: + discountPercent as number,
+      discountPercent: +discountPercent as number,
     });
     onOpen();
   };
@@ -60,56 +60,59 @@ export function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
         {/* </Link> */}
-
         {/* Button Animation */}
-        <motion.button
-          className="absolute bottom-0  inset-x-0 z-20  py-2 text-center font-mono font-black uppercase    transition-colors group bg-white hover:bg-secondary  text-green-800 hover:text-green-900"
-          initial={{ y: "50%", opacity: 0, translateY: 0 }}
-          variants={{
-            hover: {
-              y: 0,
-              opacity: 100,
-              translateY: 1,
-            },
-          }}
-          transition={{
-            duration: 1,
-            ease: "backInOut",
-            visualDuration: 0,
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            handleAddToCart();
-          }}
-          disabled={status === "out_of_stock"}
-        >
-          <IoBagOutline
-            className="inline-block group-hover:text-green-500 mr-2"
-            size={20}
-          />
-          Add to Cart
-        </motion.button>
+        {status !== "out_of_stock" && (
+          <motion.button
+            className="absolute bottom-0  inset-x-0 z-20  py-2 text-center font-mono font-black uppercase    transition-colors group bg-white hover:bg-secondary  text-green-800 hover:text-green-900"
+            initial={{ y: "50%", opacity: 0, translateY: 0 }}
+            variants={{
+              hover: {
+                y: 0,
+                opacity: 100,
+                translateY: 1,
+              },
+            }}
+            transition={{
+              duration: 1,
+              ease: "backInOut",
+              visualDuration: 0,
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handleAddToCart();
+            }}
+            disabled={status === "out_of_stock"}
+          >
+            <IoBagOutline
+              className="inline-block group-hover:text-green-500 mr-2"
+              size={20}
+            />
+            Add to Cart
+          </motion.button>
+        )}
       </Link>
 
       <div className="p-3">
         <div className="flex flex-col gap-2">
           <div>
-            <h3 className="font-semibold">{name}</h3>
+            <h3 className="font-semibold text-sm sm:text-lg">{name}</h3>
             <p className="text-sm text-muted-foreground">{category?.name}</p>
           </div>
           <div className="mt-2">
             {discountedPrice !== price ? (
               <div className="flex gap-2 items-end">
-                <p className=" font-bold text-lg">
+                <p className=" font-bold text-sm md:text-lg">
                   ₹{discountedPrice.toFixed(2)}
                 </p>
-                <p className=" text-red-500 text-muted-foreground line-through">
+                <p className=" text-red-500 text-muted-foreground line-through text-sm md:text-lg">
                   ₹{price.toFixed(2)}
                 </p>
               </div>
             ) : (
-              <p className="text-lg font-bold">₹{price.toFixed(2)}</p>
+              <p className="text-sm md:text-lg font-bold">
+                ₹{price.toFixed(2)}
+              </p>
             )}
           </div>
         </div>
