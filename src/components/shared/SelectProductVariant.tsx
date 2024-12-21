@@ -273,7 +273,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import useSelectVariantController from "@/hooks/useSelectModal";
-import { cn } from "@/lib/utils";
 import { Variant } from "@/types/product";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
@@ -338,25 +337,14 @@ const SelectProductVariant = () => {
       );
       return;
     }
-
-    const cartId = `${selectedVariant.productId}-${selectedSize}-${selectedVariant.color}`;
-
     setErrorMessage("");
     addItem({
-      id: cartId,
-      name: product.name,
-      quantity,
-      size: selectedSize,
-      color: selectedVariant.color,
-      price: currentPrice || 0,
-      image: selectedVariant.images[0] as string,
+      productId: selectedVariant.productId,
       variantId: selectedVariant.id,
       attributeId: selectedVariant.attributes.find(
         (atr) => atr.size === selectedSize
-      )?.id,
-      status: product.status,
-      slug: product.slug,
-      maxStock: currentStock as number,
+      )?.id as string,
+      quantity,
     });
     clearVariants();
     toast.success("Product added to bag.");

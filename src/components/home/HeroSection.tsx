@@ -1,6 +1,6 @@
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
-import { useEffect, useState } from 'react';
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { useEffect, useState } from "react";
 import Slider from "react-slick";
 
 const images = [
@@ -11,12 +11,10 @@ const images = [
 ];
 
 export function HeroSection() {
-
   const [slidesToShow, setSlidesToShow] = useState(0);
   const [backgroundImage, setBackgroundImage] = useState(images[0]);
 
   useEffect(() => {
-
     // handle responsive slider based on screen width
     const updateSlidesToShow = () => {
       const width = window.innerWidth;
@@ -28,10 +26,9 @@ export function HeroSection() {
       else setSlidesToShow(5);
     };
 
-
-    window.addEventListener('resize', updateSlidesToShow);
+    window.addEventListener("resize", updateSlidesToShow);
     updateSlidesToShow();
-    return () => window.removeEventListener('resize', updateSlidesToShow);
+    return () => window.removeEventListener("resize", updateSlidesToShow);
   }, []);
 
   const settings = {
@@ -41,45 +38,40 @@ export function HeroSection() {
     autoplay: true,
     autoplaySpeed: 4000,
     arrows: false,
-    beforeChange: (newIndex : number) => {
+    beforeChange: (newIndex: number) => {
       setBackgroundImage(images[newIndex]);
-    }
-
+    },
   };
 
   useGSAP(() => {
     let tl = gsap.timeline();
 
-    gsap.to(".parent .slider",{
+    gsap.to(".parent .slider", {
       scrollTrigger: {
         trigger: ".parent",
         scroller: "body",
         pin: true,
       },
-    })
+    });
 
-    
-
-    tl.from(".description h1 ",{
+    tl.from(".description h1 ", {
       y: 40,
       opacity: 0,
       duration: 1,
       delay: 0.5,
-      stagger: 1
-    })
+      stagger: 1,
+    });
 
-    tl.from(".description p ",{
+    tl.from(".description p ", {
       y: 40,
       opacity: 0,
       duration: 1,
       delay: 0.5,
-    })
+    });
+  });
 
-  })
-  
   return (
     <div className=" parent relative w-full h-screen overflow-hidden flex items-center">
-
       {/* background image */}
       <div
         className=" background absolute top-0 left-0 w-full h-full bg-cover bg-center"
@@ -88,8 +80,12 @@ export function HeroSection() {
 
       {/* description */}
       <div className=" description absolute top-16 left-5 sm:left-14 lg:left-24 z-10 text-white">
-        <h1 className=" text-6xl sm:text-8xl lg:text-9xl  font-bold mb-4">Discover </h1>
-        <h1 className=" text-2xl sm:text-4xl lg:text-5xl  font-bold mb-4 uppercase ">Your Style</h1>
+        <h1 className=" text-6xl sm:text-8xl lg:text-9xl  font-bold mb-4">
+          Discover{" "}
+        </h1>
+        <h1 className=" text-2xl sm:text-4xl lg:text-5xl  font-bold mb-4 uppercase ">
+          Your Style
+        </h1>
         <p className="text-sm md:text-base lg:text-lg font-semibold bg-black/50 px-4 py-2 rounded-full mb-6 text-white w-fit ">
           Explore our latest collection of premium fashion
         </p>

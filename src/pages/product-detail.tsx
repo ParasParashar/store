@@ -128,24 +128,32 @@ export function ProductDetailPage() {
       return;
     }
 
-    const cartId = `${selectedVariant.productId}-${selectedSize}-${selectedVariant.color}`;
     setErrorMessage("");
+    // addItem({
+    //   id: cartId,
+    //   name: product.name,
+    //   quantity,
+    //   size: selectedSize,
+    //   color: selectedVariant.color,
+    //   price: currentPrice || 0,
+    //   image: selectedVariant.images[0] as string,
+    //   variantId: selectedVariant.id,
+    //   attributeId: selectedVariant.attributes.find(
+    //     (atr) => atr.size === selectedSize
+    //   )?.id,
+    //   status: product.status,
+    //   slug: product.slug,
+    //   maxStock: currentStock as number,
+    // });
     addItem({
-      id: cartId,
-      name: product.name,
-      quantity,
-      size: selectedSize,
-      color: selectedVariant.color,
-      price: currentPrice || 0,
-      image: selectedVariant.images[0] as string,
+      productId: selectedVariant.productId,
       variantId: selectedVariant.id,
       attributeId: selectedVariant.attributes.find(
         (atr) => atr.size === selectedSize
-      )?.id,
-      status: product.status,
-      slug: product.slug,
-      maxStock: currentStock as number,
+      )?.id as string,
+      quantity,
     });
+
     toast.success("Product added to bag.");
     setIsItemSelected(true);
   };
