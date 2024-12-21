@@ -20,6 +20,8 @@ type Props = {
 function ProductImageColors({ onSelectVariant, variants }: Props) {
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
 
+  // console.log(variants)
+  
   const settings = {
     dots: true,
     infinite: true,

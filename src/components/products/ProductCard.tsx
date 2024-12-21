@@ -102,17 +102,15 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="mt-2">
             {discountedPrice !== price ? (
               <div className="flex gap-2 items-end">
-                <p className=" font-bold text-sm md:text-lg">
-                  ₹{discountedPrice.toFixed(2)}
+                <p className=" font-bold text-lg">
+                  ₹{Math.floor(discountedPrice)}
                 </p>
-                <p className=" text-red-500 text-muted-foreground line-through text-sm md:text-lg">
-                  ₹{price.toFixed(2)}
+                <p className=" text-red-500 text-muted-foreground line-through">
+                  ₹{Math.floor(price)}
                 </p>
               </div>
             ) : (
-              <p className="text-sm md:text-lg font-bold">
-                ₹{price.toFixed(2)}
-              </p>
+              <p className="text-lg font-bold">₹{Math.floor(discountedPrice)}</p>
             )}
           </div>
         </div>

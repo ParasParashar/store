@@ -13,7 +13,6 @@ import useCartController from "@/hooks/useCartController";
 import SizeChart from "@/components/product-detail/SizeChart";
 import washingInstructions from "@/lib/washingInstructions";
 import WashingInstruction from "@/components/product-detail/WashingInstruction";
-import { cn } from "@/lib/utils";
 import RelatedProducts from "@/components/product-detail/RelatedProducts";
 import { sizesArray } from "@/lib/default-data";
 import toast from "react-hot-toast";
@@ -199,18 +198,18 @@ export function ProductDetailPage() {
               {product?.discountPercent ? (
                 <div>
                   <p className="text-3xl font-bold ">
-                    &#8377; {currentPrice?.toFixed(2)}{" "}
+                    &#8377; {Math.floor(currentPrice)}{" "}
                     <span className="bg-green-500 font-normal rounded-sm text-white px-2 py-0.5 text-sm">
                       ({product.discountPercent}% OFF)
                     </span>
                   </p>
                   <p className="text-base line-through text-red-500">
-                    &#8377; {price?.toFixed(2)}
+                    &#8377; {Math.floor(price)}
                   </p>
                 </div>
               ) : (
                 <p className="text-2xl font-bold ">
-                  &#8377; {price?.toFixed(2)}
+                  &#8377; {Math.floor(price)}
                 </p>
               )}
             </div>
