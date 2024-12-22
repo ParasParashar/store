@@ -4,8 +4,8 @@ import { HomePage } from "@/pages/home";
 import { ProductsPage } from "@/pages/products";
 import { ProductDetailPage } from "@/pages/product-detail";
 import AccountPage from "./pages/account";
-import OrderPage from "./pages/order";
 import ProtectedRoute from "./context/ProtectedRoute";
+import CheckoutPage from "./pages/checkout";
 
 export function AppRoutes() {
   return (
@@ -23,10 +23,10 @@ export function AppRoutes() {
           }
         />
         <Route
-          path="/order"
+          path="/checkout"
           element={
             <ProtectedRoute>
-              <OrderPage />
+              <CheckoutPage />
             </ProtectedRoute>
           }
         />{" "}
