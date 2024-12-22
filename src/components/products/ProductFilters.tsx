@@ -124,11 +124,9 @@ export function ProductFilters() {
 
   return (
     <Accordion type="multiple" className="w-full">
-      <div className="flex justify-between my-1 mb-10 w-full items-center gap-3">
+      <div className="flex  my-1 mb-10 w-full items-center gap-3">
         <HiOutlineAdjustmentsHorizontal className="text-muted-foreground" />
-        <p className="text-muted-foreground text-xs lg:text-sm">
-          Apply filters
-        </p>
+        <p className="text-muted-foreground text-sm ">filters</p>
       </div>
 
       {/* Categories */}
