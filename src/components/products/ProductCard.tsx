@@ -43,7 +43,7 @@ export function ProductCard({ product }: ProductCardProps) {
           scale: 1.05,
         },
       }}
-      className="relative h-full  overflow-hidden rounded-xl shadow-md bg-white"
+      className="relative h-full  overflow-hidden rounded-xl shadow-md bg-white product-card"
     >
       <Link to={`/product/${slug}`} className="relative">
         {/* <Link t o=> */}
@@ -110,7 +110,9 @@ export function ProductCard({ product }: ProductCardProps) {
                 </p>
               </div>
             ) : (
-              <p className="text-lg font-bold">₹{Math.floor(discountedPrice)}</p>
+              <p className="text-lg font-bold">
+                ₹{Math.floor(discountedPrice)}
+              </p>
             )}
           </div>
         </div>

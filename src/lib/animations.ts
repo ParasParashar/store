@@ -37,7 +37,7 @@ export const staggerFadeIn = (elements: Element[]) => {
     elements,
     {
       opacity: 0,
-      y: 30,
+      y: 60,
     },
     {
       opacity: 1,
