@@ -1,5 +1,6 @@
+import { gsap } from "gsap";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
 
 type Props = {
   images: string[];
@@ -8,25 +9,48 @@ type Props = {
 const ProductImages = ({ images }: Props) => {
   const [posterImage, setPosterImage] = useState<string>("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const thumbnailsRef = useRef<HTMLDivElement>(null);
 
+  // Set initial image
   useEffect(() => {
     if (images) {
       setPosterImage(images[0]);
     }
   }, [images]);
 
+  // Automatic slideshow
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) =>
-        prevIndex === images.length - 1 ? 0 : prevIndex + 1
-      );
+      nextImage();
     }, 5000);
-
-    setPosterImage(images[currentImageIndex]);
-
     return () => clearInterval(interval);
   }, [currentImageIndex, images]);
 
+  // Animation for main image change
+  useEffect(() => {
+    if (imageRef.current) {
+      gsap.fromTo(
+        imageRef.current,
+        { x: "-60%", opacity: 0, scale: 0 },
+        { x: "0%", opacity: 1, scale: 1, duration: 0.8, ease: "power3.out" }
+      );
+    }
+  }, [posterImage]);
+
+  // Animate thumbnails on load
+  useEffect(() => {
+    if (thumbnailsRef.current) {
+      const thumbnails = thumbnailsRef.current.querySelectorAll(".thumbnail");
+      gsap.fromTo(
+        thumbnails,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.5, stagger: 0.1 }
+      );
+    }
+  }, [images]);
+
+  // Functions to handle image transitions
   const nextImage = () => {
     const nextIndex = (currentImageIndex + 1) % images.length;
     setPosterImage(images[nextIndex]);
@@ -40,7 +64,6 @@ const ProductImages = ({ images }: Props) => {
     setCurrentImageIndex(prevIndex);
   };
 
-  // Change the image on hover for thumbnails
   const setImage = (img: string, index: number) => {
     setPosterImage(img);
     setCurrentImageIndex(index);
@@ -48,13 +71,19 @@ const ProductImages = ({ images }: Props) => {
 
   return (
     <div className="w-full md:w-[60%] flex flex-col-reverse md:flex-row gap-4 h-full items-start justify-center">
-      {/* Thumbnail Section (only visible on medium screens and above) */}
-      <div className="hidden md:flex md:flex-col h-full gap-3 p-1 items-start justify-start">
+      {/* Thumbnail Section */}
+      <div
+        ref={thumbnailsRef}
+        className="hidden md:flex md:flex-col h-full gap-3 p-1 items-start justify-start"
+      >
         {images?.map((img, index) => (
           <div
             key={img}
             onMouseEnter={() => setImage(img, index)}
-            className="w-20 h-28 relative cursor-pointer rounded-sm overflow-hidden transition-all duration-300 shadow-md hover:scale-110"
+            className={cn(
+              "thumbnail w-20 h-28 relative cursor-pointer rounded-sm overflow-hidden transition-all duration-300  hover:scale-105 hover:shadow-lg",
+              posterImage === img && "shadow-md"
+            )}
           >
             <img
               src={img}
@@ -62,7 +91,7 @@ const ProductImages = ({ images }: Props) => {
               className={cn(
                 "w-full h-full object-contain",
                 posterImage === img &&
-                  "scale-110 border-2 border-muted-foreground"
+                  "scale-110 border-2  border-muted-foreground"
               )}
             />
           </div>
@@ -73,25 +102,11 @@ const ProductImages = ({ images }: Props) => {
       <div className="flex-1 w-full h-full relative">
         <div className="flex justify-center items-center overflow-hidden rounded-sm aspect-square">
           <img
+            ref={imageRef}
             src={posterImage}
             alt="Product Primary"
-            className="w-full h-full object-contain transition-all duration-500"
+            className="w-full h-full object-contain"
           />
-        </div>
-        {/* Navigation Buttons (only visible on smaller screens) */}
-        <div className="absolute top-1/2 -translate-y-1/2 w-full flex md:hidden justify-between px-1 sm:px-4">
-          <button
-            onClick={prevImage}
-            className="bg-white/50 w-8 h-8 text-black p-1 rounded-full shadow-lg hover:bg-gray-200"
-          >
-            ❮
-          </button>
-          <button
-            onClick={nextImage}
-            className="bg-white/50 w-8 h-8 text-black/90 p-1 rounded-full shadow-lg hover:bg-gray-200"
-          >
-            ❯
-          </button>
         </div>
       </div>
     </div>
