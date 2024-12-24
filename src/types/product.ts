@@ -60,7 +60,7 @@ export type Filters = {
 
 
 // User type
-export type User {
+export type User = {
   id: string;
   name: string;
   email: string;
@@ -69,7 +69,7 @@ export type User {
 }
 
 // Address type
-export type Address {
+export type Address = {
   id: string;
   userId: string;
   street: string;
@@ -78,12 +78,12 @@ export type Address {
   postalCode: string;
   country: string;
   phoneNumber: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // Order type
-export type Order {
+export type Order = {
   id: string;
   userId: string;
   paymentMethod: PaymentMethod;
@@ -100,7 +100,7 @@ export type Order {
 }
 
 // OrderItem type
-export type OrderItem {
+export type OrderItem = {
   id: string;
   orderId: string;
   productId: string;
@@ -112,7 +112,7 @@ export type OrderItem {
 }
 
 // ShippingAddress type
-export type ShippingAddress {
+export type ShippingAddress = {
   id: string;
   email: string;
   street: string;

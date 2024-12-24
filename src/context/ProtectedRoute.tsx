@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
     queryFn: async () => {
       try {
         const res = await AxiosBase("/api/store/profile/me");
-        console.log(res);
+        console.log(res.data);
         if (res.data.error || res.data.success === false) return null;
         return res.data;
       } catch (error: any) {
@@ -22,7 +22,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
 
   if (isLoading)
     return (
-      <div className="w-full mx-auto">
+      <div className="w-full min-h-screen mx-auto">
         <Loader className=" animate-spin" />
       </div>
     );
