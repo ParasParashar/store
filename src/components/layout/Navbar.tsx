@@ -97,7 +97,7 @@ export function Navbar() {
             </div>
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <Link to="/account">
+            <Link to="/profile">
               <User className="h-5 w-5" color="black" />
             </Link>
           </Button>
@@ -125,9 +125,6 @@ export function Navbar() {
           </Link>
         </nav>
       </div>
-
-
-
     </header>
   );
 }

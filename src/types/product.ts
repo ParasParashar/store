@@ -57,3 +57,92 @@ export type Filters = {
   maxPrice?: number;
   search?: string;
 };
+
+
+// User type
+export type User {
+  id: string;
+  name: string;
+  email: string;
+  addresses?: Address[];
+  orders?: Order[];
+}
+
+// Address type
+export type Address {
+  id: string;
+  userId: string;
+  street: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  phoneNumber: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Order type
+export type Order {
+  id: string;
+  userId: string;
+  paymentMethod: PaymentMethod;
+  razorpayOrderId?: string;
+  razorpayPaymentId?: string;
+  status: OrderStatus;
+  totalAmount: number;
+  orderItems: OrderItem[];
+  deliveryStatus: DeliveryStatus;
+  shippingAddressId: string;
+  shippingAddress: ShippingAddress;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// OrderItem type
+export type OrderItem {
+  id: string;
+  orderId: string;
+  productId: string;
+  product: Product;
+  quantity: number;
+  price: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ShippingAddress type
+export type ShippingAddress {
+  id: string;
+  email: string;
+  street: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  phoneNumber: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+
+
+export enum PaymentMethod {
+  COD = "COD",
+  ONLINE = "ONLINE",
+}
+
+// Enum for order status
+export enum OrderStatus {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
+  PROCESSING = 'PROCESSING",
+}
+
+export enum DeliveryStatus {
+  PENDING = "PENDING",
+  SHIPPED = 'SHIPPED',
+  OUT_FOR_DELIVERY = "OUT_FOR_DELIVERY",
+  DELIVERED = "DELIVERED",
+}

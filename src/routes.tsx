@@ -3,9 +3,9 @@ import { Layout } from "@/components/layout";
 import { HomePage } from "@/pages/home";
 import { ProductsPage } from "@/pages/products";
 import { ProductDetailPage } from "@/pages/product-detail";
-import AccountPage from "./pages/account";
 import ProtectedRoute from "./context/ProtectedRoute";
 import CheckoutPage from "./pages/checkout";
+import ProfilePage from "./pages/profile";
 
 export function AppRoutes() {
   return (
@@ -15,10 +15,10 @@ export function AppRoutes() {
         <Route path="products" element={<ProductsPage />} />
         <Route path="product/:slug" element={<ProductDetailPage />} />
         <Route
-          path="/account"
+          path="/profile"
           element={
             <ProtectedRoute>
-              <AccountPage />
+              <ProfilePage />
             </ProtectedRoute>
           }
         />
