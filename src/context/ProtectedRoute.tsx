@@ -1,9 +1,8 @@
-import { Loader } from "lucide-react";
 import LoginBox from "@/components/shared/LoginBox";
 import { useQuery } from "@tanstack/react-query";
 import AxiosBase from "@/lib/axios";
 import { User } from "@/types/product";
-import { Skeleton } from "@/components/ui/skeleton";
+import { ProfilePageSkeleton } from "@/components/loaders/ProfilePageSkeleton";
 
 const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
   const { data: authUser, isLoading } = useQuery<User>({
@@ -20,16 +19,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
     retry: false,
   });
 
-  if (isLoading)
-    return (
-      <div className="w-full min-h-screen   flex items-center justify-between">
-        <Skeleton className=" h-auto lg:h-[500px]" />
-        <div className="flex flex-col gap-3">
-          <Skeleton className=" w-full h-[500px]" />
-          <Skeleton className=" w-full h-[500px]" />
-        </div>
-      </div>
-    );
+  if (isLoading) return <ProfilePageSkeleton />;
 
   return authUser ? children : <LoginBox />;
 };

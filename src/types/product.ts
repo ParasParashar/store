@@ -108,6 +108,8 @@ export type OrderItem = {
   quantity: number;
   price: number;
   createdAt: string;
+  variant?: Variant;
+  attribute?: Attribute;
   updatedAt: string;
 }
 

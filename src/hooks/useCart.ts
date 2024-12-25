@@ -130,7 +130,7 @@ export const useCart = create<CartStore>()(
       items: [],
       detailedItems: [],
       addItem: async (item) => {
-        const { items, detailedItems } = get();
+        const { items } = get();
 
         // Check if the item already exists in the cart
         const existingItem = items.find(

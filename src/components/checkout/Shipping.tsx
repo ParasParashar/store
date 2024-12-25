@@ -1,5 +1,5 @@
 import { Address, User } from "@/types/product";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -13,9 +13,11 @@ import { HoverCardContent, HoverCardTrigger } from "../ui/hover-card";
 import toast from "react-hot-toast";
 import AxiosBase from "@/lib/axios";
 import { useCart } from "@/hooks/useCart";
+import { AddressCardSkeleton } from "../loaders/ProfilePageSkeleton";
 
 const Shipping = () => {
   const { data: authUser } = useQuery<User>({ queryKey: ["authUser"] });
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { items, clearCart } = useCart();
 
@@ -150,6 +152,7 @@ const Shipping = () => {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: handleCheckout,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
       navigate("/profile");
       setTimeout(() => {
         clearCart();
@@ -168,7 +171,7 @@ const Shipping = () => {
       <p className="text-lg border-b py-3 text-muted-foreground">Ship to </p>
       {!authUser?.addresses ||
         (authUser.addresses.length === 0 && (
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<AddressCardSkeleton />}>
             <p className="text-muted-foreground  text-sm ">
               Add Shipping address
             </p>
@@ -200,7 +203,7 @@ const Shipping = () => {
                 >
                   <X size={18} />
                 </Button>
-                <Suspense fallback={<div>loading..</div>}>
+                <Suspense fallback={<AddressCardSkeleton />}>
                   <AddressCard type="shipping" address={address} />
                 </Suspense>
               </div>

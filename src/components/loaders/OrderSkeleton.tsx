@@ -1,10 +1,11 @@
+import { Card } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
 
 export function OrderSkeleton() {
   return (
     <div className="space-y-6 overflow-hidden">
       {[...Array(3)].map((_, index) => (
-        <div key={index} className="w-full">
+        <Card key={index} className="w-full p-2">
           <div>
             <div className="flex justify-between items-center">
               <Skeleton className="h-4 w-[100px]" />
@@ -38,7 +39,7 @@ export function OrderSkeleton() {
               </div>
             </div>
           </div>
-        </div>
+        </Card>
       ))}
     </div>
   );

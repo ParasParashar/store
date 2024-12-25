@@ -2,6 +2,7 @@ import { lazy, Suspense, useState } from "react";
 import { Button } from "../ui/button";
 import { Address } from "@/types/product";
 import { Plus } from "lucide-react";
+import { AddressCardSkeleton } from "../loaders/ProfilePageSkeleton";
 
 const MyAddress = ({ data }: { data?: Address[] }) => {
   const [isAdding, setIsAdding] = useState(false);
@@ -25,7 +26,7 @@ const MyAddress = ({ data }: { data?: Address[] }) => {
       </Button>
 
       {isAdding && (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<AddressCardSkeleton />}>
           <AddressCard
             type="profile"
             setIsAdding={() => setIsAdding(!isAdding)}
@@ -44,7 +45,7 @@ const MyAddress = ({ data }: { data?: Address[] }) => {
 
       {data &&
         data.map((address) => (
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense key={address.id} fallback={<AddressCardSkeleton />}>
             <AddressCard type="profile" key={address.id} address={address} />
           </Suspense>
         ))}
