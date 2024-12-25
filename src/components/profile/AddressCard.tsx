@@ -25,14 +25,15 @@ type props = {
     phoneNumber: string;
   };
   setIsAdding?: () => void | null;
+  type: "shipping" | "profile";
 };
 
-const AddressCard = ({ address, setIsAdding }: props) => {
+const AddressCard = ({ address, type, setIsAdding }: props) => {
   const queryClient = useQueryClient();
   const [initialphoneNumber, setInitialphoneNumber] = useState("");
   const [phoneError, setPhoneError] = useState(false);
   const [showReenter, setShowReenter] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
+  const [isEdit, setIsEdit] = useState(type === "shipping" ? true : false);
   const [formData, setFormData] = useState({
     id: "",
     street: "",
@@ -125,55 +126,57 @@ const AddressCard = ({ address, setIsAdding }: props) => {
   });
   return (
     <Card className="overflow-hidden">
-      <CardHeader className="flex flex-row items-center justify-between gap-3 overflow-hidden  mb-4 pb-4 border-b  ">
-        <CardTitle className="text-xl sm:text-2xl font-semibold sm:text-center text-muted-foreground  ">
-          {address.phoneNumber !== "" ? "Edit" : "Add"} Address
-        </CardTitle>
-        <div className="flex items-center  gap-3">
-          {address.phoneNumber !== "" && (
-            <HoverCard>
-              <HoverCardTrigger className="">
-                <Button
-                  onClick={(e) => deleteAddress(e)}
-                  size={"icon"}
-                  disabled={deletePending}
-                  variant={"ghost"}
-                  className="rounded-full text-red-500"
-                >
-                  {deletePending ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    <Trash className="h-4 w-4" />
-                  )}
-                </Button>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-auto p-1 text-xs">
-                Delete Addres
-              </HoverCardContent>
-            </HoverCard>
-          )}
-          {isEdit ? (
-            <X
-              size={20}
-              className="cursor-pointer right-0 top-0"
-              onClick={() => setIsEdit(!isEdit)}
-            />
-          ) : (
-            <HoverCard>
-              <HoverCardTrigger className="">
-                <Pencil
-                  size={15}
-                  className="cursor-pointer"
-                  onClick={() => setIsEdit(true)}
-                />
-              </HoverCardTrigger>
-              <HoverCardContent className="w-auto p-1 text-xs">
-                Edit Addres
-              </HoverCardContent>
-            </HoverCard>
-          )}
-        </div>
-      </CardHeader>
+      {type === "profile" && (
+        <CardHeader className="flex flex-row items-center justify-between gap-3 overflow-hidden  mb-4 pb-4 border-b  ">
+          <CardTitle className="text-xl sm:text-2xl font-semibold sm:text-center text-muted-foreground  ">
+            {address.phoneNumber !== "" ? "Edit" : "Add"} Address
+          </CardTitle>
+          <div className="flex items-center  gap-3">
+            {address.phoneNumber !== "" && (
+              <HoverCard>
+                <HoverCardTrigger className="">
+                  <Button
+                    onClick={(e) => deleteAddress(e)}
+                    size={"icon"}
+                    disabled={deletePending}
+                    variant={"ghost"}
+                    className="rounded-full text-red-500"
+                  >
+                    {deletePending ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      <Trash className="h-4 w-4" />
+                    )}
+                  </Button>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-auto p-1 text-xs">
+                  Delete Addres
+                </HoverCardContent>
+              </HoverCard>
+            )}
+            {isEdit ? (
+              <X
+                size={20}
+                className="cursor-pointer right-0 top-0"
+                onClick={() => setIsEdit(!isEdit)}
+              />
+            ) : (
+              <HoverCard>
+                <HoverCardTrigger className="">
+                  <Pencil
+                    size={15}
+                    className="cursor-pointer"
+                    onClick={() => setIsEdit(true)}
+                  />
+                </HoverCardTrigger>
+                <HoverCardContent className="w-auto p-1 text-xs">
+                  Edit Addres
+                </HoverCardContent>
+              </HoverCard>
+            )}
+          </div>
+        </CardHeader>
+      )}
 
       {!address ||
         (isEdit && (

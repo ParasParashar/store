@@ -27,6 +27,7 @@ const MyAddress = ({ data }: { data?: Address[] }) => {
       {isAdding && (
         <Suspense fallback={<div>Loading...</div>}>
           <AddressCard
+            type="profile"
             setIsAdding={() => setIsAdding(!isAdding)}
             address={{
               id: "",
@@ -44,7 +45,7 @@ const MyAddress = ({ data }: { data?: Address[] }) => {
       {data &&
         data.map((address) => (
           <Suspense fallback={<div>Loading...</div>}>
-            <AddressCard key={address.id} address={address} />
+            <AddressCard type="profile" key={address.id} address={address} />
           </Suspense>
         ))}
     </main>

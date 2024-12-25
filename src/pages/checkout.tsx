@@ -1,23 +1,38 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { FaLeftLong } from "react-icons/fa6";
+import OrderSummary from "@/components/checkout/OrderSummary";
+import { useQuery } from "@tanstack/react-query";
+import ShippingAddress from "@/components/checkout/ShippingAddress";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
+  const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+  if (!authUser) {
+    <Navigate to="/login" />;
+  }
+
   return (
-    <main className="container mx-auto  py-8 md:py-12">
+    <main className=" w-full  mx-auto min-h-screen container ">
       {/* Header with Back Button and Logo */}
-      <header className="flex items-center justify-between border-b border-black/10  pb-2 sticky top-0 bg-background z-50">
+      <header className="flex items-center justify-between border-b border-black/10  pb-2 sticky top-0 bg-background z-50 px-10 lg:px-20">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-all"
+          className="flex items-center gap-2 text-gray-600 hover:text-neutral-900 transition-all"
         >
           <FaLeftLong />
           Back
         </button>
         <img src="/logo.png" alt="Company Logo" className="w-10 h-auto" />
       </header>
-      {/* TODO DISPLAY THE ORDER SUMMARY */}
-      <section></section>
+      <section className="grid  grid-cols-1 lg:grid-cols-2 ">
+        {/*payment method and order address  or billing address  */}
+        <div className="lg:pl-32">
+          <ShippingAddress />
+        </div>
+        <div className="bg-secondary lg:pr-20  h-[calc(100vh-75px)]">
+          <OrderSummary />
+        </div>
+      </section>
     </main>
   );
 };
