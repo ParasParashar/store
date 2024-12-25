@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { FaLeftLong } from "react-icons/fa6";
 import OrderSummary from "@/components/checkout/OrderSummary";
-import Shipping from "@/components/checkout/Shipping";
+import { motion } from "framer-motion";
+import { lazy, Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
-
+  const Shipping = lazy(() => import("@/components/checkout/Shipping"));
   return (
     <main className=" w-full  mx-auto min-h-screen container ">
       {/* Header with Back Button and Logo */}
@@ -19,14 +21,35 @@ const CheckoutPage = () => {
         </button>
         <img src="/logo.png" alt="Company Logo" className="w-10 h-auto" />
       </header>
-      <section className="grid  grid-cols-1 lg:grid-cols-2 ">
+      <section className="grid gap-5 lg:gap-0  grid-cols-1 lg:grid-cols-2 ">
         {/*payment method and order address  or billing address  */}
-        <div className="lg:pl-32">
-          <Shipping />
-        </div>
-        <div className="bg-secondary lg:pr-20  h-[calc(100vh-75px)]">
+        <motion.div
+          className="flex-1 lg:pl-32 lg:border-r"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {" "}
+          <Suspense
+            fallback={
+              <div>
+                <Skeleton className="w-full mt-3 rounded-lg h-20" />
+                <Skeleton className="w-full mt-3 rounded-lg h-20" />
+                <Skeleton className="w-full mt-3 rounded-lg h-20" />
+              </div>
+            }
+          >
+            <Shipping />
+          </Suspense>
+        </motion.div>
+        <motion.div
+          className="flex-1 bg-secondary lg:pr-20  h-[calc(100vh-75px)]"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <OrderSummary />
-        </div>
+        </motion.div>
       </section>
     </main>
   );
