@@ -1,4 +1,5 @@
 import { useCart } from "@/hooks/useCart";
+import { Navigate } from "react-router-dom";
 
 const OrderSummary = () => {
   const { detailedItems } = useCart();
@@ -8,6 +9,10 @@ const OrderSummary = () => {
       : item.price;
     return sum + discountedPrice * item.quantity;
   }, 0);
+
+  if (detailedItems.length === 0 || !detailedItems) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div className="flex flex-col h-full w-full rounded-b-lg p-5 ">

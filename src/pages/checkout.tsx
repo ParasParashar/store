@@ -1,15 +1,10 @@
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaLeftLong } from "react-icons/fa6";
 import OrderSummary from "@/components/checkout/OrderSummary";
-import { useQuery } from "@tanstack/react-query";
-import ShippingAddress from "@/components/checkout/ShippingAddress";
+import Shipping from "@/components/checkout/Shipping";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
-  const { data: authUser } = useQuery({ queryKey: ["authUser"] });
-  if (!authUser) {
-    <Navigate to="/login" />;
-  }
 
   return (
     <main className=" w-full  mx-auto min-h-screen container ">
@@ -27,7 +22,7 @@ const CheckoutPage = () => {
       <section className="grid  grid-cols-1 lg:grid-cols-2 ">
         {/*payment method and order address  or billing address  */}
         <div className="lg:pl-32">
-          <ShippingAddress />
+          <Shipping />
         </div>
         <div className="bg-secondary lg:pr-20  h-[calc(100vh-75px)]">
           <OrderSummary />

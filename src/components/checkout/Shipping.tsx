@@ -14,7 +14,7 @@ import toast from "react-hot-toast";
 import AxiosBase from "@/lib/axios";
 import { useCart } from "@/hooks/useCart";
 
-const ShippingAddress = () => {
+const Shipping = () => {
   const { data: authUser } = useQuery<User>({ queryKey: ["authUser"] });
   const navigate = useNavigate();
   const { items, clearCart } = useCart();
@@ -27,7 +27,7 @@ const ShippingAddress = () => {
 
   const [selectedAddress, setSelectedAddress] = useState("");
   if (!authUser) {
-    <Navigate to="/login" />;
+    return <Navigate to="/login" />;
   }
 
   useEffect(() => {
@@ -76,8 +76,8 @@ const ShippingAddress = () => {
         order_id: data.order.razorpayOrderId,
         amount: Math.round(data.order.totalAmount * 100),
         currency: "INR",
-        name: "Shree",
-        description: "Place order for good products",
+        name: "Fashion",
+        description: "Fashion Store with the latest and trending collections ",
         image: "https://example.com/your_logo",
         handler: async function (response: any) {
           const verifyPayload = {
@@ -113,7 +113,7 @@ const ShippingAddress = () => {
           address: "Razorpay Corporate Office",
         },
         theme: {
-          color: "#3399cc",
+          color: "#3c4a50",
         },
         method: {
           upi: true,
@@ -124,14 +124,11 @@ const ShippingAddress = () => {
         modal: {
           ondismiss: async function () {
             try {
-              console.log("Payment modal closed by user");
               const { data: res } = await AxiosBase.delete(
                 `/api/store/order/payment/delete/${data.order.id}`
               );
               if (res.success) {
-                toast.error(
-                  "Payment modal closed. Your order has been canceled."
-                );
+                toast.error("Order has been canceled.");
               }
             } catch (errorMessage) {
               console.error("Failed to delete the order:", errorMessage);
@@ -139,21 +136,24 @@ const ShippingAddress = () => {
           },
         },
       };
-
+      // @ts-ignore
       const rzp1 = new window.Razorpay(options);
 
       rzp1.open();
     } catch (errorMessage: any) {
+      toast.error("Failed to initiate payment. Please try again.");
       console.error("Checkout errorMessage:", errorMessage);
       throw new Error(errorMessage.message);
-      toast.error("Failed to initiate payment. Please try again.");
     }
   };
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: handleCheckout,
     onSuccess: () => {
-      console.log("order completed successfully");
+      navigate("/profile");
+      setTimeout(() => {
+        clearCart();
+      }, 1000);
     },
     onError: (errorMessage: any) => {
       console.error(errorMessage);
@@ -292,4 +292,4 @@ const ShippingAddress = () => {
   );
 };
 
-export default ShippingAddress;
+export default Shipping;
