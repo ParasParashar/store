@@ -1,17 +1,25 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatDate } from "@/lib/utils";
-import { Order, OrderItem } from "@/types/product";
+import { Order, OrderItem, User } from "@/types/product";
 import { Badge } from "../ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import AxiosBase from "@/lib/axios";
 import { OrderSkeleton } from "../loaders/OrderSkeleton";
+import { Navigate } from "react-router-dom";
 
 export default function MyOrders() {
+  const { data: authUser } = useQuery<User>({ queryKey: ["authUser"] });
+  if (!authUser) {
+    return <Navigate to="/" />;
+  }
+
   const { data: orders, isLoading } = useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
-      const { data } = await AxiosBase.get("/api/store/profile/orders");
+      const { data } = await AxiosBase.get(
+        "/api/store/profile/orders/" + authUser?.id
+      );
       if (!data.success) throw new Error(data.message);
       return data.data;
     },
