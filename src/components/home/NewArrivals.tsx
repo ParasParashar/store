@@ -30,8 +30,8 @@ export function NewArrivals() {
 
   if (isLoading) return null;
   return (
-    <section className="py-16">
-      <div className="container">
+    <section className="py-16 bg-white z-20 h-screen w-full relative">
+      <div className="container absolute">
         <h2 className="mb-12 text-center text-2xl  md:text-4xl font-bold ">
           New Arrivals
         </h2>

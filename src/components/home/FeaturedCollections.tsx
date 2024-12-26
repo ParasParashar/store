@@ -16,8 +16,8 @@ export function FeaturedCollections() {
   });
   if (isLoading) return null;
   return (
-    <section className="py-16 md:py-24">
-      <div className="container">
+    <section className="py-16 md:py-24 w-full h-screen bg-white z-20 relative ">
+      <div className="container absolute">
         <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl">
           Featured Collections
         </h2>
