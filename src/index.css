@@ -12,10 +12,6 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -137,7 +133,6 @@ h1 {
   background: #d3d3f0;
 }
 
-
 /* some special font-families */
 .jaro-LogoStyle {
   font-family: "Jaro", sans-serif;
@@ -189,13 +184,17 @@ h1 {
   font-style: italic;
 }
 
-
 /* background for new collection  */
-.NewCollectioStyles{
-  background: #000000;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #434343, #000000);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  
-  
+.NewCollectioStyles {
+  background: #000000; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to bottom,
+    #434343,
+    #000000
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #434343,
+    #000000
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
-
