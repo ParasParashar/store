@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import { Button } from "../ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import {
   HoverCard,
   HoverCardContent,
@@ -125,247 +126,255 @@ const AddressCard = ({ address, type, setIsAdding }: props) => {
     },
   });
   return (
-    <Card className="overflow-hidden">
-      {type === "profile" && (
-        <CardHeader className="flex flex-row items-center justify-between gap-3 overflow-hidden  mb-4 pb-4 border-b  ">
-          <CardTitle className="text-xl sm:text-2xl font-semibold sm:text-center text-muted-foreground  ">
-            {address.phoneNumber !== "" ? "Edit" : "Add"} Address
-          </CardTitle>
-          <div className="flex items-center  gap-3">
-            {address.phoneNumber !== "" && (
-              <HoverCard>
-                <HoverCardTrigger className="">
-                  <Button
-                    onClick={(e) => deleteAddress(e)}
-                    size={"icon"}
-                    disabled={deletePending}
-                    variant={"ghost"}
-                    className="rounded-full text-red-500"
-                  >
-                    {deletePending ? (
-                      <Loader2 className="animate-spin" />
-                    ) : (
-                      <Trash className="h-4 w-4" />
-                    )}
-                  </Button>
-                </HoverCardTrigger>
-                <HoverCardContent className="w-auto p-1 text-xs">
-                  Delete Addres
-                </HoverCardContent>
-              </HoverCard>
-            )}
-            {isEdit ? (
-              <X
-                size={20}
-                className="cursor-pointer right-0 top-0"
-                onClick={() => setIsEdit(!isEdit)}
-              />
-            ) : (
-              <HoverCard>
-                <HoverCardTrigger className="">
-                  <Pencil
-                    size={15}
-                    className="cursor-pointer"
-                    onClick={() => setIsEdit(true)}
-                  />
-                </HoverCardTrigger>
-                <HoverCardContent className="w-auto p-1 text-xs">
-                  Edit Addres
-                </HoverCardContent>
-              </HoverCard>
-            )}
-          </div>
-        </CardHeader>
-      )}
-
-      {!address ||
-        (isEdit && (
-          <form
-            onSubmit={handleSubmit}
-            className="grid grid-cols-2 gap-4 px-4 p-2"
-          >
-            <div className="row-span-1">
-              <label
-                htmlFor="country"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Country
-              </label>
-              <Input
-                id="country"
-                name="country"
-                value={formData.country}
-                onChange={handleChange}
-                placeholder="Country"
-                required
-                disabled={!isEdit}
-              />
-            </div>
-            <div className="row-span-1">
-              <label
-                htmlFor="state"
-                className="block text-sm font-medium text-gray-700"
-              >
-                State
-              </label>
-              <Input
-                id="state"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                placeholder="State"
-                required
-                disabled={!isEdit}
-              />
-            </div>
-            <div className="row-span-1">
-              <label
-                htmlFor="city"
-                className="block text-sm font-medium text-gray-700"
-              >
-                City
-              </label>
-              <Input
-                id="city"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                placeholder="City"
-                required
-                disabled={!isEdit}
-              />
-            </div>
-            <div className="row-span-1">
-              <label
-                htmlFor="postalCode"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Postal Code
-              </label>
-              <Input
-                id="postalCode"
-                name="postalCode"
-                value={formData.postalCode}
-                onChange={handleChange}
-                placeholder="Postal Code"
-                required
-                disabled={!isEdit}
-              />
-            </div>
-            <div className="col-span-2">
-              <label
-                htmlFor="street"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Street
-              </label>
-              <Input
-                id="street"
-                name="street"
-                value={formData.street}
-                onChange={handleChange}
-                placeholder="Street Address"
-                required
-                disabled={!isEdit}
-              />
-            </div>
-            <div className="col-span-2 space-y-3">
-              <label
-                htmlFor="phoneNumber"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Phone Number
-              </label>
-              <PhoneInput
-                inputProps={{
-                  id: "phoneNumber",
-                  name: "phoneNumber",
-                  required: true,
-                  placeholder: "Enter phone number",
-                }}
-                country={"in"}
-                onlyCountries={["in"]}
-                value={formData.phoneNumber}
-                onChange={handlePhoneChange}
-                inputStyle={{
-                  width: "100%",
-                  height: "40px",
-                  fontSize: "16px",
-                  color: "black",
-                  borderRadius: "0.375rem",
-                  border: "1px solid #e5e7eb",
-                  background: "#fff9ed",
-                }}
-                containerClass="react-phone-input-container"
-                disabled={!isEdit}
-              />
-              {showReenter && (
-                <div>
-                  <label
-                    htmlFor="reenterPhone"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Re-enter Phone Number
-                  </label>
-                  <PhoneInput
-                    inputProps={{
-                      id: "reenterPhone",
-                      name: "reenterPhone",
-                      required: true,
-                      placeholder: "Re-enter phone number",
-                    }}
-                    country={"in"}
-                    onlyCountries={["in"]}
-                    value={initialphoneNumber}
-                    onChange={handleReenterPhoneChange}
-                    inputStyle={{
-                      width: "100%",
-                      height: "40px",
-                      fontSize: "16px",
-                      color: "black",
-                      borderRadius: "0.375rem",
-                      border: "1px solid #e5e7eb",
-                      background: "#fff9ed",
-                    }}
-                  />
-                  {phoneError && (
-                    <p className="text-red-500 text-sm mt-2">
-                      Phone number does not match the initial value.
-                    </p>
-                  )}
-                </div>
+    <motion.div
+      className="flex-1"
+      initial={{ opacity: 0, y: 50, scale: 0 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Card className="overflow-hidden">
+        {type === "profile" && (
+          <CardHeader className="flex flex-row items-center justify-between gap-3 overflow-hidden  mb-4 pb-4 border-b  ">
+            <CardTitle className="text-xl sm:text-2xl font-semibold sm:text-center text-muted-foreground  ">
+              {address.phoneNumber !== "" ? "Edit" : "Add"} Address
+            </CardTitle>
+            <div className="flex items-center  gap-3">
+              {address.phoneNumber !== "" && (
+                <HoverCard>
+                  <HoverCardTrigger className="">
+                    <Button
+                      onClick={(e) => deleteAddress(e)}
+                      size={"icon"}
+                      disabled={deletePending}
+                      variant={"ghost"}
+                      className="rounded-full text-red-500"
+                    >
+                      {deletePending ? (
+                        <Loader2 className="animate-spin" />
+                      ) : (
+                        <Trash className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </HoverCardTrigger>
+                  <HoverCardContent className="w-auto p-1 text-xs">
+                    Delete Addres
+                  </HoverCardContent>
+                </HoverCard>
+              )}
+              {isEdit ? (
+                <X
+                  size={20}
+                  className="cursor-pointer right-0 top-0"
+                  onClick={() => setIsEdit(!isEdit)}
+                />
+              ) : (
+                <HoverCard>
+                  <HoverCardTrigger className="">
+                    <Pencil
+                      size={15}
+                      className="cursor-pointer"
+                      onClick={() => setIsEdit(true)}
+                    />
+                  </HoverCardTrigger>
+                  <HoverCardContent className="w-auto p-1 text-xs">
+                    Edit Addres
+                  </HoverCardContent>
+                </HoverCard>
               )}
             </div>
-            {isEdit && (
-              <Button
-                type="submit"
-                disabled={isPending}
-                variant={"secondary"}
-                size={"lg"}
-                className="col-span-2"
-              >
-                {isPending ? (
-                  <Loader />
-                ) : address.phoneNumber === "" ? (
-                  "Add Address"
-                ) : (
-                  "Update Address"
+          </CardHeader>
+        )}
+
+        {!address ||
+          (isEdit && (
+            <form
+              onSubmit={handleSubmit}
+              className="grid grid-cols-2 gap-4 px-4 p-2"
+            >
+              <div className="row-span-1">
+                <label
+                  htmlFor="country"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Country
+                </label>
+                <Input
+                  id="country"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                  placeholder="Country"
+                  required
+                  disabled={!isEdit}
+                />
+              </div>
+              <div className="row-span-1">
+                <label
+                  htmlFor="state"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  State
+                </label>
+                <Input
+                  id="state"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                  placeholder="State"
+                  required
+                  disabled={!isEdit}
+                />
+              </div>
+              <div className="row-span-1">
+                <label
+                  htmlFor="city"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  City
+                </label>
+                <Input
+                  id="city"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  placeholder="City"
+                  required
+                  disabled={!isEdit}
+                />
+              </div>
+              <div className="row-span-1">
+                <label
+                  htmlFor="postalCode"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Postal Code
+                </label>
+                <Input
+                  id="postalCode"
+                  name="postalCode"
+                  value={formData.postalCode}
+                  onChange={handleChange}
+                  placeholder="Postal Code"
+                  required
+                  disabled={!isEdit}
+                />
+              </div>
+              <div className="col-span-2">
+                <label
+                  htmlFor="street"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Street
+                </label>
+                <Input
+                  id="street"
+                  name="street"
+                  value={formData.street}
+                  onChange={handleChange}
+                  placeholder="Street Address"
+                  required
+                  disabled={!isEdit}
+                />
+              </div>
+              <div className="col-span-2 space-y-3">
+                <label
+                  htmlFor="phoneNumber"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Phone Number
+                </label>
+                <PhoneInput
+                  inputProps={{
+                    id: "phoneNumber",
+                    name: "phoneNumber",
+                    required: true,
+                    placeholder: "Enter phone number",
+                  }}
+                  country={"in"}
+                  onlyCountries={["in"]}
+                  value={formData.phoneNumber}
+                  onChange={handlePhoneChange}
+                  inputStyle={{
+                    width: "100%",
+                    height: "40px",
+                    fontSize: "16px",
+                    color: "black",
+                    borderRadius: "0.375rem",
+                    border: "1px solid #e5e7eb",
+                    background: "#fff9ed",
+                  }}
+                  containerClass="react-phone-input-container"
+                  disabled={!isEdit}
+                />
+                {showReenter && (
+                  <div>
+                    <label
+                      htmlFor="reenterPhone"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Re-enter Phone Number
+                    </label>
+                    <PhoneInput
+                      inputProps={{
+                        id: "reenterPhone",
+                        name: "reenterPhone",
+                        required: true,
+                        placeholder: "Re-enter phone number",
+                      }}
+                      country={"in"}
+                      onlyCountries={["in"]}
+                      value={initialphoneNumber}
+                      onChange={handleReenterPhoneChange}
+                      inputStyle={{
+                        width: "100%",
+                        height: "40px",
+                        fontSize: "16px",
+                        color: "black",
+                        borderRadius: "0.375rem",
+                        border: "1px solid #e5e7eb",
+                        background: "#fff9ed",
+                      }}
+                    />
+                    {phoneError && (
+                      <p className="text-red-500 text-sm mt-2">
+                        Phone number does not match the initial value.
+                      </p>
+                    )}
+                  </div>
                 )}
-              </Button>
-            )}
-          </form>
-        ))}
-      {address.phoneNumber && !isEdit && (
-        <CardDescription className="p-2 px-2">
-          <p className="text-sm font-medium">
-            {address.street}, {address.city}, {address.state}, {address.country}
-          </p>
-          <p className="text-sm font-medium">{address.postalCode}</p>
-          <p className="text-sm font-medium">{address.phoneNumber}</p>
-          <p className="text-sm">{formatDate(address.updatedAt)}</p>
-        </CardDescription>
-      )}
-    </Card>
+              </div>
+              {isEdit && (
+                <Button
+                  type="submit"
+                  disabled={isPending}
+                  variant={"secondary"}
+                  size={"lg"}
+                  className="col-span-2"
+                >
+                  {isPending ? (
+                    <Loader className="animate-spin" />
+                  ) : address.phoneNumber === "" ? (
+                    "Add Address"
+                  ) : (
+                    "Update Address"
+                  )}
+                </Button>
+              )}
+            </form>
+          ))}
+        {address.phoneNumber && !isEdit && (
+          <CardDescription className="p-2 px-2">
+            <p className="text-sm font-medium">
+              {address.street}, {address.city}, {address.state},{" "}
+              {address.country}
+            </p>
+            <p className="text-sm font-medium">{address.postalCode}</p>
+            <p className="text-sm font-medium">{address.phoneNumber}</p>
+            <p className="text-sm">{formatDate(address.updatedAt)}</p>
+          </CardDescription>
+        )}
+      </Card>
+    </motion.div>
   );
 };
 

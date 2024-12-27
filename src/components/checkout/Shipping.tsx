@@ -36,8 +36,6 @@ const Shipping = () => {
     seterrorMessage("Select a address from the list.");
   }, []);
 
-  const [isEdit, setIsEdit] = useState(false);
-
   const handleSelectAddress = (id: string) => {
     if (!id) seterrorMessage("Please select a address");
     setSelectedAddress(id);
@@ -191,54 +189,61 @@ const Shipping = () => {
         ))}
 
       {authUser?.addresses &&
-        authUser?.addresses.map((address: Address) => (
-          <div key={address.id} onClick={() => handleSelectAddress(address.id)}>
-            {isEdit ? (
-              <div className="relative ">
-                <Button
-                  variant={"ghost"}
-                  className="rounded-full absolute top-0 right-0"
-                  size={"icon"}
-                  onClick={() => setIsEdit(!isEdit)}
+        authUser?.addresses.map((address: Address) => {
+          const [isEdit, setIsEdit] = useState(false);
+
+          return (
+            <div
+              key={address.id}
+              onClick={() => handleSelectAddress(address.id)}
+            >
+              {isEdit ? (
+                <div className="relative ">
+                  <Button
+                    variant={"outline"}
+                    className="rounded-full transition-all  duration-500 ease-in absolute top-[-10px] right-[-8px]"
+                    size={"icon"}
+                    onClick={() => setIsEdit(!isEdit)}
+                  >
+                    <X size={18} />
+                  </Button>
+                  <Suspense fallback={<AddressCardSkeleton />}>
+                    <AddressCard type="shipping" address={address} />
+                  </Suspense>
+                </div>
+              ) : (
+                <Card
+                  className={cn(
+                    " bg-secondary w-full flex items-center justify-between rounded-sm px-5  cursor-pointer hover:border-blue-200 p-2 border shadow-none   ",
+                    address.id === selectedAddress && "border-blue-200"
+                  )}
                 >
-                  <X size={18} />
-                </Button>
-                <Suspense fallback={<AddressCardSkeleton />}>
-                  <AddressCard type="shipping" address={address} />
-                </Suspense>
-              </div>
-            ) : (
-              <Card
-                className={cn(
-                  " bg-secondary w-full flex items-center justify-between rounded-sm px-5  cursor-pointer hover:border-blue-200 p-2 border shadow-none   ",
-                  address.id === selectedAddress && "border-blue-200"
-                )}
-              >
-                <CardHeader className="p-0">
-                  <CardTitle className="text-sm text-primary ">
-                    <span className=" text-primary">{authUser.name}</span>-
-                    {address.street}-{address.city}
-                  </CardTitle>
-                  <CardDescription className="text-sm text-muted-foreground">
-                    {address.postalCode}-{address.country}
-                  </CardDescription>
-                </CardHeader>
-                <HoverCard>
-                  <HoverCardTrigger className="">
-                    <BsThreeDotsVertical
-                      size={15}
-                      className="cursor-pointer text-black"
-                      onClick={() => setIsEdit(true)}
-                    />
-                  </HoverCardTrigger>
-                  <HoverCardContent className="w-auto p-1 text-xs">
-                    Edit Addres
-                  </HoverCardContent>
-                </HoverCard>
-              </Card>
-            )}
-          </div>
-        ))}
+                  <CardHeader className="p-0">
+                    <CardTitle className="text-sm text-primary ">
+                      <span className=" text-primary">{authUser.name}</span>-
+                      {address.street}-{address.city}
+                    </CardTitle>
+                    <CardDescription className="text-sm text-muted-foreground">
+                      {address.postalCode}-{address.country}
+                    </CardDescription>
+                  </CardHeader>
+                  <HoverCard>
+                    <HoverCardTrigger className="">
+                      <BsThreeDotsVertical
+                        size={15}
+                        className="cursor-pointer text-black"
+                        onClick={() => setIsEdit(true)}
+                      />
+                    </HoverCardTrigger>
+                    <HoverCardContent className="w-auto p-1 text-xs">
+                      Edit Addres
+                    </HoverCardContent>
+                  </HoverCard>
+                </Card>
+              )}
+            </div>
+          );
+        })}
       {errorMessage && (
         <p className="text-secondary-foreground  text-xs">{errorMessage}</p>
       )}
