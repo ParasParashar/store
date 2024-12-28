@@ -151,10 +151,6 @@ const Shipping = () => {
     mutationFn: handleCheckout,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
-      navigate("/profile");
-      setTimeout(() => {
-        clearCart();
-      }, 1000);
     },
     onError: (errorMessage: any) => {
       console.error(errorMessage);

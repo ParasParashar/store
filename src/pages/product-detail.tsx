@@ -22,7 +22,6 @@ import { Badge } from "@/components/ui/badge";
 
 export function ProductDetailPage() {
   const { addItem, items } = useCart();
-  const { onOpen } = useCartController();
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [isItemSelected, setIsItemSelected] = useState(false);
@@ -129,22 +128,6 @@ export function ProductDetailPage() {
     }
 
     setErrorMessage("");
-    // addItem({
-    //   id: cartId,
-    //   name: product.name,
-    //   quantity,
-    //   size: selectedSize,
-    //   color: selectedVariant.color,
-    //   price: currentPrice || 0,
-    //   image: selectedVariant.images[0] as string,
-    //   variantId: selectedVariant.id,
-    //   attributeId: selectedVariant.attributes.find(
-    //     (atr) => atr.size === selectedSize
-    //   )?.id,
-    //   status: product.status,
-    //   slug: product.slug,
-    //   maxStock: currentStock as number,
-    // });
     addItem({
       productId: selectedVariant.productId,
       variantId: selectedVariant.id,
@@ -196,12 +179,12 @@ export function ProductDetailPage() {
             <p className="text-sm text-muted-foreground -tracking-tighter">
               {product.category.name}
             </p>
-            {/* <p className="mt-2 text-2xl font-bold">
-              &#8377; {currentPrice?.toFixed(2)}
-            </p> */}
-
-            {/* updated code */}
-
+            {product.status === "out_of_stock" ||
+              (product.totalQuantity < 1 && (
+                <Badge variant="destructive" className="absolute right-4 top-4">
+                  Out of Stock
+                </Badge>
+              ))}
             <div className="mt-2">
               {product?.discountPercent ? (
                 <div>
@@ -222,7 +205,9 @@ export function ProductDetailPage() {
               )}
             </div>
           </div>
-          {/* <p className="text-muted-foreground">{product?.description}</p> */}
+          <p className="text-muted-foreground line-clamp-3 truncate">
+            {product?.description}
+          </p>
 
           {/* Variants */}
           <div className="flex flex-col gap-3">
@@ -236,7 +221,7 @@ export function ProductDetailPage() {
 
             <ProductImageColors
               variants={product.variants}
-              onSelectVariant={handleSelectVariant}
+              onSelectVariant={() => handleSelectVariant}
             />
           </div>
 
@@ -258,33 +243,27 @@ export function ProductDetailPage() {
                       <Button
                         key={size}
                         onClick={() => isAvailable && handleSelectSize(size)}
-                        disabled={!isAvailable}
-                        className={`flex items-center justify-center border border-black  h-10 w-10 rounded-full bg-white text-black   ${
+                        disabled={!isAvailable || product.totalQuantity < 1}
+                        className={`flex relative items-center justify-center border border-black  h-10 w-10 rounded-full bg-white text-black   ${
                           isAvailable
                             ? isActive
                               ? " bg-primary text-white pointer-events-none "
-                              : ""
+                              : " "
                             : "opacity-80 cursor-not-allowed"
                         }`}
                       >
                         <span
                           className={`relative ${
-                            !isAvailable ? "text-muted-foreground" : ""
+                            !isAvailable || product.totalQuantity < 1
+                              ? "text-muted-foreground"
+                              : ""
                           }`}
                         >
                           {size}
-                          {!isAvailable && (
-                            <span
-                              className=" absolute inset-0 w-full flex items-center justify-center "
-                              aria-hidden="true"
-                            >
-                              <span
-                                className="w-full h-[1px] bg-muted-foreground transform rotate-45"
-                                style={{ position: "absolute" }}
-                              />
-                            </span>
-                          )}
                         </span>
+                        {!isAvailable && (
+                          <span className="w-full top-[50%]  absolute h-[1px] rotate-45 overflow-hidden bg-muted-foreground transform " />
+                        )}
                       </Button>
                     </div>
                   );
@@ -325,16 +304,26 @@ export function ProductDetailPage() {
               </Button>
             </div>
           </div>
-          {quantity === currentStock && (
-            <p className="text-sm text-muted-foreground">
-              Only {currentStock} items left in stock for this size.
-            </p>
-          )}
+          {quantity === currentStock ||
+            (currentStock === 0 && (
+              <p className="text-sm text-muted-foreground">
+                {currentStock === 0
+                  ? "Current Stock is not available"
+                  : `
+                    Only ${currentStock} items left in stock for this size.
+                    `}
+              </p>
+            ))}
 
           {/* Add to Cart */}
           {/* <div className="w-full flex gap-1"> */}
-          {currentStock === 0 || product.status === "out_of_stock" ? (
-            <Badge className="text-lg w-32  text-center  rounded-full">
+          {currentStock === 0 ||
+          product.status === "out_of_stock" ||
+          product.totalQuantity < 1 ? (
+            <Badge
+              variant="destructive"
+              className="text-lg w-32  text-center  rounded-full"
+            >
               Out of Stock
             </Badge>
           ) : (

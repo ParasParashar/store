@@ -14,8 +14,16 @@ export function ProductCard({ product }: ProductCardProps) {
 
   if (!product) return null;
 
-  const { discountPercent, price, name, category, slug, status, variants } =
-    product;
+  const {
+    discountPercent,
+    price,
+    name,
+    category,
+    slug,
+    status,
+    variants,
+    totalQuantity,
+  } = product;
 
   const discountedPrice = price - (discountPercent / 100) * price;
 
@@ -53,44 +61,45 @@ export function ProductCard({ product }: ProductCardProps) {
             alt={name}
             className="h-full w-full object-cover "
           />
-          {status === "out_of_stock" && (
-            <Badge variant="destructive" className="absolute right-4 top-4">
-              Out of Stock
-            </Badge>
-          )}
+          {status === "out_of_stock" ||
+            (totalQuantity < 1 && (
+              <Badge variant="destructive" className="absolute right-4 top-4">
+                Out of Stock
+              </Badge>
+            ))}
         </div>
         {/* </Link> */}
         {/* Button Animation */}
-        {status !== "out_of_stock" && (
-          <motion.button
-            className="absolute bottom-0  inset-x-0 z-20  py-2 text-center font-mono font-black uppercase    transition-colors group bg-white hover:bg-secondary  text-green-800 hover:text-green-900"
-            initial={{ y: "50%", opacity: 0, translateY: 0 }}
-            variants={{
-              hover: {
-                y: 0,
-                opacity: 100,
-                translateY: 1,
-              },
-            }}
-            transition={{
-              duration: 1,
-              ease: "backInOut",
-              visualDuration: 0,
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              handleAddToCart();
-            }}
-            disabled={status === "out_of_stock"}
-          >
-            <IoBagOutline
-              className="inline-block group-hover:text-green-500 mr-2"
-              size={20}
-            />
-            Add to Cart
-          </motion.button>
-        )}
+        {status !== "out_of_stock" ||
+          (totalQuantity < 1 && (
+            <motion.button
+              className="absolute bottom-0  inset-x-0 z-20  py-2 text-center font-mono font-black uppercase    transition-colors group bg-white hover:bg-secondary  text-green-800 hover:text-green-900"
+              initial={{ y: "50%", opacity: 0, translateY: 0 }}
+              variants={{
+                hover: {
+                  y: 0,
+                  opacity: 100,
+                  translateY: 1,
+                },
+              }}
+              transition={{
+                duration: 1,
+                ease: "backInOut",
+                visualDuration: 0,
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                handleAddToCart();
+              }}
+            >
+              <IoBagOutline
+                className="inline-block group-hover:text-green-500 mr-2"
+                size={20}
+              />
+              Add to Cart
+            </motion.button>
+          ))}
       </Link>
 
       <div className="p-3">
