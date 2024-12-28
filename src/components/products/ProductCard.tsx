@@ -70,36 +70,36 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
         {/* </Link> */}
         {/* Button Animation */}
-        {status !== "out_of_stock" ||
-          (totalQuantity < 1 && (
-            <motion.button
-              className="absolute bottom-0  inset-x-0 z-20  py-2 text-center font-mono font-black uppercase    transition-colors group bg-white hover:bg-secondary  text-green-800 hover:text-green-900"
-              initial={{ y: "50%", opacity: 0, translateY: 0 }}
-              variants={{
-                hover: {
-                  y: 0,
-                  opacity: 100,
-                  translateY: 1,
-                },
-              }}
-              transition={{
-                duration: 1,
-                ease: "backInOut",
-                visualDuration: 0,
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                handleAddToCart();
-              }}
-            >
-              <IoBagOutline
-                className="inline-block group-hover:text-green-500 mr-2"
-                size={20}
-              />
-              Add to Cart
-            </motion.button>
-          ))}
+        {status !== "out_of_stock" && (
+          <motion.button
+            className="absolute bottom-0  inset-x-0 z-20  py-2 text-center font-mono font-black uppercase    transition-colors group bg-white hover:bg-secondary  text-green-800 hover:text-green-900"
+            initial={{ y: "50%", opacity: 0, translateY: 0 }}
+            variants={{
+              hover: {
+                y: 0,
+                opacity: 100,
+                translateY: 1,
+              },
+            }}
+            transition={{
+              duration: 1,
+              ease: "backInOut",
+              visualDuration: 0,
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handleAddToCart();
+            }}
+            disabled={totalQuantity < 1}
+          >
+            <IoBagOutline
+              className="inline-block group-hover:text-green-500 mr-2"
+              size={20}
+            />
+            Add to Cart
+          </motion.button>
+        )}
       </Link>
 
       <div className="p-3">

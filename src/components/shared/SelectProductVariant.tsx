@@ -140,7 +140,7 @@ const SelectProductVariant = () => {
                       key={size}
                       onClick={() => isAvailable && handleSelectSize(size)}
                       disabled={!isAvailable}
-                      className={`flex items-center justify-center border border-black h-10 w-10 rounded-full bg-white text-black ${
+                      className={`flex relative items-center justify-center border border-black h-10 w-10 rounded-full bg-white text-black ${
                         isAvailable
                           ? isActive
                             ? "bg-primary text-white pointer-events-none"
@@ -154,18 +154,10 @@ const SelectProductVariant = () => {
                         }`}
                       >
                         {size}
-                        {!isAvailable && (
-                          <span
-                            className="absolute inset-0 w-full flex items-center justify-center"
-                            aria-hidden="true"
-                          >
-                            <span
-                              className="w-full h-[1px] bg-muted-foreground transform rotate-45"
-                              style={{ position: "absolute" }}
-                            />
-                          </span>
-                        )}
                       </span>
+                      {!isAvailable && (
+                        <span className="w-full top-[50%]  absolute h-[1px] rotate-45 overflow-hidden bg-muted-foreground transform " />
+                      )}
                     </Button>
                   </div>
                 );

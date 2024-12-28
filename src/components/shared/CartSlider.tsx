@@ -97,17 +97,18 @@ const CartSlider = () => {
                       {/* Price & Discount Section */}
                       <div className="flex items-center justify-between mt-2">
                         <div>
-                          {item.discountPercent && (
-                            <>
-                              <span className="line-through text-sm text-muted-foreground font-bold ">
-                                {" "}
-                                ₹{item.price}
-                              </span>
-                              <Badge className="text-[10px]  ml-2  rounded-full">
-                                {item.discountPercent}% OFF
-                              </Badge>
-                            </>
-                          )}
+                          {item.discountPercent !== null &&
+                            item?.discountPercent > 1 && (
+                              <>
+                                <span className="line-through text-sm text-muted-foreground font-bold ">
+                                  {" "}
+                                  ₹{item.price}
+                                </span>
+                                <Badge className="text-[10px]  ml-2  rounded-full">
+                                  {item.discountPercent}% OFF
+                                </Badge>
+                              </>
+                            )}
                           <p className="text-xl font-bold mt-1 ">
                             ₹{discountedPrice.toFixed(2)}
                           </p>
