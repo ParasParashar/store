@@ -154,7 +154,9 @@ export function ProductDetailPage() {
     setSelectedSize(size);
     if (selectedVariant) {
       const cartId = `${selectedVariant.productId}-${size}-${selectedVariant.color}`;
-      const isSelected = items.some((item) => item.id === cartId);
+      const isSelected = items.some(
+        (item) => item.productId + item.attributeId + item.variantId === cartId
+      );
       setIsItemSelected(isSelected);
     }
     setErrorMessage("");
@@ -221,7 +223,7 @@ export function ProductDetailPage() {
 
             <ProductImageColors
               variants={product.variants}
-              onSelectVariant={() => handleSelectVariant}
+              onSelectVariant={handleSelectVariant}
             />
           </div>
 

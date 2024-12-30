@@ -7,7 +7,9 @@ export function Footer() {
       <div className="container mx-auto flex flex-col items-start ">
         <div className="w-full grid grid-cols-2 gap-8 md:grid-cols-4">
           <div>
-            <h3 className="mb-4 text-lg text-muted-foreground font-semibold">Shop</h3>
+            <h3 className="mb-4 text-lg text-muted-foreground font-semibold">
+              Shop
+            </h3>
             <ul className="space-y-2">
               <li>
                 <Link
@@ -36,7 +38,9 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="mb-4 text-lg text-muted-foreground font-semibold">Company</h3>
+            <h3 className="mb-4 text-lg text-muted-foreground font-semibold">
+              Company
+            </h3>
             <ul className="space-y-2">
               <li>
                 <Link
@@ -65,7 +69,9 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="mb-4 text-lg text-muted-foreground font-semibold">Support</h3>
+            <h3 className="mb-4 text-lg text-muted-foreground font-semibold">
+              Support
+            </h3>
             <ul className="space-y-2">
               <li>
                 <Link
@@ -94,7 +100,9 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="mb-4 text-lg text-muted-foreground font-semibold">Follow Us</h3>
+            <h3 className="mb-4 text-lg text-muted-foreground font-semibold">
+              Follow Us
+            </h3>
             <div className="flex space-x-4">
               <a href="#" className="text-white hover:text-muted-foreground">
                 <Facebook className="h-5 w-5" />
@@ -112,7 +120,9 @@ export function Footer() {
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Fashion Store. All rights reserved.
           </p>
-          <p className="text-white text-7xl min-[380px]:text-8xl min-[500px]:text-9xl sm:text-[10rem] md:text-[11rem] min-[850px]:text-[13rem] min-[950px]:text-[14rem] mt-4 text-center uppercase jaro-LogoStyle tracking-widest ">Fashion</p>
+          <p className="text-white text-7xl min-[380px]:text-8xl min-[500px]:text-9xl sm:text-[10rem] md:text-[11rem] min-[850px]:text-[13rem] min-[950px]:text-[14rem] mt-4 text-center uppercase jaro-LogoStyle tracking-widest ">
+            Fashion
+          </p>
         </div>
       </div>
     </footer>

@@ -4,24 +4,26 @@ import { Navigate } from "react-router-dom";
 const OrderSummary = () => {
   const { detailedItems } = useCart();
   const total = detailedItems.reduce((sum, item) => {
+    const p = item.variants[0].attributes[0].price || item.price;
     const discountedPrice = item.discountPercent
-      ? item.price - (item.discountPercent * item.price) / 100
-      : item.price;
+      ? p - (item.discountPercent * p) / 100
+      : p;
     return sum + discountedPrice * item.quantity;
   }, 0);
-
   if (detailedItems.length === 0 || !detailedItems) {
     return <Navigate to="/" />;
   }
 
   return (
-    <div className="flex flex-col h-full w-full rounded-b-lg p-5 ">
+    <div className="flex flex-col  bg-secondary h-full w-full rounded-b-lg p-5 ">
       {/* Scrollable Cart Items */}
       <div className="flex-1 overflow-y-auto h-full custom-scrollbar ">
         {detailedItems.map((item) => {
+          const p = item.variants[0].attributes[0].price || item.price;
+
           const discountedPrice = item.discountPercent
-            ? item.price - (item.discountPercent * item.price) / 100
-            : item.price;
+            ? p - (item.discountPercent * p) / 100
+            : p;
           const totalPrice = discountedPrice * item.quantity;
 
           return (

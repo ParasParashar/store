@@ -24,9 +24,10 @@ const CartSlider = () => {
   };
 
   const total = detailedItems.reduce((sum, item) => {
+    const p = item.variants[0].attributes[0].price || item.price;
     const discountedPrice = item.discountPercent
-      ? item.price - (item.discountPercent * item.price) / 100
-      : item.price;
+      ? p - (item.discountPercent * p) / 100
+      : p;
     return sum + discountedPrice * item.quantity;
   }, 0);
 
@@ -46,11 +47,15 @@ const CartSlider = () => {
           {/* Scrollable Cart Items */}
           <SheetDescription className="flex-1 overflow-y-auto p-4 custom-scrollbar">
             {detailedItems.map((item) => {
+              const price = item.variants[0].attributes[0].price || item.price;
               const discountedPrice = item.discountPercent
-                ? item.price - (item.discountPercent * item.price) / 100
-                : item.price;
+                ? price - (item.discountPercent * price) / 100
+                : price;
               const totalPrice = discountedPrice * item.quantity;
 
+              const currentPrice = item?.discountPercent
+                ? price - (item?.discountPercent / 100) * price
+                : price;
               return (
                 <Card
                   key={`${item.id}-${item.variants[0]?.id}-${item.variants[0]?.attributes[0]?.id}`}
@@ -102,7 +107,7 @@ const CartSlider = () => {
                               <>
                                 <span className="line-through text-sm text-muted-foreground font-bold ">
                                   {" "}
-                                  ₹{item.price}
+                                  ₹{currentPrice}
                                 </span>
                                 <Badge className="text-[10px]  ml-2  rounded-full">
                                   {item.discountPercent}% OFF
@@ -110,7 +115,7 @@ const CartSlider = () => {
                               </>
                             )}
                           <p className="text-xl font-bold mt-1 ">
-                            ₹{discountedPrice.toFixed(2)}
+                            ₹{currentPrice}
                           </p>
                         </div>
                         <div>

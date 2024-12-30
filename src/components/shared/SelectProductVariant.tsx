@@ -110,7 +110,7 @@ const SelectProductVariant = () => {
             <div className="max-w-full overflow-hidden">
               <ProductImageColors
                 variants={variants}
-                onSelectVariant={() => handleSelectVariant}
+                onSelectVariant={handleSelectVariant}
               />
             </div>
           </div>
