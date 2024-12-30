@@ -20,6 +20,14 @@ const Shipping = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { items, clearCart } = useCart();
+  const [closeStates, setCloseStates] = useState<Record<string, boolean>>({});
+
+  const toggleCloseState = (id: string) => {
+    setCloseStates((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   const AddressCard = lazy(() => import("../profile/AddressCard"));
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "ONLINE">(
@@ -185,21 +193,26 @@ const Shipping = () => {
         ))}
 
       {authUser?.addresses &&
-        authUser?.addresses.map((address: Address) => {
-          const [isEdit, setIsEdit] = useState(false);
+        authUser?.addresses?.map((address: Address) => {
+          const isClose = closeStates[address.id] || false;
 
           return (
             <div
               key={address.id}
               onClick={() => handleSelectAddress(address.id)}
+              className={cn(
+                " rounded-lg border-blue-200 ",
+                address.id === selectedAddress &&
+                  "border-gray-200 shadow-md shadow-gray-200"
+              )}
             >
-              {isEdit ? (
+              {isClose ? (
                 <div className="relative ">
                   <Button
                     variant={"outline"}
                     className="rounded-full transition-all  duration-500 ease-in absolute top-[-10px] right-[-8px]"
                     size={"icon"}
-                    onClick={() => setIsEdit(!isEdit)}
+                    onClick={() => toggleCloseState(address.id)}
                   >
                     <X size={18} />
                   </Button>
@@ -210,8 +223,9 @@ const Shipping = () => {
               ) : (
                 <Card
                   className={cn(
-                    " bg-secondary w-full flex items-center justify-between rounded-sm px-5  cursor-pointer hover:border-blue-200 p-2 border shadow-none   ",
-                    address.id === selectedAddress && "border-blue-200"
+                    " bg-secondary w-full flex items-center justify-between rounded-sm px-5  cursor-pointer hover:border-gray-200 p-2 border shadow-none   ",
+                    address.id === selectedAddress &&
+                      "border-gray-200 border-2 shadow-md shadow-gray-200"
                   )}
                 >
                   <CardHeader className="p-0">
@@ -228,7 +242,7 @@ const Shipping = () => {
                       <BsThreeDotsVertical
                         size={15}
                         className="cursor-pointer text-black"
-                        onClick={() => setIsEdit(true)}
+                        onClick={() => toggleCloseState(address.id)}
                       />
                     </HoverCardTrigger>
                     <HoverCardContent className="w-auto p-1 text-xs">

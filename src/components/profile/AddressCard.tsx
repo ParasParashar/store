@@ -24,6 +24,7 @@ type props = {
     postalCode: string;
     country: string;
     phoneNumber: string;
+    updatedAt?: string;
   };
   setIsAdding?: () => void | null;
   type: "shipping" | "profile";
