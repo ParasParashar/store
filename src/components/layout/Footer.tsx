@@ -3,9 +3,9 @@ import { Facebook, Instagram, Twitter } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t px-4 md:px-6 lg:px-10 w-full h-screen bg-[#000] relative z-20">
-      <div className="container py-8 md:py-12 absolute">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+    <footer className="border-t w-full h-full bg-[#000]  z-20 px-6 md:px-8 py-8 md:py-12 relative">
+      <div className="container mx-auto flex flex-col items-start ">
+        <div className="w-full grid grid-cols-2 gap-8 md:grid-cols-4">
           <div>
             <h3 className="mb-4 text-lg text-muted-foreground font-semibold">Shop</h3>
             <ul className="space-y-2">
@@ -112,7 +112,7 @@ export function Footer() {
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Fashion Store. All rights reserved.
           </p>
-          <p className="text-white text-7xl min-[380px]:text-8xl min-[500px]:text-9xl sm:text-[10rem] md:text-[12rem] min-[850px]:text-[14rem] min-[950px]:text-[15rem] mt-4 text-center uppercase jaro-LogoStyle tracking-widest w-full">Fashion</p>
+          <p className="text-white text-7xl min-[380px]:text-8xl min-[500px]:text-9xl sm:text-[10rem] md:text-[11rem] min-[850px]:text-[13rem] min-[950px]:text-[14rem] mt-4 text-center uppercase jaro-LogoStyle tracking-widest ">Fashion</p>
         </div>
       </div>
     </footer>

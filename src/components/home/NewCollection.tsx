@@ -6,7 +6,7 @@ import { FaCircleArrowRight } from "react-icons/fa6";
 const NewCollection = () => {
 
   return (
-    <main className="NewCollectioStyles w-full h-screen relative text-white py-6 px-2 md:p-12 mt-[100vh] z-20">
+    <main className="NewCollectioStyles text-white w-full h-screen relative right-0 py-6 px-2 md:p-12 mt-[100vh] z-20">
         <div className="absolute -top-32 md:-top-20 right-0 w-1/2 md:w-1/3 h-full">
             <img src="/NewCollection/newCollection1.png" alt="mainImage" className="w-full h-full object-cover" />
         </div>

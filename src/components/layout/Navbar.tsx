@@ -40,12 +40,15 @@ export function Navbar() {
   }, [lastScrollY]);
 
   return (
+    
+    
     <header
-      className={`sticky sm:px-4 md:px-6 lg:px-10  top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300 ${
+      className={`sticky sm:px-4 md:px-6 lg:px-10 top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300  ${
         showNavbar ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <div className="flex justify-between h-16 items-center">
+       
+      <div className="container mx-auto flex justify-between h-16 items-center">
         <div className="flex sm:gap-2 md:gap-4">
           <Button
             variant="ghost"
@@ -103,14 +106,14 @@ export function Navbar() {
           </Button>
         </div>
       </div>
-
+            
       {/* Dropdown Menu */}
       <div
-        className={`absolute left-0 top-16 w-full bg-white border-t border-gray-200 overflow-hidden transition-all duration-500 ease-in-out ${
+        className={`w-full absolute left-0 top-16 bg-white border-t border-gray-200 overflow-hidden transition-all duration-500 ease-in-out ${
           isMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <nav className="flex flex-col space-y-4 py-4 px-6">
+        <nav className="container mx-auto  flex flex-col space-y-4 py-4 px-6">
           <Link
             to="/products"
             className="text-xl font-medium transition-colors hover:text-primary"
@@ -125,6 +128,7 @@ export function Navbar() {
           </Link>
         </nav>
       </div>
-    </header>
+      </header>
+      
   );
 }

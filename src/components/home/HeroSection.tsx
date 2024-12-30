@@ -54,7 +54,8 @@ export function HeroSection() {
       const width = window.innerWidth;
       if (width < 1024) setSlidesToShow(3);
       else if (width < 1240) setSlidesToShow(4);
-      else setSlidesToShow(5);
+      else if (width < 1536) setSlidesToShow(5);
+      else setSlidesToShow(6);
     };
 
     // gsap animation for first hero section animation
@@ -105,7 +106,7 @@ export function HeroSection() {
   };
 
   return (
-    <div className="parent fixed w-full h-screen overflow-hidden flex items-center top- z-10">
+    <div className="parent fixed w-screen h-screen overflow-hidden flex items-center top- z-10">
 
       {/* Background Image */}
       <div

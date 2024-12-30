@@ -1,11 +1,15 @@
 import { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import { Card, CardContent } from "@/components/ui/card";
-import { staggerFadeIn } from "@/lib/animations";
 import AxiosBase from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
+import ShopByCategory from "./ShopByCategory";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function FeaturedCollections() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const { data: collections, isLoading } = useQuery({
     queryKey: ["collections"],
     queryFn: async () => {
@@ -14,39 +18,63 @@ export function FeaturedCollections() {
       return data.data;
     },
   });
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const items = gsap.utils.toArray(".collection-item");
+
+      items.forEach((item, index) => {
+        gsap.fromTo(
+          item as gsap.TweenTarget,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            delay: index * 0.2,
+            scrollTrigger: {
+              trigger: item as Element,
+              start: "top 80%",
+              end: "top 90%",
+              scrub: true,
+            },
+          }
+        );
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [collections]);
+
   if (isLoading) return null;
+
   return (
-    <section className="py-16 md:py-24 w-full h-screen bg-white z-20 relative ">
-      <div className="container absolute">
-        <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl">
-          Featured Collections
+    <section
+      ref={containerRef}
+      className="py-16 md:py-24 w-full bg-white z-20 relative"
+    >
+      <div className="w-full flex flex-col items-center">
+        <h2 className="mb-12 text-3xl font-bold md:text-4xl">
+          Featured Categories
         </h2>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {!isLoading &&
+
+        <div className="w-full h-full sm:grid sm:grid-cols-2 gap-6">
+
+          <ShopByCategory className="collection-item" />
+          <ShopByCategory className="collection-item" />
+          <ShopByCategory className="collection-item" />
+          <ShopByCategory className="collection-item" />
+          {/* {!isLoading &&
             collections.map((collection: any) => (
-              <Link key={collection.id} to={`/collections/${collection.id}`}>
-                <Card className="collection-card overflow-hidden transition-all duration-300 hover:scale-110">
-                  <CardContent className="p-0">
-                    <div className="relative">
-                      <img
-                        src={collection.image}
-                        alt={collection.title}
-                        onLoad={(e) =>
-                          e.currentTarget.classList.remove("opacity-0")
-                        }
-                        className="h-[300px] opacity-0 w-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                      <div className="absolute bottom-0 p-6 text-white">
-                        <h3 className="mb-2 text-xl font-semibold">
-                          {collection.name}
-                        </h3>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+              <ShopByCategory
+                key={collection.id}
+                title={collection.title}
+                description={collection.description}
+                image={collection.img}
+                className="collection-item"
+              />
+            ))} */}
         </div>
       </div>
     </section>
