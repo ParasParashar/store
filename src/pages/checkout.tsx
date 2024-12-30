@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { FaLeftLong } from "react-icons/fa6";
-import OrderSummary from "@/components/checkout/OrderSummary";
 import { motion } from "framer-motion";
 import { lazy, Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -8,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const Shipping = lazy(() => import("@/components/checkout/Shipping"));
+  const OrderSummary = lazy(() => import("@/components/checkout/OrderSummary"));
   return (
     <main className=" w-full  mx-auto min-h-screen container ">
       {/* Header with Back Button and Logo */}
@@ -36,6 +36,7 @@ const CheckoutPage = () => {
                 <Skeleton className="w-full mt-3 rounded-lg h-20" />
                 <Skeleton className="w-full mt-3 rounded-lg h-20" />
                 <Skeleton className="w-full mt-3 rounded-lg h-20" />
+                <Skeleton className="w-full mt-5 rounded-lg h-24" />
               </div>
             }
           >
@@ -48,7 +49,17 @@ const CheckoutPage = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <OrderSummary />
+          <Suspense
+            fallback={
+              <div>
+                <Skeleton className="w-full mt-3 rounded-lg h-20" />
+                <Skeleton className="w-full mt-3 rounded-lg h-20" />
+                <Skeleton className="w-full mt-3 rounded-lg h-20" />
+              </div>
+            }
+          >
+            <OrderSummary />
+          </Suspense>
         </motion.div>
       </section>
     </main>

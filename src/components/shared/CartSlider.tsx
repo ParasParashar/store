@@ -65,7 +65,11 @@ const CartSlider = () => {
                     variant={"ghost"}
                     size="icon"
                     className="absolute top-2 right-2 rounded-full"
-                    onClick={() => removeItem(item.id)}
+                    onClick={() =>
+                      removeItem(
+                        `${item.id}-${item.variants[0]?.id}-${item.variants[0]?.attributes[0]?.id}`
+                      )
+                    }
                   >
                     <X />
                   </Button>
