@@ -7,6 +7,7 @@ import { IoBagOutline } from "react-icons/io5";
 import useCartController from "@/hooks/useCartController";
 import { useCart } from "@/hooks/useCart";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import SearchProduct from "../shared/SearchProduct";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -40,16 +41,13 @@ export function Navbar() {
   }, [lastScrollY]);
 
   return (
-    
-    
     <header
       className={`sticky sm:px-4 md:px-6 lg:px-10 top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300  ${
         showNavbar ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-       
       <div className="container mx-auto flex justify-between h-16 items-center">
-        <div className="flex sm:gap-2 md:gap-4">
+        <div className="flex items-center sm:gap-2 md:gap-4">
           <Button
             variant="ghost"
             size={"sm"}
@@ -70,10 +68,11 @@ export function Navbar() {
             )}
           </Button>
 
-          <Button variant="ghost" size={"sm"} className="gap-2">
+          {/* <Button variant="ghost" size={"sm"} className="gap-2">
             <MagnifyingGlassIcon className="h-5 w-5" />{" "}
             <span className=" max-sm:hidden">Search</span>
-          </Button>
+          </Button> */}
+          <SearchProduct />
         </div>
 
         <Link to="/" className="flex items-center md:mr-16 lg:mr-24 space-x-2">
@@ -106,7 +105,7 @@ export function Navbar() {
           </Button>
         </div>
       </div>
-            
+
       {/* Dropdown Menu */}
       <div
         className={`w-full absolute left-0 top-16 bg-white border-t border-gray-200 overflow-hidden transition-all duration-500 ease-in-out ${
@@ -128,7 +127,6 @@ export function Navbar() {
           </Link>
         </nav>
       </div>
-      </header>
-      
+    </header>
   );
 }
