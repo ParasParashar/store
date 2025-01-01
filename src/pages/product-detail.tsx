@@ -9,7 +9,6 @@ import { Product, Variant } from "@/types/product";
 import { ProductDetailSkeleton } from "@/components/loaders/ProductDetailSkeleton";
 import { useCart } from "@/hooks/useCart";
 import ProductImages from "@/components/product-detail/ProductImages";
-import useCartController from "@/hooks/useCartController";
 import SizeChart from "@/components/product-detail/SizeChart";
 import washingInstructions from "@/lib/washingInstructions";
 import WashingInstruction from "@/components/product-detail/WashingInstruction";
@@ -99,8 +98,6 @@ export function ProductDetailPage() {
     return <div>Product not found</div>;
   }
 
-  // console.log(product.variants)
-
   const price =
     (selectedVariant &&
       selectedVariant.attributes.find((attr) => attr.size === selectedSize)
@@ -108,14 +105,13 @@ export function ProductDetailPage() {
     product.price;
 
   const currentPrice = product?.discountPercent
-    ? price - (product?.discountPercent / 100) * price
+    ? price - (parseInt(product?.discountPercent) / 100) * price
     : price;
 
   const currentStock =
     selectedVariant &&
     selectedVariant.attributes.find((attr) => attr.size === selectedSize)
       ?.stock;
-
   const availableSizes =
     selectedVariant?.attributes.map((attr) => attr.size.toUpperCase()) || [];
 
@@ -317,8 +313,6 @@ export function ProductDetailPage() {
               </p>
             ))}
 
-          {/* Add to Cart */}
-          {/* <div className="w-full flex gap-1"> */}
           {currentStock === 0 ||
           product.status === "out_of_stock" ||
           product.totalQuantity < 1 ? (
@@ -336,7 +330,6 @@ export function ProductDetailPage() {
               >
                 ADD TO BAG
               </Button>
-              {/* </div> */}
             </div>
           )}
         </section>
