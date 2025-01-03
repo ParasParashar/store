@@ -14,6 +14,8 @@ import { useQuery } from "@tanstack/react-query";
 import AxiosBase from "@/lib/axios";
 import { Skeleton } from "../ui/skeleton";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "../ui/button";
+import { FcClearFilters } from "react-icons/fc";
 
 export function ProductFilters() {
   const [selectedFilters, setSelectedFilters] = useState<{
@@ -102,6 +104,15 @@ export function ProductFilters() {
     updateURLParams();
   }, [selectedFilters]);
 
+  const clearFilters = () => {
+    setSelectedFilters({
+      category: { id: null, name: null },
+      size: null,
+      color: null,
+      priceRange: [0, 3000],
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center flex-col gap-3">
@@ -124,11 +135,17 @@ export function ProductFilters() {
 
   return (
     <Accordion type="multiple" className="w-full">
-      <div className="flex  my-1 mb-10 w-full items-center gap-3">
+      <div className="flex  my-1 mb-2 w-full items-center gap-3">
         <HiOutlineAdjustmentsHorizontal className="text-muted-foreground" />
         <p className="text-muted-foreground text-sm ">filters</p>
       </div>
-
+      <button
+        onClick={clearFilters}
+        className="my-5 flex  gap-3 items-center text-muted-foreground text-xs group  hover:text-primary"
+      >
+        <FcClearFilters className="text-muted-foreground group-hover:text-primary" />
+        Clear Filters
+      </button>
       {/* Categories */}
       <AccordionItem value="categories">
         <AccordionTrigger className="text-sm hover:no-underline font-semibold">
