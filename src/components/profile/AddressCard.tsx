@@ -68,9 +68,16 @@ const AddressCard = ({ address, type, setIsAdding }: props) => {
       ...prev,
       phoneNumber: value,
     }));
+    const phoneRegex = /^[6-9]\d{9}$/; //to check numver is valid or not
+    if (!phoneRegex.test(value)) {
+      setPhoneError(true);
+    } else {
+      setPhoneError(false);
+    }
+
+    //  if re-entry is needed
     if (value !== initialphoneNumber) {
       setShowReenter(true);
-      setPhoneError(false);
     } else {
       setShowReenter(false);
     }
@@ -78,10 +85,12 @@ const AddressCard = ({ address, type, setIsAdding }: props) => {
 
   const handleReenterPhoneChange = (value: string) => {
     setInitialphoneNumber(value);
-    setPhoneError(false);
 
     if (value === formData.phoneNumber) {
       setShowReenter(false);
+      setPhoneError(false);
+    } else {
+      setPhoneError(true);
     }
   };
 
@@ -347,7 +356,7 @@ const AddressCard = ({ address, type, setIsAdding }: props) => {
               {isEdit && (
                 <Button
                   type="submit"
-                  disabled={isPending}
+                  disabled={isPending || phoneError}
                   variant={"secondary"}
                   size={"lg"}
                   className="col-span-2"
