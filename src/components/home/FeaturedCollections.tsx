@@ -4,32 +4,52 @@ import { useQuery } from "@tanstack/react-query";
 import { gsap } from "gsap";
 
 const FeaturedCollections = () => {
-
-  // fetching data 
-  const {data:FeaturedProducts} = useQuery({
+  // fetching data
+  const { data: FeaturedProducts } = useQuery({
     queryKey: ["homeFeaturedProducts"],
     queryFn: async () => {
-      const {data} = await AxiosBase.get("/api/store/featuredproducts")
-      return data.data
-    }
-  })
+      const { data } = await AxiosBase.get("/api/store/featuredproducts");
+      return data.data;
+    },
+  });
 
   // handle animation on mouse enter and leave
   const handleMouseEnter = (index: number) => {
-    gsap.to(`.shade-${index}`, { left: "100%", duration: 0.8, ease: "power2.out" });
-    gsap.to(`.text-${index}`, { x: "0%", opacity: 1, duration: 0.8, ease: "power2.out" });
+    gsap.to(`.shade-${index}`, {
+      left: "100%",
+      duration: 0.8,
+      ease: "power2.out",
+    });
+    gsap.to(`.text-${index}`, {
+      x: "0%",
+      opacity: 1,
+      duration: 0.8,
+      ease: "power2.out",
+    });
   };
 
   const handleMouseLeave = (index: number) => {
-    gsap.to(`.shade-${index}`, { left: "0%", duration: 0.8, ease: "power2.in" });
-    gsap.to(`.text-${index}`, { x: index % 2 === 0 ? "-100%" : "100%", opacity: 0, duration: 0.8, ease: "power2.in" });
+    gsap.to(`.shade-${index}`, {
+      left: "0%",
+      duration: 0.8,
+      ease: "power2.in",
+    });
+    gsap.to(`.text-${index}`, {
+      x: index % 2 === 0 ? "-100%" : "100%",
+      opacity: 0,
+      duration: 0.8,
+      ease: "power2.in",
+    });
   };
 
   return (
     <div className="top-collection-container bg-white py-8 w-full relative z-20">
-      <h2 className="text-center text-3xl md:text-5xl font-bold my-12 uppercase"> Shop By Catagory</h2>
+      <h2 className="text-center text-3xl md:text-5xl font-bold my-12 uppercase">
+        {" "}
+        Shop By Catagory
+      </h2>
       <div className="w-full flex flex-col md:px-4 gap-2">
-        {FeaturedProducts?.map((product:Product, index:number) => (
+        {FeaturedProducts?.map((product: Product, index: number) => (
           <div
             key={index}
             className={`flex flex-col md:flex-row items-stretch ${
@@ -43,7 +63,7 @@ const FeaturedCollections = () => {
               className={`absolute inset-0 flex flex-col justify-center items-center text-center text-${index} text-white md:hidden z-30 `}
               style={{
                 transform: `translateX(0%)`,
-                opacity: 1, 
+                opacity: 1,
                 transition: "opacity 0.8s ease, transform 0.8s ease",
               }}
             >
@@ -92,6 +112,6 @@ const FeaturedCollections = () => {
       </div>
     </div>
   );
-}
+};
 
-export default FeaturedCollections
+export default FeaturedCollections;

@@ -1,62 +1,79 @@
+export type Seller = {
+  id: string;
+  name: string;
+  email: string;
+  contact?: string | null;
+  googleId: string;
+  products: Product[];
+  shiprocketEmail?: string
+  shiprocketPassword?: string
+};
+
+
 export type Product = {
   id: string;
   name: string;
-  description: string | null;
+  description?: string | null;
   price: number;
-  slug: string;
   totalQuantity: number;
-  status: string;
+  status: ProductStatus;
+  images: string[];
   isDeleted: boolean;
   isPublished: boolean;
-  categoryId: string;
-  sellerId: string;
-  createdAt: string;
-  updatedAt: string;
-  category: {
-    id: string;
-    name: string;
-    description: string | null;
-    parentId: string | null;
-  };
-  seller: {
-    name: string;
-    contact: string | null;
-  };
   variants: Variant[];
   discountPercent?: string;
   isFeatured?: boolean;
-}
+  slug?: string;
+  categoryId: string;
+  category: Category;
+  sellerId: string;
+  seller: Seller;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+
+export type Category = {
+  id: string; // MongoDB ObjectId
+  name: string;
+  description?: string | null; // Optional description
+  parentId?: string | null; // ID of the parent category (if exists)
+  parent?: Category | null; // Parent category object
+  subcategories: Category[]; // List of subcategories
+  products?: Product[]; // List of products under this category
+};
 
 
 export type Variant = {
-  id: string;
-  color: string;
-  images: string[];
-  productId: string;
-  createdAt: string;
-  updatedAt: string;
-  attributes: Attribute[]
-}
+  id: string; // MongoDB ObjectId
+  color: string; // Color of the variant
+  images: string[]; // Images specific to this variant
+  attributes: Attribute[]; // Attributes (e.g., size, stock)
+  productId: string; // ID of the related product
+  product: Product; // Related product object
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 
 export type Attribute = {
-  id: string;
-  size: string;
-  stock: number;
-  price: number;
-  sku: string | null;
-  variantId: string;
+  id: string; // MongoDB ObjectId
+  size: string; // Size of the variant
+  stock: number; // Stock level for this size
+  price?: number | null; // Optional price override
+  sku?: string | null; // Optional SKU for inventory tracking
+  variantId: string; // ID of the related variant
+  variant: Variant; // Related variant object
+};
+
+
+export enum ProductStatus {
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+  OUT_OF_STOCK = "out_of_stock",
+  DISCONTINUED = "discontinued",
 }
 
-
-export type Filters = {
-  categoryId?: string;
-  categoryName?: string;
-  size?: string;
-  color?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  search?: string;
-};
 
 
 // User type
@@ -86,32 +103,51 @@ export type Address = {
 export type Order = {
   id: string;
   userId: string;
+  user: User;
   paymentMethod: PaymentMethod;
   razorpayOrderId?: string;
   razorpayPaymentId?: string;
-  status: OrderStatus;
+  status: PaymentStatus;
   totalAmount: number;
-  orderItems: OrderItem[];
   deliveryStatus: DeliveryStatus;
   shippingAddressId: string;
   shippingAddress: ShippingAddress;
-  createdAt: string;
-  updatedAt: string;
-}
+  createdAt: Date;
+  updatedAt: Date;
+  SubOrder: SubOrder[];
+};
 
-// OrderItem type
+export type SubOrder = {
+  id: string;
+  parentOrderId: string;
+  parentOrder: Order;
+  sellerId: string;
+  seller: Seller;
+  orderItems: OrderItem[];
+  totalAmount: number;
+  paymentMethod: PaymentMethod;
+  deliveryStatus: DeliveryStatus;
+  paymentStatus: PaymentStatus;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type OrderItem = {
   id: string;
-  orderId: string;
   productId: string;
   product: Product;
+  variantId?: string;
+  variant?: Variant;
+  attributeId?: string;
+  attribute?: Attribute;
   quantity: number;
   price: number;
-  createdAt: string;
-  variant?: Variant;
-  attribute?: Attribute;
-  updatedAt: string;
-}
+  createdAt: Date;
+  updatedAt: Date;
+  Delivery: Delivery[];
+  subOrderId: string;
+  SubOrder: SubOrder;
+};
 
 // ShippingAddress type
 export type ShippingAddress = {
@@ -128,6 +164,21 @@ export type ShippingAddress = {
 }
 
 
+export type Delivery = {
+  id: string;
+  orderItemId: string;
+  orderItem: OrderItem;
+  sellerId: string;
+  seller: Seller;
+  deliveryService: string;
+  trackingId?: string;
+  deliveryStatus: DeliveryStatus;
+  estimatedDelivery?: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+
 
 export enum PaymentMethod {
   COD = "COD",
@@ -139,7 +190,13 @@ export enum OrderStatus {
   PENDING = "PENDING",
   COMPLETED = "COMPLETED",
   CANCELLED = "CANCELLED",
-  PROCESSING = 'PROCESSING",
+  PROCESSING = 'PROCESSING'
+}
+export enum PaymentStatus {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+  PROCESSING = 'PROCESSING'
 }
 
 export enum DeliveryStatus {

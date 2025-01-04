@@ -1,25 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatDate } from "@/lib/utils";
-import { Order, OrderItem, User } from "@/types/product";
+import { Order, OrderItem, SubOrder } from "@/types/product";
 import { Badge } from "../ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import AxiosBase from "@/lib/axios";
 import { OrderSkeleton } from "../loaders/OrderSkeleton";
-import { Navigate } from "react-router-dom";
 
 export default function MyOrders() {
-  const { data: authUser } = useQuery<User>({ queryKey: ["authUser"] });
-  if (!authUser) {
-    return <Navigate to="/" />;
-  }
-
   const { data: orders, isLoading } = useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
-      const { data } = await AxiosBase.get(
-        "/api/store/profile/orders/" + authUser?.id
-      );
+      const { data } = await AxiosBase.get("/api/store/profile/orders");
       if (!data.success) throw new Error(data.message);
       return data.data;
     },
@@ -154,30 +146,34 @@ function OrderList({
               <div>
                 <h4 className="text-sm font-medium mb-2">Order Items</h4>
                 <div className="space-y-4">
-                  {order.orderItems.map((item: OrderItem) => (
-                    <div key={item.id} className="flex items-center space-x-4">
-                      <div className="relative h-16 w-16 overflow-hidden rounded bg-gray-100">
-                        <img
-                          src={
-                            item.variant?.images?.[0] ||
-                            "/placeholder-image.jpg"
-                          }
-                          alt={item.product.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">
-                          {item.product.name}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {item?.variant?.color}, {item?.attribute?.size} (Qty:{" "}
-                          {item.quantity})
-                        </p>
-                      </div>
-                      <div className="text-sm font-medium">
-                        ₹{item.price.toFixed(2)}
-                      </div>
+                  {order.SubOrder.map((s: SubOrder) => (
+                    <div key={s.id} className="flex items-center space-x-4">
+                      {s.orderItems.map((item: OrderItem) => (
+                        <div key={item.id}>
+                          <div className="relative h-16 w-16 overflow-hidden rounded bg-gray-100">
+                            <img
+                              src={
+                                item.variant?.images?.[0] ||
+                                "/placeholder-image.jpg"
+                              }
+                              alt={item.product.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium">
+                              {item.product.name}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {item?.variant?.color}, {item?.attribute?.size}{" "}
+                              (Qty: {item.quantity})
+                            </p>
+                          </div>
+                          <div className="text-sm font-medium">
+                            ₹{item.price.toFixed(2)}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   ))}
                 </div>
