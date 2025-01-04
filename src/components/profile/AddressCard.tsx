@@ -216,6 +216,7 @@ const AddressCard = ({ address, type, setIsAdding }: props) => {
                   placeholder="Country"
                   required
                   disabled={!isEdit}
+                  autoFocus
                 />
               </div>
               <div className="row-span-1">
