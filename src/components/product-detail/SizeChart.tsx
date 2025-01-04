@@ -12,17 +12,17 @@ import { Button } from "../ui/button";
 const SizeChart = () => {
   return (
     <Sheet>
-      <SheetTrigger>
         <div className="flex items-center gap-2">
           <span className="text-sm text-[#1C1D45] ">Check your size?</span>
+            <SheetTrigger>
           <Button
             variant="link"
             className="text-xs uppercase text-[#1C1D45] hover:text-[#3B82F6]"
           >
             Size chart
           </Button>
-        </div>
       </SheetTrigger>
+        </div>
 
       <SheetContent
         side="bottom"

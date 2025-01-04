@@ -1,82 +1,97 @@
-import { useEffect, useRef } from "react";
 import AxiosBase from "@/lib/axios";
+import { Product } from "@/types/product";
 import { useQuery } from "@tanstack/react-query";
-import ShopByCategory from "./ShopByCategory";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+const FeaturedCollections = () => {
 
-export function FeaturedCollections() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const { data: collections, isLoading } = useQuery({
-    queryKey: ["collections"],
+  // fetching data 
+  const {data:FeaturedProducts} = useQuery({
+    queryKey: ["homeFeaturedProducts"],
     queryFn: async () => {
-      const { data } = await AxiosBase.get("/api/store/collections");
-      if (!data.success) throw new Error(data.message);
-      return data.data;
-    },
-  });
+      const {data} = await AxiosBase.get("/api/store/featuredproducts")
+      return data.data
+    }
+  })
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const items = gsap.utils.toArray(".collection-item");
+  // handle animation on mouse enter and leave
+  const handleMouseEnter = (index: number) => {
+    gsap.to(`.shade-${index}`, { left: "100%", duration: 0.8, ease: "power2.out" });
+    gsap.to(`.text-${index}`, { x: "0%", opacity: 1, duration: 0.8, ease: "power2.out" });
+  };
 
-      items.forEach((item, index) => {
-        gsap.fromTo(
-          item as gsap.TweenTarget,
-          { opacity: 0, y: 50 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power3.out",
-            delay: index * 0.2,
-            scrollTrigger: {
-              trigger: item as Element,
-              start: "top 80%",
-              end: "top 90%",
-              scrub: true,
-            },
-          }
-        );
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, [collections]);
-
-  if (isLoading) return null;
+  const handleMouseLeave = (index: number) => {
+    gsap.to(`.shade-${index}`, { left: "0%", duration: 0.8, ease: "power2.in" });
+    gsap.to(`.text-${index}`, { x: index % 2 === 0 ? "-100%" : "100%", opacity: 0, duration: 0.8, ease: "power2.in" });
+  };
 
   return (
-    <section
-      ref={containerRef}
-      className="py-16 md:py-24 w-full bg-white z-20 relative"
-    >
-      <div className="w-full flex flex-col items-center">
-        <h2 className="mb-12 text-3xl font-bold md:text-4xl">
-          Featured Categories
-        </h2>
+    <div className="top-collection-container bg-white py-8 w-full relative z-20">
+      <h2 className="text-center text-3xl md:text-5xl font-bold my-12 uppercase"> Shop By Catagory</h2>
+      <div className="w-full flex flex-col md:px-4 gap-2">
+        {FeaturedProducts?.map((product:Product, index:number) => (
+          <div
+            key={index}
+            className={`flex flex-col md:flex-row items-stretch ${
+              index % 2 === 0 ? "md:flex-row-reverse" : ""
+            } relative`}
+            onMouseEnter={() => handleMouseEnter(index)}
+            onMouseLeave={() => handleMouseLeave(index)}
+          >
+            {/* Text Container for Mobile */}
+            <div
+              className={`absolute inset-0 flex flex-col justify-center items-center text-center text-${index} text-white md:hidden z-30 `}
+              style={{
+                transform: `translateX(0%)`,
+                opacity: 1, 
+                transition: "opacity 0.8s ease, transform 0.8s ease",
+              }}
+            >
+              <h3 className="text-3xl font-semibold mb-2">{product.name}</h3>
+              <p className="text-xl mb-4">{product.category.name}</p>
+              <button className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                Shop Now
+              </button>
+            </div>
 
-        <div className="w-full h-full sm:grid sm:grid-cols-2 gap-6">
+            {/* Text Container for Desktop */}
+            <div
+              className={`w-full md:w-1/2 flex flex-col justify-center items-baseline text-start text-${index} hidden md:flex px-32 `}
+              style={{
+                transform: `translateX(${index % 2 === 0 ? "-100%" : "100%"})`,
+                opacity: 0,
+                transition: "all 0.8s ease",
+              }}
+            >
+              <h3 className="text-3xl font-semibold mb-2">{product.name}</h3>
+              <p className="text-xl mb-4">{product.category.name}</p>
+              <button className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition ">
+                Shop Now
+              </button>
+            </div>
 
-          <ShopByCategory className="collection-item" />
-          <ShopByCategory className="collection-item" />
-          <ShopByCategory className="collection-item" />
-          <ShopByCategory className="collection-item" />
-          {/* {!isLoading &&
-            collections.map((collection: any) => (
-              <ShopByCategory
-                key={collection.id}
-                title={collection.title}
-                description={collection.description}
-                image={collection.img}
-                className="collection-item"
+            {/* Image Container */}
+            <div className="w-full md:w-1/2 h-[450px] xl:h-[700px] relative overflow-hidden">
+              <img
+                src={product.variants[0].images[0]}
+                alt={product.name}
+                className="w-full h-full object-cover"
               />
-            ))} */}
-        </div>
+              <div
+                className={`absolute top-0 left-0 h-full bg-black bg-opacity-60 shade-${index}`}
+                style={{
+                  width: "100%",
+                  left: "0%",
+                  zIndex: 10,
+                  transition: "all 0.8s ease",
+                }}
+              ></div>
+            </div>
+          </div>
+        ))}
       </div>
-    </section>
+    </div>
   );
 }
+
+export default FeaturedCollections

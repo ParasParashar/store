@@ -1,3 +1,5 @@
+import AxiosBase from "@/lib/axios";
+import { useQuery } from "@tanstack/react-query";
 import gsap from "gsap";
 import { useEffect, useState } from "react";
 import Slider from "react-slick";
@@ -42,11 +44,21 @@ const heroProduct = [
   },
 ];
 
-export function HeroSection() {
+const HeroSection = () => {
 
   const [slidesToShow, setSlidesToShow] = useState(0);
   const [currentProduct, setCurrentProduct] = useState(heroProduct[0]);
+
+  // fetching data for hero banners
+  // const {data: Banners} = useQuery({
+  //   queryKey : ["Banners"],
+  //   queryFn : async () => {
+  //     const {data} = await AxiosBase.get("/api/store/category")
+  //     return data.data
+  //   }
+  // })
   
+  // useEffect for update the slides according to screen size
   useEffect(() => {
 
     // function for update the slides according to scrren size
@@ -106,7 +118,7 @@ export function HeroSection() {
   };
 
   return (
-    <div className="parent fixed w-screen h-screen overflow-hidden flex items-center top- z-10">
+    <div className="parent fixed w-screen h-screen overflow-hidden flex items-center z-10">
 
       {/* Background Image */}
       <div
@@ -114,8 +126,10 @@ export function HeroSection() {
         style={{ backgroundImage: `url(${currentProduct.img})` }}
       />
 
+      <div className="container h-full mx-auto ">
+
       {/* Description */}
-      <div className="description absolute top-36 md:top-28 left-5 sm:left-14 lg:left-24 z-10 text-white">
+      <div className=" description absolute top-36 md:top-28 left-5 sm:left-14 lg:left-24 z-10 text-white">
         <h1 className="description-line text-6xl sm:text-8xl lg:text-9xl font-bold mb-4">
           {currentProduct.title}
         </h1>
@@ -132,7 +146,7 @@ export function HeroSection() {
 
       {/* Slider */}
       <div
-        className={`slider-container hidden md:block`}
+        className={`slider-container  hidden md:block`}
       >
         <Slider
           {...settings}
@@ -149,6 +163,9 @@ export function HeroSection() {
           ))}
         </Slider>
       </div>
+      </div>
     </div>
   );
 }
+
+export default HeroSection;

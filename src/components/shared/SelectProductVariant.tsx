@@ -38,7 +38,7 @@ const SelectProductVariant = () => {
   const openModal = variants && isOpen;
   const price =
     (selectedVariant &&
-      selectedVariant.attributes.find((attr) => attr.size === selectedSize)
+      selectedVariant.attributes?.find((attr) => attr.size === selectedSize)
         ?.price) ||
     product?.price;
 
@@ -48,7 +48,7 @@ const SelectProductVariant = () => {
 
   const currentStock =
     selectedVariant &&
-    selectedVariant.attributes.find((attr) => attr.size === selectedSize)
+    selectedVariant.attributes?.find((attr) => attr.size === selectedSize)
       ?.stock;
 
   const handleSelectVariant = (variant: Variant) => {
@@ -74,7 +74,7 @@ const SelectProductVariant = () => {
     addItem({
       productId: selectedVariant.productId,
       variantId: selectedVariant.id,
-      attributeId: selectedVariant.attributes.find(
+      attributeId: selectedVariant.attributes?.find(
         (atr) => atr.size === selectedSize
       )?.id as string,
       quantity,
@@ -127,8 +127,8 @@ const SelectProductVariant = () => {
             </p>
 
             <div className="flex gap-2">
-              {sizesArray.map((size) => {
-                const availableSizes = selectedVariant?.attributes.map((attr) =>
+              {sizesArray?.map((size) => {
+                const availableSizes = selectedVariant?.attributes?.map((attr) =>
                   attr.size.toUpperCase()
                 );
                 const isAvailable = availableSizes?.includes(size);
