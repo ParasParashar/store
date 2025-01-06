@@ -18,9 +18,12 @@ import toast from "react-hot-toast";
 import { BsExclamationCircleFill } from "react-icons/bs";
 import ProductImageColors from "@/components/product-detail/ProductImageColors";
 import { Badge } from "@/components/ui/badge";
+import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill";
 
 export function ProductDetailPage() {
   const { addItem, items } = useCart();
+
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [isItemSelected, setIsItemSelected] = useState(false);
@@ -203,9 +206,6 @@ export function ProductDetailPage() {
               )}
             </div>
           </div>
-          <p className="text-muted-foreground line-clamp-3 truncate">
-            {product?.description}
-          </p>
 
           {/* Variants */}
           <div className="flex flex-col gap-3">
@@ -335,12 +335,22 @@ export function ProductDetailPage() {
         </section>
       </div>
 
+      <div className="mt-8">
+        <h6 className=" text-2xl sm:text-3xl ubuntu-medium">
+          Product Description
+        </h6>
+        <ReactQuill
+          value={product.description ? product.description : ""}
+          theme="bubble"
+          readOnly
+        />
+      </div>
       {/* Washing Instructions */}
       <div className="mt-8 flex flex-col gap-4 ">
-        <p className=" text-2xl sm:text-3xl ubuntu-medium">
+        <h6 className=" text-2xl sm:text-3xl ubuntu-medium">
           Washing Instructions
-        </p>
-        <div className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 border border-black/50 rounded-md max-[550px]:px-2 px-8 py-2">
+        </h6>
+        <div className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 border border-muted-foreground rounded-md max-[550px]:px-2 px-8 py-2">
           {washingInstructions.map((instruction) => (
             <WashingInstruction
               key={instruction.id}
