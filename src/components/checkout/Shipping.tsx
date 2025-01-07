@@ -270,6 +270,7 @@ const Shipping = () => {
               type="radio"
               name="paymentMethod"
               value="COD"
+              disabled={true}
               checked={paymentMethod === "COD"}
               onChange={() => setPaymentMethod("COD")}
               className="h-5 w-5"
@@ -277,7 +278,7 @@ const Shipping = () => {
             <span className="text-gray-700">Cash on Delivery</span>
           </label>
           <label className="flex items-center gap-3 w-full border bg-muted rounded-sm p-2">
-            <input
+            <Input
               type="radio"
               name="paymentMethod"
               value="ONLINE"
