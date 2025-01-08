@@ -6,6 +6,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
+import { MdDiscount } from "react-icons/md";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -16,17 +17,22 @@ import { Skeleton } from "../ui/skeleton";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { FcClearFilters } from "react-icons/fc";
+import { IoMdTrendingUp } from "react-icons/io";
 
 export function ProductFilters() {
   const [selectedFilters, setSelectedFilters] = useState<{
     category: { id: string | null; name: string | null };
     size: string | null;
     color: string | null;
+    discountedProducts: string | null;
+    newArrivals: string | null;
     priceRange: [number, number];
   }>({
     category: { id: null, name: null },
     size: null,
     color: null,
+    newArrivals: null,
+    discountedProducts: null,
     priceRange: [0, 3000],
   });
 
@@ -62,7 +68,16 @@ export function ProductFilters() {
     } else {
       params.delete("color");
     }
-
+    if (selectedFilters.newArrivals) {
+      params.set("newArrivals", "true");
+    } else {
+      params.delete("newArrivals");
+    }
+    if (selectedFilters.discountedProducts) {
+      params.set("discountedProducts", "true");
+    } else {
+      params.delete("discountedProducts");
+    }
     params.set("min_price", String(selectedFilters.priceRange[0]));
     params.set("max_price", String(selectedFilters.priceRange[1]));
 
@@ -100,6 +115,20 @@ export function ProductFilters() {
     }));
   };
 
+  const handleNewDiscount = (type: string) => {
+    if (type === "new") {
+      setSelectedFilters((prev) => ({
+        ...prev,
+        newArrivals: "true",
+      }));
+    } else {
+      setSelectedFilters((prev) => ({
+        ...prev,
+        discountedProducts: "true",
+      }));
+    }
+  };
+
   useEffect(() => {
     updateURLParams();
   }, [selectedFilters]);
@@ -110,6 +139,8 @@ export function ProductFilters() {
       size: null,
       color: null,
       priceRange: [0, 3000],
+      discountedProducts: null,
+      newArrivals: null,
     });
   };
 
@@ -146,6 +177,33 @@ export function ProductFilters() {
         <FcClearFilters className="text-muted-foreground group-hover:text-primary" />
         Clear Filters
       </button>
+      {/* fetch products by new arrival and discounts */}
+      <AccordionItem value="featured">
+        <AccordionTrigger className="text-sm hover:no-underline font-semibold">
+          Fiter by
+        </AccordionTrigger>
+        <AccordionContent className="flex flex-col gap-3">
+          <Button
+            size={"sm"}
+            variant={"ghost"}
+            onClick={() => handleNewDiscount("new")}
+            className="rounded-full flex items-center justify-start text-sm gap-3  text-muted-foreground font-semibold"
+          >
+            <IoMdTrendingUp />
+            New Arrivals
+          </Button>
+          <Button
+            variant={"ghost"}
+            size={"sm"}
+            className="rounded-full flex items-center justify-start text-sm gap-3  text-muted-foreground font-semibold"
+            onClick={() => handleNewDiscount("discount")}
+          >
+            <MdDiscount size={20} />
+            Discounte Products
+          </Button>
+        </AccordionContent>
+      </AccordionItem>
+
       {/* Categories */}
       <AccordionItem value="categories">
         <AccordionTrigger className="text-sm hover:no-underline font-semibold">
@@ -189,14 +247,27 @@ export function ProductFilters() {
         <AccordionTrigger className="text-sm hover:no-underline font-semibold">
           Colors
         </AccordionTrigger>
-        <AccordionContent className="flex flex-col gap-3">
+        <AccordionContent className="flex flex-wrap gap-3">
           {colors?.map((color: string) => (
-            <div key={color} className="flex items-center space-x-2">
+            <div
+              key={color}
+              className="flex items-center space-x-2 rounded-full border p-1 cursor-pointer hover:border-muted-foreground"
+            >
               <Checkbox
                 id={color}
+                hidden
                 checked={selectedFilters.color === color}
                 onCheckedChange={() => handleColorChange(color)}
               />
+              <span
+                style={{
+                  backgroundColor: color,
+                  width: "10px",
+                  height: "10px",
+                  border: "1px solid black",
+                  borderRadius: "100%",
+                }}
+              ></span>
               <Label htmlFor={color}>{color}</Label>
             </div>
           ))}

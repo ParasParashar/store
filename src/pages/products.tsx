@@ -16,6 +16,8 @@ const getFiltersFromSearchParams = (searchParams: URLSearchParams) => {
     categoryName: searchParams.get("category_name") || undefined,
     size: searchParams.get("size") || undefined,
     color: searchParams.get("color") || undefined,
+    discountedProducts: searchParams.get("discountedProducts") || undefined,
+    newArrivals: searchParams.get("newArrivals") || undefined,
     minPrice: searchParams.get("min_price")
       ? parseInt(searchParams.get("min_price")!)
       : undefined,
@@ -49,7 +51,7 @@ export function ProductsPage() {
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage]);
-
+  console.log(data?.pages, "skdfjlskdjf");
   return (
     <div className="w-full h-full md:w-[95%] sm:px-4 md:mx-auto py-2 sm:py-8 lg:py-10  p-5 lg:px-20">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
@@ -66,35 +68,42 @@ export function ProductsPage() {
           )}
 
           {/* Product Grid */}
-          <div
-            ref={productsRef}
-            className="grid grid-cols-2 gap-3 lg:gap-6 sm:grid-cols-2 lg:grid-cols-3"
-          >
-            {/* Skeleton loader for loading state */}
-            {isLoading &&
-              Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="space-y-4">
-                  <Skeleton className="h-[300px] w-full" />
-                  <Skeleton className="h-4 w-2/3" />
-                  <Skeleton className="h-4 w-1/2" />
-                </div>
-              ))}
-            {/* Render products */}
 
-            {data?.pages.map((page) =>
-              page.products.map((product: Product) => (
-                <ProductCard key={product.id} product={product} />
-              ))
-            )}
-            {isFetchingNextPage &&
-              Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="space-y-4">
-                  <Skeleton className="h-[300px] w-full" />
-                  <Skeleton className="h-4 w-2/3" />
-                  <Skeleton className="h-4 w-1/2" />
-                </div>
-              ))}
-          </div>
+          {data?.pages[0].products.length === 0 && !isLoading ? (
+            <p className="text-lg text-center w-full  text-muted-foreground">
+              Product not found with the {JSON.stringify(filters)}
+            </p>
+          ) : (
+            <div
+              ref={productsRef}
+              className="grid grid-cols-2 gap-3 lg:gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            >
+              {/* Skeleton loader for loading state */}
+              {isLoading &&
+                Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="space-y-4">
+                    <Skeleton className="h-[300px] w-full" />
+                    <Skeleton className="h-4 w-2/3" />
+                    <Skeleton className="h-4 w-1/2" />
+                  </div>
+                ))}
+              {data?.pages.map((page) =>
+                page.products.map((product: Product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))
+              )}
+              {/* Render products */}
+
+              {isFetchingNextPage &&
+                Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="space-y-4">
+                    <Skeleton className="h-[300px] w-full" />
+                    <Skeleton className="h-4 w-2/3" />
+                    <Skeleton className="h-4 w-1/2" />
+                  </div>
+                ))}
+            </div>
+          )}
 
           {/* Sentinel Element for Intersection Observer */}
           {hasNextPage && (
