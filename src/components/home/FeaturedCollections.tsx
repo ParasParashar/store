@@ -1,114 +1,53 @@
-import AxiosBase from "@/lib/axios";
-import { Product } from "@/types/product";
-import { useQuery } from "@tanstack/react-query";
-import { gsap } from "gsap";
+import { motion } from "framer-motion";
+import { LampContainer } from '../ui/lamp';
+import FeaturedCollectionsSlider from './FeaturedCollectionsSlider';
+import { useQuery } from '@tanstack/react-query';
+import AxiosBase from '@/lib/axios';
 
-const FeaturedCollections = () => {
-  // fetching data
-  const { data: FeaturedProducts } = useQuery({
-    queryKey: ["homeFeaturedProducts"],
-    queryFn: async () => {
-      const { data } = await AxiosBase.get("/api/store/featuredproducts");
-      return data.data;
-    },
-  });
+const FeaturedCollections: React.FC = () => {
 
-  // handle animation on mouse enter and leave
-  const handleMouseEnter = (index: number) => {
-    gsap.to(`.shade-${index}`, {
-      left: "100%",
-      duration: 0.8,
-      ease: "power2.out",
-    });
-    gsap.to(`.text-${index}`, {
-      x: "0%",
-      opacity: 1,
-      duration: 0.8,
-      ease: "power2.out",
-    });
-  };
+  // fetching the data
+  const {data: featuredproducts} = useQuery(
+    {
+      queryKey: ["homeFeaturedProducts"],
+      queryFn: async () => {
+        const {data} = await AxiosBase.get("/api/store/featuredproducts")
+        return data.data
+      }
+    }
+  )
 
-  const handleMouseLeave = (index: number) => {
-    gsap.to(`.shade-${index}`, {
-      left: "0%",
-      duration: 0.8,
-      ease: "power2.in",
-    });
-    gsap.to(`.text-${index}`, {
-      x: index % 2 === 0 ? "-100%" : "100%",
-      opacity: 0,
-      duration: 0.8,
-      ease: "power2.in",
-    });
-  };
+  // console.log(featuredproducts)
 
   return (
-    <div className="top-collection-container bg-white py-8 w-full relative z-20">
-      <h2 className="text-center text-3xl md:text-5xl font-bold my-12 uppercase">
-        {" "}
-        Shop By Catagory
-      </h2>
-      <div className="w-full flex flex-col md:px-4 gap-2">
-        {FeaturedProducts?.map((product: Product, index: number) => (
-          <div
-            key={index}
-            className={`flex flex-col md:flex-row items-stretch ${
-              index % 2 === 0 ? "md:flex-row-reverse" : ""
-            } relative`}
-            onMouseEnter={() => handleMouseEnter(index)}
-            onMouseLeave={() => handleMouseLeave(index)}
-          >
-            {/* Text Container for Mobile */}
-            <div
-              className={`absolute inset-0 flex flex-col justify-center items-center text-center text-${index} text-white md:hidden z-30 `}
-              style={{
-                transform: `translateX(0%)`,
-                opacity: 1,
-                transition: "opacity 0.8s ease, transform 0.8s ease",
-              }}
-            >
-              <h3 className="text-3xl font-semibold mb-2">{product.name}</h3>
-              <p className="text-xl mb-4">{product.category.name}</p>
-              <button className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                Shop Now
-              </button>
-            </div>
+    <div className="bg-[#010517] text-white pb-14 w-full relative z-20">
+          
+      {/* Featured Collection title and subtitle with aceternity ui */}
+        <LampContainer>
+           <motion.h1
+           initial={{ opacity: 0, y: 100 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           transition={{
+             delay: 0.3,
+             duration: 0.8,
+             ease: "easeInOut",
+             
+           }} >
 
-            {/* Text Container for Desktop */}
-            <div
-              className={`w-full md:w-1/2 flex flex-col justify-center items-baseline text-start text-${index} hidden md:flex px-32 `}
-              style={{
-                transform: `translateX(${index % 2 === 0 ? "-100%" : "100%"})`,
-                opacity: 0,
-                transition: "all 0.8s ease",
-              }}
-            >
-              <h3 className="text-3xl font-semibold mb-2">{product.name}</h3>
-              <p className="text-xl mb-4">{product.category.name}</p>
-              <button className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition ">
-                Shop Now
-              </button>
-            </div>
+            <h1 className="text-2xl md:text-4xl font-semibold text-center tracking-wide mb-10">FEATURED COLLECTIONS</h1>
+        
+            <h1 className="text-3xl md:text-5xl font-bold tracking-widest mb-4 p-1 protest-revolution-regular text-center ">
+              DIVE INTO A WORLD OF ENDLESS FASHION POSSIBILITIES
+            </h1>
+           </motion.h1>
+        
+        
+         
+        </LampContainer>
 
-            {/* Image Container */}
-            <div className="w-full md:w-1/2 h-[450px] xl:h-[700px] relative overflow-hidden">
-              <img
-                src={product.variants[0].images[0]}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-              <div
-                className={`absolute top-0 left-0 h-full bg-black bg-opacity-60 shade-${index}`}
-                style={{
-                  width: "100%",
-                  left: "0%",
-                  zIndex: 10,
-                  transition: "all 0.8s ease",
-                }}
-              ></div>
-            </div>
-          </div>
-        ))}
+      {/* Featured Collection products in unique slider */}
+      <div className=' container mx-auto'>
+          <FeaturedCollectionsSlider products={featuredproducts} />
       </div>
     </div>
   );

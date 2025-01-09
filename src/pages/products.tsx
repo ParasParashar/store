@@ -54,8 +54,12 @@ export function ProductsPage() {
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage]);
+  
   return (
     <div className="w-full h-full md:w-[95%] sm:px-4 md:mx-auto py-2 sm:py-8 lg:py-10  p-5 lg:px-20">
+      <div className="container mx-auto" >
+
+      
       <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
         <div className="block md:hidden w-full h-full">
           <MobileProductFilter />
@@ -112,6 +116,7 @@ export function ProductsPage() {
             <div ref={ref} className="mt-8 flex justify-center h-4"></div>
           )}
         </section>
+      </div>
       </div>
     </div>
   );

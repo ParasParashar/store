@@ -162,7 +162,8 @@ export function ProductDetailPage() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-y-5  md:w-[90%] px-2 sm:px-4  md:mx-auto h-full py-2 sm:py-8 lg:py-14 ">
+    <div className="w-full flex flex-col gap-y-5  md:w-[90%] px-2 sm:px-4  md:mx-auto h-full py-2 sm:py-8 lg:py-14  ">
+      <div className="container mx-auto">
       <div
         ref={contentRef}
         className="w-full flex flex-col md:flex-row items-start gap-8"
@@ -345,6 +346,7 @@ export function ProductDetailPage() {
           readOnly
         />
       </div>
+
       {/* Washing Instructions */}
       <div className="mt-8 flex flex-col gap-4 ">
         <h6 className=" text-2xl sm:text-3xl ubuntu-medium">
@@ -362,6 +364,7 @@ export function ProductDetailPage() {
       </div>
 
       <RelatedProducts productId={product.id} categoryId={product.categoryId} />
+      </div>
     </div>
   );
 }
