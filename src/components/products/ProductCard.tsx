@@ -27,7 +27,7 @@ export function ProductCard({ product }: ProductCardProps) {
     totalQuantity,
   } = product;
 
-  const discountedPrice = price - (discountPercent / 100) * price;
+  const discountedPrice = price - (parseInt(discountPercent!) / 100) * price;
 
   const handleAddToCart = () => {
     addVariants(variants);
@@ -35,8 +35,8 @@ export function ProductCard({ product }: ProductCardProps) {
       name: name,
       price: price,
       status: status,
-      slug: slug,
-      discountPercent: +discountPercent as number,
+      slug: slug!,
+      discountPercent: parseInt(discountPercent!),
     });
     onOpen();
   };
@@ -50,7 +50,6 @@ export function ProductCard({ product }: ProductCardProps) {
         duration: 1,
         ease: "backInOut",
       }}
-      // variants={{}}
       className="relative h-full overflow-hidden shadow-md bg-white product-card"
     >
       <Link to={`/product/${slug}`} className="relative">

@@ -1,98 +1,60 @@
-import React, { useEffect, useState } from "react";
-import { Input } from "../ui/input";
+import React, { useState, useRef } from "react";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
+import { Button } from "../ui/button";
 
 const SearchProduct = () => {
   const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setDebouncedQuery(query);
-    }, 800);
-
-    return () => clearTimeout(t);
-  }, [query]);
-
-  useEffect(() => {
-    if (debouncedQuery) {
-      navigate(`/products?search=${debouncedQuery}`, { replace: true });
-    }
-  }, [debouncedQuery, navigate]);
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
+    const value = e.target.value;
+    setQuery(value);
+
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = setTimeout(() => {
+      if (value) {
+        navigate(`/products?search=${value}`, { replace: true });
+      } else {
+        navigate("/products", { replace: true });
+      }
+    }, 800);
   };
 
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ["search", debouncedQuery],
-  //   queryFn: async () => {
-  //     if (!debouncedQuery) return [];
-  //     const { data } = await AxiosBase.get(
-  //       `/api/store/search?search=${debouncedQuery}`
-  //     );
-  //     if (!data.success) throw new Error(data.error || "Something went wrong");
-  //     return data.data;
-  //   },
-  //   enabled: !!debouncedQuery,
-  // });
+  const clearSearch = () => {
+    setQuery("");
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+  };
 
   return (
     <div className="relative w-full max-w-xl">
-      <div className="flex items-center px-3 py-2  ">
+      <div className="flex items-center bg-white/80 rounded-full px-3 py-2 gap-4">
         <MagnifyingGlassIcon className="w-5 h-5 text-gray-500" />
-        <Input
+        <input
           type="text"
-          className="w-full shadow-none ring-0 focus:border-none  bg-transparent border-none outline-none focus:ring-0"
+          className="w-full shadow-none ring-0 focus:border-none bg-transparent border-none outline-none focus:ring-0"
           placeholder="Search products e.g., 'T-shirt'"
           value={query}
-          onChange={(e) => handleChange(e)}
-          // onFocus={() => setShowDropdown(true)}
-          // onBlur={() => setTimeout(() => setShowDropdown(false), 350)}
+          onChange={handleChange}
         />
+        {query.length > 1 && (
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            onClick={clearSearch}
+            className="rounded-full transition-all ease-in-out duration-300"
+          >
+            <X size={15} className="text-muted-foreground" />
+          </Button>
+        )}
       </div>
-
-      {/* {showDropdown && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-md shadow-lg z-50">
-          {isLoading && (
-            <div className="p-4">
-              <Skeleton className="h-8 w-3/4 mb-2" />
-              <Skeleton className="h-8 w-1/2" />
-            </div>
-          )}
-          {!isLoading && data?.length === 0 && (
-            <p className="p-4 text-center text-gray-500">No products found</p>
-          )}
-          {!isLoading && data?.length > 0 && (
-            <ul className="divide-y divide-gray-200">
-              {data.map((product: Product) => (
-                <li key={product.id} className="hover:bg-gray-100">
-                  <Link
-                    to={`/product/${product.slug}`}
-                    className="flex items-center p-4 space-x-4"
-                  >
-                    <img
-                      src={product.variants[0].images[0]}
-                      alt={product.name}
-                      className="w-12 h-12 object-cover rounded-md"
-                    />
-                    <div>
-                      <p className="font-medium line-clamp-1 text-gray-800">
-                        {product.name}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {product.category.name}
-                      </p>
-                    </div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )} */}
     </div>
   );
 };
