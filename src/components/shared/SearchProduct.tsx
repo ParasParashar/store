@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
 import { Input } from "../ui/input";
-import { Skeleton } from "../ui/skeleton";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { Link } from "react-router-dom";
-import AxiosBase from "@/lib/axios";
-import { Product } from "@/types/product";
+import { useNavigate } from "react-router-dom";
 
 const SearchProduct = () => {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -20,18 +16,28 @@ const SearchProduct = () => {
     return () => clearTimeout(t);
   }, [query]);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["search", debouncedQuery],
-    queryFn: async () => {
-      if (!debouncedQuery) return [];
-      const { data } = await AxiosBase.get(
-        `/api/store/search?search=${debouncedQuery}`
-      );
-      if (!data.success) throw new Error(data.error || "Something went wrong");
-      return data.data;
-    },
-    enabled: !!debouncedQuery,
-  });
+  useEffect(() => {
+    if (debouncedQuery) {
+      navigate(`/products?search=${debouncedQuery}`, { replace: true });
+    }
+  }, [debouncedQuery, navigate]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
+
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ["search", debouncedQuery],
+  //   queryFn: async () => {
+  //     if (!debouncedQuery) return [];
+  //     const { data } = await AxiosBase.get(
+  //       `/api/store/search?search=${debouncedQuery}`
+  //     );
+  //     if (!data.success) throw new Error(data.error || "Something went wrong");
+  //     return data.data;
+  //   },
+  //   enabled: !!debouncedQuery,
+  // });
 
   return (
     <div className="relative w-full max-w-xl">
@@ -42,13 +48,13 @@ const SearchProduct = () => {
           className="w-full shadow-none ring-0 focus:border-none  bg-transparent border-none outline-none focus:ring-0"
           placeholder="Search products e.g., 'T-shirt'"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => setShowDropdown(true)}
-          onBlur={() => setTimeout(() => setShowDropdown(false), 350)}
+          onChange={(e) => handleChange(e)}
+          // onFocus={() => setShowDropdown(true)}
+          // onBlur={() => setTimeout(() => setShowDropdown(false), 350)}
         />
       </div>
 
-      {showDropdown && (
+      {/* {showDropdown && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-md shadow-lg z-50">
           {isLoading && (
             <div className="p-4">
@@ -86,7 +92,7 @@ const SearchProduct = () => {
             </ul>
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

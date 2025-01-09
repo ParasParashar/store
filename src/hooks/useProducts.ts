@@ -44,6 +44,7 @@ export const buildFilterQueryParams = (filters: Filters): string => {
   if (filters.size) params.set("size", filters.size);
   if (filters.color) params.set("color", filters.color);
   if (filters.newArrivals) params.set("newArrivals", filters.newArrivals);
+  if (filters.search) params.set("search", filters.search);
   if (filters.discountedProducts) params.set("discountedProducts", filters.discountedProducts);
   if (filters.minPrice !== undefined) params.set("min_price", filters.minPrice.toString());
   if (filters.maxPrice !== undefined) params.set("max_price", filters.maxPrice.toString());

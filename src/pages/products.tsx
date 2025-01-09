@@ -16,6 +16,7 @@ const getFiltersFromSearchParams = (searchParams: URLSearchParams) => {
     categoryName: searchParams.get("category_name") || undefined,
     size: searchParams.get("size") || undefined,
     color: searchParams.get("color") || undefined,
+    search: searchParams.get("search") || undefined,
     discountedProducts: searchParams.get("discountedProducts") || undefined,
     newArrivals: searchParams.get("newArrivals") || undefined,
     minPrice: searchParams.get("min_price")
@@ -30,7 +31,9 @@ const getFiltersFromSearchParams = (searchParams: URLSearchParams) => {
 export function ProductsPage() {
   const { ref, inView } = useInView();
   const { search } = useLocation();
+
   const searchParams = new URLSearchParams(search);
+
   const productsRef = useRef<HTMLDivElement>(null);
 
   const filters = getFiltersFromSearchParams(searchParams);
@@ -51,7 +54,6 @@ export function ProductsPage() {
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage]);
-  console.log(data?.pages, "skdfjlskdjf");
   return (
     <div className="w-full h-full md:w-[95%] sm:px-4 md:mx-auto py-2 sm:py-8 lg:py-10  p-5 lg:px-20">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
