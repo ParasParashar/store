@@ -14,6 +14,9 @@ import toast from "react-hot-toast";
 import AxiosBase from "@/lib/axios";
 import { useCart } from "@/hooks/useCart";
 import { AddressCardSkeleton } from "../loaders/ProfilePageSkeleton";
+import { GiTakeMyMoney } from "react-icons/gi";
+import { RiBankFill } from "react-icons/ri";
+import { FaLeftLong } from "react-icons/fa6";
 
 const Shipping = () => {
   const { data: authUser } = useQuery<User>({ queryKey: ["authUser"] });
@@ -169,8 +172,20 @@ const Shipping = () => {
   });
 
   return (
+    <div className="flex flex-col">
+      <header className="h-28 flex items-center justify-between border-b border-black/10 px-4 bg-background ">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 text-gray-600 hover:text-neutral-900 transition-all"
+        >
+          <FaLeftLong />
+          Back
+        </button>
+       
+      </header>
+    
     <div className="flex flex-col gap-3 lg:px-10 px-4">
-      <p className="text-lg border-b py-3 text-muted-foreground">Ship to </p>
+      <p className="text-lg pt-3 text-muted-foreground">Ship to </p>
       {!authUser?.addresses ||
         (authUser.addresses.length === 0 && (
           <Suspense fallback={<AddressCardSkeleton />}>
@@ -265,29 +280,23 @@ const Shipping = () => {
         </p>
         <div className="  flex flex-col gap-3 mt-5">
           <p className="text-foreground ">Select payment type</p>
-          <label className="flex items-center gap-3 w-full border bg-muted rounded-sm p-2">
-            <Input
-              type="radio"
-              name="paymentMethod"
-              value="COD"
-              disabled={true}
-              checked={paymentMethod === "COD"}
-              onChange={() => setPaymentMethod("COD")}
-              className="h-5 w-5"
-            />
-            <span className="text-gray-700">Cash on Delivery</span>
-          </label>
-          <label className="flex items-center gap-3 w-full border bg-muted rounded-sm p-2">
-            <Input
-              type="radio"
-              name="paymentMethod"
-              value="ONLINE"
-              checked={paymentMethod === "ONLINE"}
-              onChange={() => setPaymentMethod("ONLINE")}
-              className="h-5 w-5"
-            />
-            <span className="text-gray-700">Online Payment</span>
-          </label>
+
+          <div className="flex items-center gap-1 sm:gap-4">
+            <div className={`w-[50%] text-sm sm:text-balance flex items-center justify-center gap-1 sm:gap-3 py-5 px-2 sm:px-8 rounded-md border hover:cursor-pointer hover:border-blue-300  ${paymentMethod === "ONLINE"? 'bg-blue-50 border-blue-200 text-blue-700 font-semibold' : ""}  `}
+            onClick={() => setPaymentMethod("ONLINE")}
+            >
+            
+              <RiBankFill />
+              <span>OnLine</span>
+            </div>
+            <div className={`w-[50%] text-sm sm:text-balance flex items-center justify-center gap-1 sm:gap-3 py-5 px-2 sm:px-6 rounded-md border hover:cursor-pointer hover:border-blue-300 ${paymentMethod === "COD"? 'bg-blue-50 border-blue-200 text-blue-700 font-semibold' : ""}  `}
+            onClick={() => setPaymentMethod("COD")}
+            >
+              <GiTakeMyMoney size={20} />
+              <span>Cash On Delivary</span>
+            
+            </div>
+          </div>
         </div>
       </div>
       <Button
@@ -295,9 +304,9 @@ const Shipping = () => {
         disabled={selectedAddress === "" || isPending}
         size={"lg"}
         variant={"outline"}
-        className="text-lg  disabled:bg-slate-200 bg-slate-400 text-white hover:bg-slate-500 hover:text-white  transition-all duration-300 ease-in-out"
+        className="text-lg  disabled:bg-slate-200 bg-blue-700 text-white hover:bg-blue-800 hover:text-white  transition-all duration-300 ease-in-out"
       >
-        Buy Now
+        Make it Your
       </Button>
       {errorMessage && (
         <p className="text-destructive text-xs">
@@ -305,6 +314,8 @@ const Shipping = () => {
         </p>
       )}
       {isError && <p className="text-destructive text-xs">{error.message}</p>}
+    </div>
+
     </div>
   );
 };

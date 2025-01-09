@@ -1,9 +1,21 @@
-import { useEffect } from "react";
-import { gsap } from "gsap";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "../ui/button";
 import { FaCircleArrowRight } from "react-icons/fa6";
+import AxiosBase from "@/lib/axios";
 
 const NewCollection = () => {
+
+  const {data:newArrivals} = useQuery({
+    queryKey:["heroNewCollections"],
+    queryFn: async () => {
+      const data = await AxiosBase.get('/api/store/newarrivals')
+      return data.data
+    }
+  })
+
+  const handleCheckNow = () => { 
+    console.log(newArrivals)
+  }  
 
   return (
     <main className="NewCollectioStyles text-white w-full h-screen relative right-0 py-6 px-2 md:p-12 mt-[100vh] z-20">
@@ -24,9 +36,11 @@ const NewCollection = () => {
             Where style speaks, Fashion Flourishes, trend resonate
           </p>
 
-          <Button variant="secondary" size={"lg"} className="w-40 mb-5 order-2 md:order-3  ">
+          <Button variant="secondary" size={"lg"} className="w-40 mb-5 order-2 md:order-3  "
+          onClick={handleCheckNow}  
+          >
             <span className=" mr-2">Check Now</span>
-            <FaCircleArrowRight size={20} />
+            <FaCircleArrowRight size={24} />
           </Button>
 
           <div className=" flex gap-4 order-3 md:order-1 md:mb-8">

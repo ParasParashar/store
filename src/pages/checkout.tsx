@@ -9,22 +9,12 @@ const CheckoutPage = () => {
   const Shipping = lazy(() => import("@/components/checkout/Shipping"));
   const OrderSummary = lazy(() => import("@/components/checkout/OrderSummary"));
   return (
-    <main className=" w-full  mx-auto min-h-screen container ">
-      {/* Header with Back Button and Logo */}
-      <header className="flex items-center justify-between border-b border-black/10  pb-2 sticky top-0 bg-background z-50 px-10 lg:px-20">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-gray-600 hover:text-neutral-900 transition-all"
-        >
-          <FaLeftLong />
-          Back
-        </button>
-        <img src="/logo.png" alt="Company Logo" className="w-10 h-auto" />
-      </header>
+    <main className=" w-full min-h-screen">
+     
       <section className="grid gap-5 lg:gap-0  grid-cols-1 lg:grid-cols-2 ">
         {/*payment method and order address  or billing address  */}
         <motion.div
-          className="flex-1 lg:pl-32 lg:border-r"
+          className="flex-1 lg:pl-32 lg:border-r order-2 lg:order-1"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -44,7 +34,7 @@ const CheckoutPage = () => {
           </Suspense>
         </motion.div>
         <motion.div
-          className="flex-1 bg-secondary lg:pr-20  h-[calc(100vh-75px)]"
+          className="flex-1 lg:pr-20  h-[calc(100vh-75px)] order-1 lg:order-2"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
