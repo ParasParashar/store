@@ -8,10 +8,10 @@ import {
 import { useCart } from "@/hooks/useCart";
 import useCartController from "@/hooks/useCartController";
 import { Link, useNavigate } from "react-router-dom";
-import { Card, CardContent } from "../ui/card";
+import { CardContent } from "../ui/card";
 import { Button } from "../ui/button";
-import { X } from "lucide-react";
 import { Badge } from "../ui/badge";
+import { MdDelete } from "react-icons/md";
 
 const CartSlider = () => {
   const { isOpen, onClose } = useCartController();
@@ -35,7 +35,7 @@ const CartSlider = () => {
     <Sheet open={isOpen} onOpenChange={() => onClose()}>
       <SheetContent
         side={"right"}
-        className="p-0 border-none rounded-l-2xl h-full ring-0  "
+        className="p-0 border-none h-full ring-0  "
       >
         <SheetHeader>
           <SheetTitle className="text-muted-foreground px-4 py-3 border-b">
@@ -45,7 +45,7 @@ const CartSlider = () => {
 
         <div className="flex flex-col h-full w-full">
           {/* Scrollable Cart Items */}
-          <SheetDescription className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+          <SheetDescription className="flex-1 overflow-y-auto p-1 custom-scrollbar">
             {detailedItems.map((item) => {
               const price = item.variants[0].attributes[0].price || item.price;
               const discountedPrice = item.discountPercent
@@ -57,9 +57,9 @@ const CartSlider = () => {
                 ? price - (item?.discountPercent / 100) * price
                 : price;
               return (
-                <Card
+                <div
                   key={`${item.id}-${item.variants[0]?.id}-${item.variants[0]?.attributes[0]?.id}`}
-                  className="relative mb-4 shadow-md"
+                  className="relative border-b"
                 >
                   <Button
                     variant={"ghost"}
@@ -71,7 +71,8 @@ const CartSlider = () => {
                       )
                     }
                   >
-                    <X />
+                    
+                    <MdDelete color="red" size={'20'} />
                   </Button>
                   <CardContent className="p-4 flex gap-3 items-start">
                     <Link
@@ -105,32 +106,33 @@ const CartSlider = () => {
 
                       {/* Price & Discount Section */}
                       <div className="flex items-center justify-between mt-2">
-                        <div>
+                        <div className="flex gap-2 items-center ">
+                        <p className=" text-lg font-bold">
+                            ₹{currentPrice}
+                          </p>
                           {item.discountPercent !== null &&
                             item?.discountPercent > 1 && (
                               <>
-                                <span className="line-through text-sm text-muted-foreground font-bold ">
+                                <span className="line-through text-xs text-muted-foreground font-bold text-red-500">
                                   {" "}
-                                  ₹{currentPrice}
+                                  ₹{item.price}
                                 </span>
-                                <Badge className="text-[10px]  ml-2  rounded-full">
+                                <Badge className="text-[10px] rounded-full">
                                   {item.discountPercent}% OFF
                                 </Badge>
                               </>
                             )}
-                          <p className="text-xl font-bold mt-1 ">
-                            ₹{currentPrice}
-                          </p>
+                          
                         </div>
-                        <div>
+                        {/* <div>
                           <p className="text-md font-medium">
                             Total: ₹{totalPrice.toFixed(2)}
                           </p>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </CardContent>
-                </Card>
+                </div>
               );
             })}
           </SheetDescription>

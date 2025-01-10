@@ -6,8 +6,14 @@ import { Badge } from "../ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import AxiosBase from "@/lib/axios";
 import { OrderSkeleton } from "../loaders/OrderSkeleton";
+import { TbShoppingBagSearch } from "react-icons/tb";
+import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 export default function MyOrders() {
+
+  const navigate = useNavigate()
+
   const { data: orders, isLoading } = useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
@@ -22,9 +28,16 @@ export default function MyOrders() {
   }
   if (!orders) {
     return (
-      <p className="text-center py-6 text-sm lg:text-lg text-muted-foreground">
-        Currently You don&apos;t have any orders.
+      <div className="h-full flex flex-col gap-2 items-center justify-center">
+        <TbShoppingBagSearch size={60} />
+      <p className="text-lg lg:text-2xl text-black font-semibold">
+        Hey man, you didn't buy anithing from here.
       </p>
+      <p>You should try now</p>
+      <Button onClick={() => navigate("/")} >
+          Return to Shop
+        </Button>
+      </div>
     );
   }
 

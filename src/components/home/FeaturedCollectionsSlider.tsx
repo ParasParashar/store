@@ -2,11 +2,14 @@ import gsap from 'gsap';
 import React, { useEffect, useState } from 'react'
 import { Button } from '../ui/button';
 import { HiArrowLongRight } from "react-icons/hi2";
+import { useNavigate } from 'react-router-dom';
 
 interface FeaturedProducts{
   name:string,
   category: any,
-  variants: any
+  variants: any,
+  slug:string
+
 }
 
 interface SliderProps {
@@ -15,8 +18,11 @@ interface SliderProps {
 
 const FeaturedCollectionsSlider: React.FC<SliderProps> = ({products}) => {
 
+  const navigate = useNavigate()
+  
   // state for active image
   const [activeIndex, setActiveIndex] = useState(1);
+
 
     // handling on click image
     const handleImageClick = (index: number) => {
@@ -57,8 +63,8 @@ const FeaturedCollectionsSlider: React.FC<SliderProps> = ({products}) => {
             {index === activeIndex ? (
               <div className="absolute bottom-10 left-14 text-black">
                 <h2 className="text-xl md:text-4xl font-bold uppercase mb-2">{product?.category?.name}</h2>
-                <Button size={'lg'} >
-                
+                <Button size={'lg'} 
+                  onClick={() => navigate(`/product/${product?.slug}`)} >
                   Explore
                   <HiArrowLongRight size={24} className='ml-2' />
                 </Button>

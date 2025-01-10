@@ -89,10 +89,10 @@ export function Navbar() {
             asChild
             className="relative "
           >
-            <div className="relative">
+            <div className="relative hover:cursor-pointer">
               <IoBagOutline size={20} />
               {items.length > 0 && (
-                <span className="absolute rounded-full bg-blue-50 p-3 text-center flex items-center justify-center w-0 h-0 top-[-7px] right-[-5px]">
+                <span className="absolute rounded-full bg-gray-50 p-3 text-center flex items-center justify-center w-0 h-0 top-[-7px] right-[-5px]  ">
                   {items.length}
                 </span>
               )}
@@ -108,7 +108,7 @@ export function Navbar() {
 
       {/* Dropdown Menu */}
       <div
-        className={`w-full absolute left-0 top-16 bg-white border-t border-gray-200 overflow-hidden transition-all duration-500 ease-in-out ${
+        className={`w-full absolute left-0 top-16 bg-white/70 overflow-hidden transition-all duration-500 ease-in-out ${
           isMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
         }`}
       >

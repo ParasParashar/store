@@ -1,4 +1,5 @@
 import { useCart } from "@/hooks/useCart";
+import { FaLock } from "react-icons/fa6";
 import { Navigate } from "react-router-dom";
 
 const OrderSummary = () => {
@@ -15,9 +16,20 @@ const OrderSummary = () => {
   }
 
   return (
-    <div className="flex flex-col  bg-secondary h-full w-full rounded-b-lg p-5 ">
+    <div className="flex flex-col h-full lg:h-screen  bg-gray-100 rounded-b-lg p-5">
       {/* Scrollable Cart Items */}
+      
+      <div className=" flex flex-col items-center justify-center py-10 lg:py-14 border-b">
+        <span className=" text-[#737373] text-sm">Total Amount</span>
+        <span className="text-5xl text-blue-800 font-semibold">₹ {total.toFixed(2)}</span>
+        <div className="flex items-center gap-2 mt-3 text-sm">
+          <FaLock color={'green'} />
+          <span>Secure</span>
+        </div>
+      </div>
+
       <div className="flex-1 overflow-y-auto h-full custom-scrollbar ">
+      <p className="text-lg font-semibold pt-2">Order Details</p>
         {detailedItems.map((item) => {
           const p = item.variants[0].attributes[0].price || item.price;
 
@@ -29,7 +41,7 @@ const OrderSummary = () => {
           return (
             <div
               key={`${item.id}-${item.variants[0]?.id}-${item.variants[0]?.attributes[0]?.id}`}
-              className="relative flex items-center justify-between p-4 border-b "
+              className="relative flex items-center justify-between p-4 "
             >
               <div className="flex gap-3 items-center">
                 <div className="w-[10%] flex-shrink-0 relative">
@@ -38,9 +50,7 @@ const OrderSummary = () => {
                     alt={item.name}
                     className="rounded-lg object-fill w-full aspect-square border"
                   />
-                  <span className="absolute top-[-10px] right-[-10px] bg-red-500 text-white rounded-full   p-1 text-sm w-5 h-5 flex items-center justify-center">
-                    {item.quantity}
-                  </span>
+                 
                 </div>
                 <div className="flex flex-col flex-1">
                   <h6 className=" text-sm font-semibold text-muted-foreground truncate">
@@ -49,6 +59,9 @@ const OrderSummary = () => {
                       {item.variants[0]?.color}
                     </span>
                   </h6>
+                  <div className="flex gap-2 items-center">
+
+                  
                   <div className="flex gap-3 text-sm font-medium mt-1">
                     <p className="text-muted-foreground">
                       Size:{" "}
@@ -56,6 +69,15 @@ const OrderSummary = () => {
                         {item.variants[0]?.attributes[0]?.size}
                       </span>
                     </p>
+                  </div>
+                  <div className="flex gap-3 text-sm font-medium mt-1">
+                    <p className="text-muted-foreground">
+                      Qty:{" "}
+                      <span className="text-primary">
+                        {item.quantity}
+                      </span>
+                    </p>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -66,11 +88,11 @@ const OrderSummary = () => {
       </div>
 
       {/* Sticky Footer */}
-      <div className="  border-t p-4  ">
-        <p className="text-lg font-semibold">Order Details</p>
+      <div className="  border-t py-2 px-4  ">
+        
         <div className="flex justify-between items-center text-sm mt-2">
           <p className="text-muted-foreground">
-            Subtotal - {detailedItems.length}
+            Subtotal - <span className=" font-semibold text-black">{detailedItems.length} items</span>
           </p>
           <p className="font-semibold">₹{total.toFixed(2)}</p>
         </div>
