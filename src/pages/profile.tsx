@@ -1,18 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { FaCubesStacked, FaLocationArrow } from "react-icons/fa6";
+import { FaCubesStacked, FaLocationArrow, FaSpinner } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
 
 import { motion } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import MyAddress from "@/components/profile/MyAddress";
 import MyOrders from "@/components/profile/MyOrders";
 import { User } from "@/types/product";
 import { Loader, LucideLogOut } from "lucide-react";
+import AxiosBase from "@/lib/axios";
+import toast from "react-hot-toast";
 
 const ProfilePage = () => {
   const { data: authUser } = useQuery<User>({ queryKey: ["authUser"] });
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   if (!authUser) return null;
 
@@ -20,6 +24,31 @@ const ProfilePage = () => {
 
   const handleSectionChange = (newSection: "orders" | "address") => {
     setSearchParams({ section: newSection });
+  };
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () => {
+      try {
+        const { data } = await AxiosBase.post("/api/store/profile/logout");
+        if (!data.success) throw new Error(data.error);
+        navigate("/login");
+        return data;
+      } catch (error: any) {
+        throw new Error(error.message);
+      }
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      toast.success(data.message || "Logged out successfully");
+      navigate("/login");
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Logout failed");
+    },
+  });
+  const handleLogout = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutate();
   };
 
   return (
@@ -78,10 +107,13 @@ const ProfilePage = () => {
           </Button>
         </div>
 
-        <Button variant="destructive">
-          <LucideLogOut size={16} />
-
-          <span className="ml-4">Logout</span>
+        <Button onClick={handleLogout} variant="destructive">
+          {isPending ? (
+            <FaSpinner className="animate-spin" size={15} />
+          ) : (
+            <LucideLogOut size={16} />
+          )}{" "}
+          <span>Logout</span>
         </Button>
       </motion.div>
 
